@@ -73,10 +73,13 @@ angular.module('fringeApp').component('schedule', {
                 entries.map(function(entry) {
                     entry.isAttending = Schedule.isUserAttendingPerformance(entry.id);
                     entry.attendState = Schedule.getPerformanceScheduleState(entry.id);
-                    if (entry.isAttending) {
+                    if (! entry.isAttending) {
                         qLists.canUserAttendPerformance[entry.id] = Schedule.canUserAttendPerformance(entry.id);
                         qLists.canPerformanceBeAddedToSchedule[entry.id] = Schedule.canPerformanceBeAddedToSchedule(entry.id);
-                        qLists.isUserAttendingShow[entry.show.id] = Schedule.isUserAttendingShow(entry.showId);
+
+                        if (qLists.isUserAttendingShow[entry.showId] === undefined) {
+                            qLists.isUserAttendingShow[entry.showId] = Schedule.isUserAttendingShow(entry.showId);
+                        }
                     }
 
                     return entry;
@@ -127,7 +130,19 @@ angular.module('fringeApp').component('schedule', {
                 $timeout(function() {
                     $window.scroll(0, 196);
                 });
+            };
 
+            $scope.addToSchedule = function(performanceId) {
+                Schedule.add(performanceId);
+                refresh();
+            };
+            $scope.removeFromSchedule = function(performanceId) {
+                Schedule.remove(performanceId);
+                refresh();
+            };
+            $scope.addMaybe = function(performanceId) {
+                Schedule.addMaybe(performanceId);
+                refresh();
             };
         }
     ]

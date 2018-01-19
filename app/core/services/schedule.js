@@ -19,7 +19,7 @@ angular.module('fringeApp').service('Schedule', ['$q', 'UserData', 'Data', 'Avai
         UserData.setPreferences(preferences);
     };
     this.getDesiredShows = function() {
-        return Object.keys(UserData.getPreferences()).map(function(showId) {
+        return Object.keys(UserData.getPreferences()).filter(function(showId) {
             return self.getShowDesire(showId) > 0;
         });
     };
@@ -34,7 +34,7 @@ angular.module('fringeApp').service('Schedule', ['$q', 'UserData', 'Data', 'Avai
         Data.getPerformance(performanceId).then(function(performance) {
             return Data.getShow(performance.show);
         }).then(function(show) {
-            self.removeFromMaybe(show.performance);
+            self.removeMaybe(show.performance);
             return show.performances;
         });
     };
@@ -157,12 +157,12 @@ angular.module('fringeApp').service('Schedule', ['$q', 'UserData', 'Data', 'Avai
 
     this.canUserAttendPerformance = function(performanceId) {
         return Data.getPerformance(performanceId).then(function(performance) {
-            return Availability.isUserAvailable(performance.start, performance.end);
+            return Availability.isUserAvailable(performance.start, performance.stop);
         });
     };
 
     this.canPerformanceBeAddedToSchedule = function(performanceId) {
-        $q.all({
+        return $q.all({
             performances: Data.getPerformances(),
             shows: Data.getShows(),
             venueDistances: Data.getVenueDistances()
@@ -177,9 +177,8 @@ angular.module('fringeApp').service('Schedule', ['$q', 'UserData', 'Data', 'Avai
                 i = userSchedule.length;
 
             while (i --) {
-                var performance2 = performances[userSchedule[i]];
-
-                var offset = venueDistances[shows[performance1.show].venue][shows[performance2.show].venue];
+                var performance2 = performances[userSchedule[i]],
+                    offset = venueDistances[shows[performance1.show].venue][shows[performance2.show].venue];
 
                 if (! (stop < performance2.start - offset || start > performance2.stop + offset)) {
                     return false;
@@ -207,6 +206,40 @@ angular.module('fringeApp').service('Schedule', ['$q', 'UserData', 'Data', 'Avai
             }));
         }).then(function(results) {
             return results.indexOf(true) > -1;
+        });
+    };
+
+    this.getPossiblePerformances = function() {
+        return $q.all([Data.getPerformances(), Data.getShows(), Data.getVenueDistances()]).then(function(results) {
+            var performances = results[0],
+                shows = results[1],
+                venueDistances = results[2],
+                possiblePerformances = [],
+                userSchedule = UserData.getSchedule();
+
+            angular.forEach(performances, function(performance1, performanceId) {
+                if (userSchedule.indexOf(performanceId) > -1 || ! Availability.isUserAvailable(performance1.start, performance1.stop)) {
+                    return true;
+
+                }
+
+                var start = performance1.start,
+                    stop = performance1.stop,
+                    i = userSchedule.length;
+
+                while (i --) {
+                    var performance2 = performances[userSchedule[i]],
+                        offset = venueDistances[shows[performance1.show].venue][shows[performance2.show].venue];
+
+                    if (! (stop < performance2.start - offset || start > performance2.stop + offset)) {
+                        return true;
+                    }
+                }
+
+                possiblePerformances.push(performanceId);
+            });
+
+            return possiblePerformances;
         });
     };
 }]);

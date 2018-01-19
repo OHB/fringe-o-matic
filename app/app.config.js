@@ -1,17 +1,17 @@
 angular.module('fringeApp')
-    .constant('GOOGLE_MAPS_API_KEY', 'AIzaSyDdE91DU1mNa65N7Utpolt787MKFpFo0z4')
-    .constant('Sorters', {
+    .value('GOOGLE_MAPS_API_KEY', 'AIzaSyDdE91DU1mNa65N7Utpolt787MKFpFo0z4')
+    .value('Sorters', {
         performance: function(a, b) {
             return a.start - b.start || a.stop - b.stop;
         }
     })
-    .constant('InterestText', [
+    .value('InterestText', [
         'Eh...maybe.',
         "I wouldn't mind seeing this.",
         "I'd love to see this!",
         'I HAVE to see this!'
     ])
-    .constant('FringeLevels', [
+    .value('FringeLevels', [
         {min: 0, name: 'New Recruit'},
         {min: 1, name: 'Newbie'},
         {min: 3, name: 'Rookie'},
@@ -23,13 +23,13 @@ angular.module('fringeApp')
         {min: 50, name: 'Legend'},
         {min: 65, name: 'BOSS'}
     ])
-    .constant('Plurals', {
+    .value('Plurals', {
         show: {0: 'no shows', one: 'one show', other: '{} shows'},
         aShow: {0: 'no shows', one: 'a show', other: '{} shows'},
         performance: {0: 'no performances', one: 'one performance', other: '{} performances'},
         Performance: {0: 'No performances', one: '1 Performance', other: '{} Performances'}
     })
-    .constant('Menu', [
+    .value('Menu', [
         {route: 'my-fringe', title: 'My Fringe'},
         {route: 'shows', title: 'Shows'},
         {route: 'schedule', title: 'Schedule'},
@@ -38,7 +38,7 @@ angular.module('fringeApp')
         {route: 'about', title: 'About'},
         {route: 'help', title: 'Help'}
     ])
-    .constant('MapConfig', {
+    .value('MapConfig', {
         initialView: 0,
         views: [
             {name: 'Fringe Central', center: [28.572253, -81.367035], zoom: 18, markerGroups: true},

@@ -1,0 +1,76 @@
+warn about shows user cannot possibly attend before starting generater
+	new version doesn't both with them
+
+new version doesn't both with <2 possible performances for a show
+	so add those before generating as well
+
+
+schedule is WAY too slow now
+
+
+extra points for empty days! + 100?
+
+on full schedule warn when adding if
+	not enough time to travel (popup yes/no with time comparison)
+	show already on schedule (popup with keep 1, 2, both)
+		if > 1, list with deletes and with yes/no
+
+after generate, manually check unscheduled for possible performances?
+
+generate infos
+
+before generating, modal for performances without conflicts to add to slots.
+	determine list by trying recursively
+
+my schedule
+	fringe level help
+		this is just our way of getting people to see more shows!
+	as calendar
+
+
+
+ticket links (my schedule, shows, full schedule)
+
+
+when floriduh was scheduled it auto accepted the ladies of the peekaboo lounge at same time 24th 11:59p
+
+
+schedule gen hooray schedule is full says that when it's empty if there's no shows with interest to look at
+	check actual availability -> your schedule has room for more shows if you'd be interested
+	check my availability -> there are more shows if you can make more time
+
+
+how to let the scheduler continue after finding a match in order to see about a better match?
+	minimum # of generations
+	extra generations after fitness increase
+	update progress bar to match with that
+	store data in userData???
+	gen stop disabled for now
+
+need a better way of determining population/generation
+	
+
+i need the extra points for empty days
+	this is tricky
+	points for close together (current does venue distance, but it should only apply if the two performances are close together in the schedule)
+	points for empty days (needs to include from fringe start to first show and last show to fringe end)
+
+scheduler auto select is fucked and it also needs upgraded to include maybe
+
+my schedule
+	add tri-select
+	option to hide maybes
+
+schedule pin top previous/next buttons, remove lower
+
+tickets buying screen
+	mark tickets as bought
+	select tickets to buy
+		auto populate cart???
+		mark tickets bought (optional deselect)
+
+
+bingo reminder
+progressbar in nav to encourage exploring?
+	welcome modal, optional tell about each page the first land
+context sensitive help	

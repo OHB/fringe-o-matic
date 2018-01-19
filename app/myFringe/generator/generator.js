@@ -1,48 +1,31 @@
-angular.module('fringeApp').component('my-fringe-generator', {
+angular.module('fringeApp').component('myFringeGenerator', {
     templateUrl: 'app/myFringe/generator/generator.html',
-    controller: ['$scope', '$uibModal', '$q', 'Schedule', function($scope, $uibModal, $q, Schedule) {
-        $scope.hasSelectedShows = false;
+    controller: ['$scope', '$uibModal', '$q', 'Data', 'Schedule', 'Plurals', function($scope, $uibModal, $q, Data, Schedule, Plurals) {
+        $scope.plurals = Plurals;
+        $scope.desiredShowCount = Schedule.getDesiredShows().length;
+        $scope.onScheduleCount = Schedule.getPerformancesAttending().length;
 
-        var desiredShows = Schedule.getDesiredShows();
+        $q.all([Data.getPerformances(), Schedule.getPossiblePerformances()]).then(function(results) {
+            var performances = results[0],
+                possiblePerformances = results[1];
 
-        $scope.desiredShowCount = desiredShows.length;
-        $scope.hasSelectedShows = $scope.desiredShowCount > 0;
-        $scope.onScheduleCount = Schedule.getPerformancesAttending.length;
-        $scope.toPlaceCount = $scope.desiredShowCount - $scope.onScheduleCount;
+            $scope.possiblePerformanceCount = possiblePerformances.length;
+            $scope.possibleDesiredCount = possiblePerformances.filter(function(performance) {
+                return Schedule.getShowDesire(performances[performance]) > 0;
+            }).length;
 
-        $scope.desiredPerformanceCount = 0;
-        $scope.generatePossible = false;
-
-        angular.forEach(desiredShows, function(showId) {
-            Schedule.isUserAttendingShow(showId).then(function(isAttending) {
-                if (! isAttending) {
-                    $scope.desiredPerformanceCount ++;
-
-                    Schedule.canShowBeAddedToSchedule(showId).then(function(canBeAdded) {
-                        if (canBeAdded) {
-                            Schedule.canUserAttendShow(showId).then(function(canAttend) {
-                                if (canAttend) {
-                                    $scope.generatePossible = true;
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+            console.log($scope.possibleDesiredCount);
+            $scope.loaded = true;
         });
 
         $scope.generate = function() {
             $uibModal.open({
-                templateUrl: 'createScheduleModal.html',
-                controller: 'CreateScheduleModalCtrl',
-                controllerAs: '$ctrl',
+                templateUrl: 'app/myFringe/generator/generateModal/generateModal.html',
+                controller: 'GenerateModalCtrl',
                 size: 'lg',
                 backdrop: 'static',
-                keyboard: false,
-                scope: $scope
+                keyboard: false
             });
         };
-
-        // $scope.generate();
     }]
 });

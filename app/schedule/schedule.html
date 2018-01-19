@@ -64,7 +64,7 @@
                                 <label class="btn btn-default" ng-class="entry.attendState == 'no' && 'btn-danger'" ng-click="removeFromSchedule(entry.id)" bs-tooltip="entry.attendState == 'no' && {title: entry.attendState == 'maybe' ? 'Not attending' : 'Remove from schedule'}">
                                     <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
                                 </label>
-                                <label class="btn btn-default" ng-class="entry.attendState == 'maybe' && 'btn-warning'" ng-click="addToMaybe(entry.id)" bs-tooltip="entry.attendState != 'maybe' && {title: entry.attendState == 'no' ? 'Maybe attending' : 'Remove from schedule, maybe attending'}">
+                                <label class="btn btn-default" ng-class="entry.attendState == 'maybe' && 'btn-warning'" ng-click="addMaybe(entry.id)" bs-tooltip="entry.attendState != 'maybe' && {title: entry.attendState == 'no' ? 'Maybe attending' : 'Remove from schedule, maybe attending'}">
                                     <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
                                 </label>
                                 <label class="btn btn-default" ng-class="{'btn-success': entry.attendState == 'yes', 'disabled': entry.attendState != 'yes' && !entry.canBeScheduled}" bs-tooltip="entry.attendState != 'yes' && {title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-click="entry.canBeScheduled && addToSchedule(entry.id)">

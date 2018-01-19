@@ -80,6 +80,7 @@ $templates = [
     'about', 'help', 'venues', 'shows', 'schedule', 'map',
     'myFringe', 'myFringe/availability', 'myFringe/generator', 'myFringe/schedule',
     'myFringe/availability/slotPerformancesModal',
+    'myFringe/generate/generateModal',
 ];
 foreach ($templates as $component) { $filename = 'app/' . $component . '/' . basename($component) . '.html'; ?>
     <script type="text/ng-template" id="<?php echo $filename; ?>">
@@ -107,7 +108,6 @@ foreach ($templates as $component) { $filename = 'app/' . $component . '/' . bas
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
 <script src="res/genetics.js"></script>
 <script src="res/ng-map.min.js"></script>
-<script src="res/scheduler.js"></script>
 <script src="res/angular-location-update.min.js"></script>
 <script src="res/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
 <script src="app/app.js"></script>
@@ -131,6 +131,8 @@ foreach ($templates as $component) { $filename = 'app/' . $component . '/' . bas
 <script src="app/myFringe/availability/availability.js"></script>
 <script src="app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.js"></script>
 <script src="app/myFringe/generator/generator.js"></script>
+<script src="app/myFringe/generator/generateModal/generateModal.js"></script>
+<script src="app/myFringe/generator/services/generatorFactory.js"></script>
 <script src="app/myFringe/schedule/schedule.js"></script>
 <script src="app/map/map.js"></script>
 <script src="app/schedule/schedule.js"></script>

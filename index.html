@@ -330,7 +330,7 @@
                                 <label class="btn btn-default" ng-class="entry.attendState == 'no' && 'btn-danger'" ng-click="removeFromSchedule(entry.id)" bs-tooltip="entry.attendState == 'no' && {title: entry.attendState == 'maybe' ? 'Not attending' : 'Remove from schedule'}">
                                     <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
                                 </label>
-                                <label class="btn btn-default" ng-class="entry.attendState == 'maybe' && 'btn-warning'" ng-click="addToMaybe(entry.id)" bs-tooltip="entry.attendState != 'maybe' && {title: entry.attendState == 'no' ? 'Maybe attending' : 'Remove from schedule, maybe attending'}">
+                                <label class="btn btn-default" ng-class="entry.attendState == 'maybe' && 'btn-warning'" ng-click="addMaybe(entry.id)" bs-tooltip="entry.attendState != 'maybe' && {title: entry.attendState == 'no' ? 'Maybe attending' : 'Remove from schedule, maybe attending'}">
                                     <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
                                 </label>
                                 <label class="btn btn-default" ng-class="{'btn-success': entry.attendState == 'yes', 'disabled': entry.attendState != 'yes' && !entry.canBeScheduled}" bs-tooltip="entry.attendState != 'yes' && {title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-click="entry.canBeScheduled && addToSchedule(entry.id)">
@@ -474,41 +474,35 @@
 </table>
 <ul uib-pager items-per-page="1" total-items="totalItems" ng-model="currentPage" previous-text="&larr; Previous" next-text="Next &rarr;"></ul>    </script>
     <script type="text/ng-template" id="app/myFringe/generator/generator.html">
-    <div ng-if="!generatePossible" class="container">
+    <div ng-if="loaded && possiblePerformanceCount === 0" class="container">
     <p class="lead">Hooray! Your schedule is full!</p>
-    <p>It is not possible to add any more shows to <a href="#" ng-click="setPage('My Schedule')">your schedule</a>.</p>
+    <p>It is not possible to add any more shows to <a href="#!/my-fringe">your schedule</a>.</p>
     <p>If you don't like your schedule, you remove items and start again.</p>
 </div>
-<div class="container" ng-if="generatePossible">
+<div class="container" ng-if="loaded && possiblePerformanceCount > 0">
     <p class="lead">Step 1: Choose the shows you want to see</p>
-    <p ng-if="! hasSelectedShows">You haven't selected any shows you want to see yet. To add shows, use the <a href="#" ng-click="setPage('Shows')">Shows</a> screen.</p>
-    <div ng-if="hasSelectedShows">
-        <p>You have selected {{desiredShowCount}} shows. To add shows, use the <a href="#" ng-click="setPage('Shows')">Shows</a> screen.</p>
+    <p ng-if="! desiredShowCount">You haven't selected any shows you want to see yet. To add shows, use the <a href="#!/shows">Shows</a> screen.</p>
+    <div ng-if="desiredShowCount">
+        <p>You have selected <ng-pluralize count="desiredShowCount" when="plurals.show"></ng-pluralize>. To add shows, use the <a href="#!/shows">Shows</a> screen.</p>
     </div>
     <hr />
-    <p class="lead">Step 2: Select the specific showtimes you definitely going to (optional)</p>
-    <div ng-if="! userData.schedule.length">
-        <p>You haven't selected any showtimes. That's ok!</p>
-        <p>But, if you have bought tickets to anything, make sure you go and select those on the <a href="#" ng-click="setPage('Schedule')">Schedule</a> screen. Otherwise, let's move on!</p>
-    </div>
-    <div ng-if="userData.schedule.length">
-        <p>There are already {{userData.schedule.length}} shows on your calendar. We won't touch those. If you need to make any changes, use the <a href="#" ng-click="setPage('Schedule')">Schedule</a> screen.</p>
-    </div>
+    <p class="lead">Step 2: Set your availability</p>
+    <p>Select your availability on the <a href="#!/my-fringe/availability">My Availability</a> tab.</p>
     <hr />
-    <p class="lead">Step 3: Set your availability</p>
-    <p>Select your availability on the <a href="#" ng-click="tabs.activeTab = 'My Availability'">My Availability</a> tab.</p>
-    <hr />
-    <p class="lead">Step 4: Generate a suggested schedule</p>
-    <div>
+    <div ng-class="{'text-muted': !desiredShowCount}">
+        <p class="lead">Step 3: Generate a schedule</p>
         <p>When you click <b>Generate Schedule</b>, this tool will generate a schedule for you while doing the following:</p>
         <ol>
             <li>trying to fit as many shows in as possible</li>
             <li>ensuring you have enough time to get to every show</li>
             <li>attempting to group shows to reduce travel between locations</li>
-            <li>preferring to clump shows together so you have larger blocks of time off</li>
+            <!--<li>preferring to clump shows together so you have larger blocks of time off</li>-->
         </ol>
+        <div ng-if="onScheduleCount > 0">
+            <p>We won't touch the <ng-pluralize count="onScheduleCount" when="plurals.show"></ng-pluralize> already on your calendar, nor will we try to place 2 shows at the same time.</p>
+        </div>
         <p>You'll have an opportunity to review the schedule before it is saved.</p>
-        <p><button class="btn btn-primary" ng-click="generate()">Generate Schedule</button></p>
+        <p><button class="btn btn-primary" ng-click="generate()" ng-disabled="!desiredShowCount">Generate Schedule</button></p>
     </div>
 </div>    </script>
     <script type="text/ng-template" id="app/myFringe/schedule/schedule.html">
@@ -592,6 +586,8 @@
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
 </div>    </script>
+    <script type="text/ng-template" id="app/myFringe/generate/generateModal/generateModal.html">
+        </script>
 <script type="text/javascript">
     document.body.className += ' js';
 </script>
@@ -613,7 +609,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
 <script src="res/genetics.js"></script>
 <script src="res/ng-map.min.js"></script>
-<script src="res/scheduler.js"></script>
 <script src="res/angular-location-update.min.js"></script>
 <script src="res/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
 <script src="app/app.js"></script>
@@ -637,6 +632,8 @@
 <script src="app/myFringe/availability/availability.js"></script>
 <script src="app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.js"></script>
 <script src="app/myFringe/generator/generator.js"></script>
+<script src="app/myFringe/generator/generateModal/generateModal.js"></script>
+<script src="app/myFringe/generator/services/generatorFactory.js"></script>
 <script src="app/myFringe/schedule/schedule.js"></script>
 <script src="app/map/map.js"></script>
 <script src="app/schedule/schedule.js"></script>
