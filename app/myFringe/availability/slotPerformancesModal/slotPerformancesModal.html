@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        {{moment(slotStart, 'X').format('ddd, MMM Do hh:mma')}} - {{moment(slotStop, 'X').format('hh:mma')}}
+    </h3>
+</div>
+<div class="modal-body">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Time</th>
+            <th>Show</th>
+            <th>Venue</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="performanceId in slotPerformances" ng-init="performance = performances[performanceId]">
+            <td nowrap="nowrap">{{moment(performance.start, 'X').format('h:mm a')}} - {{moment(performance.stop, 'X').format('h:mm a')}}</td>
+            <td><strong>{{shows[performance.show].name}}</strong></td>
+            <td>
+                <span class="label label-venue-default label-venue-{{shows[performance.show].venue}}">
+                    {{venues[shows[performance.show].venue].name}}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-xs btn-danger" ng-click="remove(performanceId)" bs-tooltip="{title: 'Remove'}">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+</div>

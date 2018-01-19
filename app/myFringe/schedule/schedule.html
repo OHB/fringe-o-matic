@@ -1,0 +1,43 @@
+<div class="row" ng-if="! hasSchedule">
+    <div ng-if="! hasPreferences">
+        <h1>Welcome!</h1>
+    </div>
+    <div ng-if="hasPreferences">
+        <h1>Your schedule is empty :(</h1>
+
+    </div>
+</div>
+
+<table class="table table-striped amazing-schedule" ng-if="hasSchedule">
+    <tbody ng-repeat="(day, amazingScheduleDay) in amazingSchedule">
+    <tr class="header">
+        <th colspan="5">
+            <h3 class="bg-info">{{moment(day, 'X').format('dddd, MMM D')}}</h3>
+        </th>
+    </tr>
+    <tr>
+        <th>Start</th>
+        <th>Stop</th>
+        <th>Show</th>
+        <th>Venue</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="item in amazingScheduleDay" ng-class="item.as">
+        <td ng-if="item.as=='performance'">{{moment(item.start, 'X').format('h:mm a')}}</td>
+        <td ng-if="item.as=='performance'">{{moment(item.stop, 'X').format('h:mm a')}}</td>
+        <td ng-if="item.as=='performance'"><a href="#!/shows/show/{{item.show}}">{{shows[item.show].name}}</a></td>
+        <td ng-if="item.as=='performance'">
+                <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
+                    {{venues[shows[item.show].venue].name}}
+                </span>
+            </a>
+        </td>
+        <td ng-if="item.as=='performance'">
+            <button class="btn btn-xs btn-danger" ng-click="removeFromSchedule(item.id)" bs-tooltip="{title:'Remove'}">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </td>
+        <td ng-if="item.as!=='performance'" colspan="5" ng-class="item.as">{{item.text}}</td>
+    </tr>
+    </tbody>
+</table>

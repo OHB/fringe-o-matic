@@ -1,0 +1,72 @@
+<div class="jumbotron" style="margin-bottom:10px">
+    <div class="container">
+        <h1>Venues</h1>
+    </div>
+</div>
+<div class="container" style="padding-top:20px">
+    <div class="row" ng-if="venues">
+        <div class="col-md-3">
+            <div class="panel panel-primary" data-offset-top="-80" bs-affix>
+                <div class="panel-heading">
+                    <h3 class="panel-title">Distance Calculator</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>From</label>
+                        <select class="form-control" ng-options="item as item.label for item in venueOptions" ng-model="distanceCalcFrom"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>To</label>
+                        <select class="form-control" ng-options="item as item.label for item in venueOptions" ng-model="distanceCalcTo"></select>
+                    </div>
+                    <p>
+                        <strong>Distance:</strong>
+                        <span ng-show="distanceCalcFrom==distanceCalcTo">No time at all!</span>
+                        <span ng-show="distanceCalcFrom!=distanceCalcTo && venues[distanceCalcFrom.value].host==venues[distanceCalcTo.value].host">
+                            These venues are at the same location...so a minute, maybe?
+                        </span>
+                        <span ng-show="venues[distanceCalcFrom.value].host!=venues[distanceCalcTo.value].host">
+                            {{distances[distanceCalcFrom.value][distanceCalcTo.value] / 60}} minutes
+                        </span>
+                    </p>
+                    <p ng-if="venues[distanceCalcFrom.value].host!=venues[distanceCalcTo.value].host">
+                        <strong>Drive or walk?</strong>
+                        <span ng-show="drivingCalc=='assumed'">Drive</span>
+                        <span ng-show="drivingCalc=='recommended'">Drive</span>
+                        <span ng-show="drivingCalc=='possible'">Either</span>
+                        <span ng-show="drivingCalc==''">Walk</span>
+                    </p>
+                    <p ng-show="drivingCalc!=''">
+                        <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalcFrom.value].host].name}}, {{venueHosts[venues[distanceCalcFrom.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalcTo.value].host].name}}, {{venueHosts[venues[distanceCalcTo.value].host].address.join(', ')}}&travelmode={{(drivingCalc=='possible') ? 'walking' : 'driving'}}" target="_blank">Get Directions</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row" ng-repeat="(hostId, host) in venueHosts">
+                <hr ng-if="! $first" />
+                <div class="col-md-8">
+                    <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&destination={{host.name}}, {{host.address.join(', ')}}" target="_blank">Directions</a>
+                    <h3 style="margin-top:0">{{host.name}}</h3>
+                    <p>{{host.address.join(', ')}}</p>
+                    <table class="table table-condensed">
+                        <tr ng-repeat="venueId in ::getHostVenues(hostId)" ng-init="venue=venues[venueId]">
+                            <td style="padding-top: 9px" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
+                                <span class="label label-venue-default label-venue-{{venueId}}" style="font-size: 0.9em">{{venue.name}}</span>
+                            </td>
+                            <td class="text-right" style="vertical-align: middle" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
+                                <a class="btn btn-default btn-sm" ng-href="#!/shows/venue/{{venueId}}">Shows</a>
+                                <a class="btn btn-default btn-sm" ng-href="#!/map/venue/{{venueId}}">Map</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <a href="#!/map/host/{{hostId}}">
+                        <static-map size="'336x252'" markers="host.mapPos && host.mapPos.join() || host.address.join(', ')" style="width:100%"></static-map>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

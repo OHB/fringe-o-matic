@@ -1,0 +1,57 @@
+<div class="jumbotron">
+    <div class="container">
+        <h1>Map</h1>
+    </div>
+</div>
+<div class="container">
+    <p class="lead text-center" ng-if="! mapLoaded">Loading map...</p>
+    <div class="row" ng-if="markerGroups" ng-style="{visibility: !mapLoaded ? 'hidden' : 'visible'}">
+        <div class="col-md-3">
+            <h3>Views</h3>
+            <ul class="list-unstyled">
+                <li ng-repeat="view in ::views"><a href ng-click="gotoView(view)">{{view.name}}</a></li>
+            </ul>
+            <hr />
+            <h3 style="margin-bottom: 15px">Layers</h3>
+            <ul class="nav nav-default nav-pills nav-stacked">
+                <li ng-repeat="group in ::markerGroups" ng-class="{active:isGroupVisible[group.id]}">
+                    <a href ng-click="toggleGroup(group.id)">{{group.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div>
+                <ng-map ng-style="{height: (innerHeight - 110) + 'px'}" clickable-icons="false" fullscreen-control="false" max-zoom="20" min-zoom="7" street-view-control="false" tilt="0" map-type-control-options="{mapTypeIds: ['roadmap', 'hybrid']}">
+                    <shape name="polygon"
+                           paths="{{lawnPolygon}}"
+                           stroke-color="#94af72"
+                           stroke-opacity="1"
+                           stroke-weight="1"
+                           fill-color="#cbe6a3"
+                           fill-opacity="0.8">
+                    </shape>
+                    <div ng-repeat="group in ::markerGroups">
+                        <marker ng-repeat="(markerId, marker) in ::group.markers" id="{{group.id + '-' + markerId}}" position="{{::marker.position}}" title="{{::marker.title}}" icon="img/map/{{marker.icon}}.png" ng-if="isGroupVisible[group.id]" on-click="markerClick(marker, group.id, markerId)"></marker>
+                    </div>
+                    <info-window id="marker-info">
+                        <div ng-non-bindable>
+                            <p class="lead">{{markerWindow.title}}</p>
+                            <address ng-if="markerWindow.location || markerWindow.address">
+                                <strong ng-if="markerWindow.location">{{markerWindow.location}}<br /></strong>
+                                <span ng-if="markerWindow.address">
+                                {{markerWindow.address[0]}}<br />
+                                {{markerWindow.address[1]}}
+                                </span>
+                            </address>
+                            <p ng-if="markerWindow.notes">{{markerWindow.notes}}</p>
+                            <p ng-if="markerWindow.venue || markerWindow.address">
+                                <a class="btn btn-default btn-sm" ng-if="markerWindow.venue" style="margin-right:6px" href="#!/shows/venue/{{markerWindow.venue}}">Shows</a>
+                                <a class="btn btn-default btn-sm" ng-if="markerWindow.address" href="https://www.google.com/maps/dir/?api=1&destination={{markerWindow.location}}, {{markerWindow.address.join(', ')}}" target="_blank">Directions</a>
+                            </p>
+                        </div>
+                    </info-window>
+                </ng-map>
+            </div>
+        </div>
+    </div>
+</div>

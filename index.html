@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html ng-app="fringeApp">
+<head>
+    <meta charset="utf-8">
+    <title>Fringe-o-Matic</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./res/style.css" />
+    <!--<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />-->
+    <style>
+        [ng-cloak] {
+            display: none !important;
+        }
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body ng-controller="CoreCtrl">
+<nav class="navbar-primary navbar navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" ng-cloak ng-if="loaded">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand">Fringe-o-Matic</span>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav" ng-cloak>
+                <li ng-repeat="item in menu" ng-class="{active:currentRoute == '/' + item.route}">
+                    <a href="#!/{{item.route}}" >{{item.title}}</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><i class="glyphicon glyphicon-saved" ng-class="{'glyphicon-transfer': !loaded || saving}" bs-tooltip="{title:'Your data is saved automatically.'}" data-placement="bottom"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<noscript>
+    <div class="jumbotron" ng-cloak>
+        <div class="container">
+            <h1>Error</h1>
+            <p>This tool requires JavaScript. Please enable JavaScript and refresh the page.</p>
+        </div>
+    </div>
+</noscript>
+<div ng-if="error" ng-cloak>
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Error</h1>
+            <p>{{error.title}}</p>
+        </div>
+    </div>
+    <div class="container">
+        <p ng-bind="error.more"></p>
+    </div>
+</div>
+<div ng-if="! error && ! loaded" class="js-required">
+    <div class="jumbotron" ng-if="! loaded">
+        <div class="container">
+            <h1>Loading...</h1>
+            <p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped active" style="width: 100%">
+                </div>
+            </div>
+            </p>
+        </div>
+    </div>
+</div>
+<div ng-if="! error && loaded" ng-cloak>
+    <div ng-view></div>
+</div>
+<p style="height: 20px">&nbsp;</p>
+    <script type="text/ng-template" id="app/about/about.html">
+    <div class="jumbotron">
+    <div class="container">
+        <h1>About</h1>
+    </div>
+</div>
+<div class="container">
+    <h3>Notice</h3>
+    <p>This tool is not affiliated with the Orlando Fringe, its brought to you for free by an Orlando Fringe fanatic!</p>
+    <h3>Credits</h3>
+    <ul>
+        <li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> - makes designing websites easy</li>
+        <li><a href="https://angularjs.org/" target="_blank">AngularJS</a> - makes adding functionality easy</li>
+        <li><a href="http://mgcrea.github.io/angular-strap" target="_blank">AngularStrap</a> - makes Bootstrap components with with AngularJS<br />
+        <em class="small">(Affix, Button, Select, Tooltip)</em></li>
+        <li><a href="https://angular-ui.github.io/bootstrap/" target="_blank">UI Bootstrap</a>  - has useful easy-to-use components<br />
+            <em class="small">(Modal, Pagination, Pager, Progressbar)</em></li>
+        <li><a href="https://github.com/anglibs/angular-location-update" target="_blank">angular-location-update</a> - used to get the My Fringe tabs working with the router</li>
+        <li><a href="https://github.com/subprotocol/genetic-js" target="_blank">Genetic.js</a> - a nice genetic algorithm library which powers the Auto-Scheduler<br />
+            <em class="small">(heavily optimized)</em></li>
+        <li><a href="https://github.com/nbubna/store" target="_blank">Store2</a> - an easy way to use local storage</li>
+        <li><a href="https://ngmap.github.io/" target="_blank">ngMap</a> - a nice Angular wrapper for the Google Maps API.</li>
+        <li>Ticket icons made by <a href="https://www.flaticon.com/authors/daniel-bruce" target="_blank">Daniel Bruce</a></li>
+    </ul>
+</div>    </script>
+    <script type="text/ng-template" id="app/help/help.html">
+    <div class="jumbotron">
+    <div class="container">
+        <h1>Help</h1>
+    </div>
+</div>
+<div class="container">
+    <h3>Current User Data</h3>
+    <pre class="well" style="word-wrap: break-word; overflow-wrap: break-word; white-space: initial;">{{userData}}</pre>
+    <h3>Set User Data</h3>
+    <p>
+        <button class="btn btn-primary" ng-repeat="(name, data) in testData" ng-click="import(data)" style="margin-right:5px">{{name}}</button>
+    </p>
+</div>    </script>
+    <script type="text/ng-template" id="app/venues/venues.html">
+    <div class="jumbotron" style="margin-bottom:10px">
+    <div class="container">
+        <h1>Venues</h1>
+    </div>
+</div>
+<div class="container" style="padding-top:20px">
+    <div class="row" ng-if="venues">
+        <div class="col-md-3">
+            <div class="panel panel-primary" data-offset-top="-80" bs-affix>
+                <div class="panel-heading">
+                    <h3 class="panel-title">Distance Calculator</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>From</label>
+                        <select class="form-control" ng-options="item as item.label for item in venueOptions" ng-model="distanceCalcFrom"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>To</label>
+                        <select class="form-control" ng-options="item as item.label for item in venueOptions" ng-model="distanceCalcTo"></select>
+                    </div>
+                    <p>
+                        <strong>Distance:</strong>
+                        <span ng-show="distanceCalcFrom==distanceCalcTo">No time at all!</span>
+                        <span ng-show="distanceCalcFrom!=distanceCalcTo && venues[distanceCalcFrom.value].host==venues[distanceCalcTo.value].host">
+                            These venues are at the same location...so a minute, maybe?
+                        </span>
+                        <span ng-show="venues[distanceCalcFrom.value].host!=venues[distanceCalcTo.value].host">
+                            {{distances[distanceCalcFrom.value][distanceCalcTo.value] / 60}} minutes
+                        </span>
+                    </p>
+                    <p ng-if="venues[distanceCalcFrom.value].host!=venues[distanceCalcTo.value].host">
+                        <strong>Drive or walk?</strong>
+                        <span ng-show="drivingCalc=='assumed'">Drive</span>
+                        <span ng-show="drivingCalc=='recommended'">Drive</span>
+                        <span ng-show="drivingCalc=='possible'">Either</span>
+                        <span ng-show="drivingCalc==''">Walk</span>
+                    </p>
+                    <p ng-show="drivingCalc!=''">
+                        <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalcFrom.value].host].name}}, {{venueHosts[venues[distanceCalcFrom.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalcTo.value].host].name}}, {{venueHosts[venues[distanceCalcTo.value].host].address.join(', ')}}&travelmode={{(drivingCalc=='possible') ? 'walking' : 'driving'}}" target="_blank">Get Directions</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row" ng-repeat="(hostId, host) in venueHosts">
+                <hr ng-if="! $first" />
+                <div class="col-md-8">
+                    <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&destination={{host.name}}, {{host.address.join(', ')}}" target="_blank">Directions</a>
+                    <h3 style="margin-top:0">{{host.name}}</h3>
+                    <p>{{host.address.join(', ')}}</p>
+                    <table class="table table-condensed">
+                        <tr ng-repeat="venueId in ::getHostVenues(hostId)" ng-init="venue=venues[venueId]">
+                            <td style="padding-top: 9px" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
+                                <span class="label label-venue-default label-venue-{{venueId}}" style="font-size: 0.9em">{{venue.name}}</span>
+                            </td>
+                            <td class="text-right" style="vertical-align: middle" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
+                                <a class="btn btn-default btn-sm" ng-href="#!/shows/venue/{{venueId}}">Shows</a>
+                                <a class="btn btn-default btn-sm" ng-href="#!/map/venue/{{venueId}}">Map</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <a href="#!/map/host/{{hostId}}">
+                        <static-map size="'336x252'" markers="host.mapPos && host.mapPos.join() || host.address.join(', ')" style="width:100%"></static-map>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    </script>
+    <script type="text/ng-template" id="app/shows/shows.html">
+    <div class="jumbotron" style="margin-bottom:10px">
+    <div class="container">
+        <h1>Shows</h1>
+    </div>
+</div>
+<div data-offset-top="-51" bs-affix style="z-index:10000; background: white">
+    <div class="container" style="padding-top: 20px">
+        <nav class="navbar navbar-default" style="margin-bottom: 0">
+            <form class="navbar-form navbar-left">
+                <button type="button" class="btn btn-default" ng-model="selectedVenue" bs-options="o.value as o.label for o in venueOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <button type="button" class="btn btn-default" ng-model="selectedRating" bs-options="o.value as o.label for o in ratingOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <button type="button" class="btn btn-default" ng-model="selectedPrice" bs-options="o.value as o.label for o in priceOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <button type="button" class="btn btn-default" ng-model="selectedOther" bs-options="o.value as o.label for o in otherOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Search" ng-model="search" ng-change="searchTextEntered()">
+                    <span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show="searchText" ng-click="clearSearch()"></span>
+                </div>
+            </form>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-right" ng-show="allShows.length > perPage">
+                    <li>
+                        <ul uib-pagination total-items="allShows.length" ng-model="currentPage" items-per-page="perPage" rotate="true" max-size="5" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" style="margin: 8px 15px 0" ng-change="scroll()"></ul>
+                    </li>
+                </ul>
+                <p class="navbar-text navbar-right"><ng-pluralize count="allShows.length" when="plurals.show"></ng-pluralize></p>
+            </div>
+        </nav>
+    </div>
+</div>
+<div scroll-y-model="pixelsScrolled" class="container" ng-style="{marginTop: pixelsScrolled > 204 ? '112px' : '30px'}">
+    <div class="row text-center" style="margin-top:100px" ng-if="allShows.length === 0">
+        <p class="lead">No matching shows</p>
+        <p><button class="btn btn-sm" ng-click="resetFilters() && buildData()">Clear Filters</button></p>
+    </div>
+    <div class="row" ng-repeat="showId in allShows | startFrom:(currentPage-1)*perPage | limitTo:perPage" ng-init="show=shows[showId]">
+        <hr ng-if="! $first" />
+        <div class="col-md-2">
+            <img ng-src="img/show/{{show.image}}" style="width:100%" ng-if="show.image" />
+        </div>
+        <div class="col-md-8">
+            <div class="h4" style="margin-top: 0; margin-bottom: 10px"><strong ng-bind-html="show.name|highlight:searchText"></strong></div>
+            <p ng-if="show.artist">
+                <em>
+                    by <strong ng-bind-html="show.artist|highlight:searchText"></strong><span ng-if="show.artistLocation">, {{show.artistLocation}}</span>
+                </em>
+            </p>
+            <p style="margin-top: 20px" ng-bind-html="show.description|highlight:searchText"></p>
+            <p ng-if="show.warnings"><br /><em class="small">Note: {{show.warnings.join(', ')}}</em></p>
+            <p style="margin: 20px 0 0">
+                <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
+                <show-rating value="ratings[show.rating]"></show-rating>
+                <span class="label label-success">{{show.price|price}}</span>
+            </p>
+        </div>
+        <div class="col-md-2">
+            <strong class="small">Interest:</strong>
+            <div class="lead">
+                <interest show-id="showId"></interest>
+            </div>
+            <div class="small" ng-init="firstPerformance = performances[show.performances[0]]">
+                <p>{{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</p>
+                <strong><ng-pluralize count="show.performances.length" when="plurals.Performance"></ng-pluralize>:</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="pId in show.performances | limitTo:allShowPerformances[showId] ? show.performances.length : 10">{{moment(performances[pId].start, 'X').format('MMM D, h:mm a')}} <i ng-if="isUserAttendingPerformance(pId)" class="glyphicon glyphicon-check text-success" style="margin-left:5px"></i></li>
+                    <li ng-if="! allShowPerformances[showId] && show.performances.length > 10"><a href ng-click="showAllPerformances(showId)">(show all)</a></li>
+                </ul>
+                <p><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop">Buy Tickets <i class="glyphicon glyphicon glyphicon-new-window"></i></a></p>
+            </div>
+        </div>
+    </div>
+    <div class="text-center" style="margin: 20px 0 40px">
+        <ul uib-pagination total-items="allShows.length" ng-model="currentPage" items-per-page="perPage" rotate="true" max-size="10" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" ng-change="scroll()"></ul>
+    </div>
+</div>
+    </script>
+    <script type="text/ng-template" id="app/schedule/schedule.html">
+    <div class="jumbotron" style="margin-bottom:0">
+    <div class="container">
+        <h1>Schedule</h1>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2" style="margin-top:30px">
+            <div data-offset-top="-80" bs-affix>
+                <div class="btn-group" ng-model="userData.settings.scheduleMode" bs-radio-group style="width:100%; margin-top: 3px">
+                    <label class="btn btn-default" style="width:50%" ng-class="userData.settings.scheduleMode=='smart' && 'btn-primary'" bs-tooltip="{title: 'Hides performances you\'re not interested in, can\'t attend, or are seeing at a different time.'}">
+                        <input type="radio" value="smart"> Smart
+                    </label>
+                    <label class="btn btn-default" style="width:50%" ng-class="userData.settings.scheduleMode=='full' && 'btn-primary'" bs-tooltip="{title: 'Shows full schedule.'}">
+                        <input type="radio" value="full"> Full
+                    </label>
+                </div>
+                <br />
+                <br />
+                <ul class="nav nav-pills nav-stacked">
+                    <li ng-repeat="(dayId, dayStart) in ::days" ng-class="{active:currentDay - 1 == dayId}">
+                        <a href ng-click="setDay(dayId+1)">{{moment(days[dayId], 'X').format('ddd, MMM Do')}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div data-offset-top="-51" bs-affix style="z-index:10000; background: white; padding-top:30px; margin-bottom:10px">
+                <div class="page-header" style="margin:0">
+                    <h1 style="margin:0 0 20px">
+                        {{moment(days[currentDay-1], 'X').format('dddd, MMMM D')}}
+                        <small><ng-pluralize count="schedule.length" when="plurals.show"></ng-pluralize></small>
+                    </h1>
+                    <ul uib-pager items-per-page="1" total-items="days.length" ng-model="currentDay" previous-text="&larr; Previous Day" next-text="Next Day &rarr;" ng-change="setDay(currentDay)" style="margin-bottom: 10px;"></ul>
+                </div>
+            </div>
+            <div class="row text-center" style="margin:100px 0" ng-if="!schedule.length">
+                <p class="lead text-center">No shows to display for this day.</p>
+                <p><button class="btn btn-sm" ng-click="userData.settings.scheduleMode='full'">Switch to Full Schedule</button></p>
+            </div>
+            <div ng-style="{marginTop: pixelsScrolled > 194 && '150px'}">
+                <table scroll-y-model="pixelsScrolled" class="table table-striped" ng-hide="!schedule.length">
+                    <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Show</th>
+                        <th>Interest</th>
+                        <th width="195">Going?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="entry in schedule">
+                        <td nowrap>{{moment(entry.performance.start, 'X').format('h:mm a')}} -
+                            {{moment(entry.performance.stop, 'X').format('h:mm a')}}</td>
+                        <td>
+                            <p class="h4" style="margin:0 0 10px;"><a href="#!/shows/show/{{entry.showId}}">{{entry.show.name}}</a></p>
+                            <span class="label label-venue-default label-venue-{{entry.venueId}}">{{entry.venue.name}}</span>
+                            <show-rating value="entry.rating"></show-rating>
+                            <span class="label label-success">{{entry.show.price|price}}</span>
+                        </td>
+                        <td nowrap style="vertical-align: middle"><interest show-id="entry.showId"></interest></td>
+                        <td nowrap style="vertical-align: middle">
+                            <div class="btn-group" ng-model="entry.attendState" bs-radio-group>
+                                <label class="btn btn-default" ng-class="entry.attendState == 'no' && 'btn-danger'" ng-click="removeFromSchedule(entry.id)" bs-tooltip="entry.attendState == 'no' && {title: entry.attendState == 'maybe' ? 'Not attending' : 'Remove from schedule'}">
+                                    <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
+                                </label>
+                                <label class="btn btn-default" ng-class="entry.attendState == 'maybe' && 'btn-warning'" ng-click="addToMaybe(entry.id)" bs-tooltip="entry.attendState != 'maybe' && {title: entry.attendState == 'no' ? 'Maybe attending' : 'Remove from schedule, maybe attending'}">
+                                    <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
+                                </label>
+                                <label class="btn btn-default" ng-class="{'btn-success': entry.attendState == 'yes', 'disabled': entry.attendState != 'yes' && !entry.canBeScheduled}" bs-tooltip="entry.attendState != 'yes' && {title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-click="entry.canBeScheduled && addToSchedule(entry.id)">
+                                    <input type="radio" value="yes" ng-disabled="entry.attendState != 'yes' && !entry.canBeScheduled"><span class="glyphicon glyphicon-thumbs-up"></span>
+                                </label>
+                            </div>
+                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px"><img src="img/ticket.png" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <ul uib-pager items-per-page="1" total-items="days.length" ng-model="currentDay" previous-text="&larr; Previous Day" next-text="Next Day &rarr;" ng-change="setDay(currentDay)"></ul>
+            </div>
+        </div>
+    </div>
+</div>    </script>
+    <script type="text/ng-template" id="app/map/map.html">
+    <div class="jumbotron">
+    <div class="container">
+        <h1>Map</h1>
+    </div>
+</div>
+<div class="container">
+    <p class="lead text-center" ng-if="! mapLoaded">Loading map...</p>
+    <div class="row" ng-if="markerGroups" ng-style="{visibility: !mapLoaded ? 'hidden' : 'visible'}">
+        <div class="col-md-3">
+            <h3>Views</h3>
+            <ul class="list-unstyled">
+                <li ng-repeat="view in ::views"><a href ng-click="gotoView(view)">{{view.name}}</a></li>
+            </ul>
+            <hr />
+            <h3 style="margin-bottom: 15px">Layers</h3>
+            <ul class="nav nav-default nav-pills nav-stacked">
+                <li ng-repeat="group in ::markerGroups" ng-class="{active:isGroupVisible[group.id]}">
+                    <a href ng-click="toggleGroup(group.id)">{{group.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div>
+                <ng-map ng-style="{height: (innerHeight - 110) + 'px'}" clickable-icons="false" fullscreen-control="false" max-zoom="20" min-zoom="7" street-view-control="false" tilt="0" map-type-control-options="{mapTypeIds: ['roadmap', 'hybrid']}">
+                    <shape name="polygon"
+                           paths="{{lawnPolygon}}"
+                           stroke-color="#94af72"
+                           stroke-opacity="1"
+                           stroke-weight="1"
+                           fill-color="#cbe6a3"
+                           fill-opacity="0.8">
+                    </shape>
+                    <div ng-repeat="group in ::markerGroups">
+                        <marker ng-repeat="(markerId, marker) in ::group.markers" id="{{group.id + '-' + markerId}}" position="{{::marker.position}}" title="{{::marker.title}}" icon="img/map/{{marker.icon}}.png" ng-if="isGroupVisible[group.id]" on-click="markerClick(marker, group.id, markerId)"></marker>
+                    </div>
+                    <info-window id="marker-info">
+                        <div ng-non-bindable>
+                            <p class="lead">{{markerWindow.title}}</p>
+                            <address ng-if="markerWindow.location || markerWindow.address">
+                                <strong ng-if="markerWindow.location">{{markerWindow.location}}<br /></strong>
+                                <span ng-if="markerWindow.address">
+                                {{markerWindow.address[0]}}<br />
+                                {{markerWindow.address[1]}}
+                                </span>
+                            </address>
+                            <p ng-if="markerWindow.notes">{{markerWindow.notes}}</p>
+                            <p ng-if="markerWindow.venue || markerWindow.address">
+                                <a class="btn btn-default btn-sm" ng-if="markerWindow.venue" style="margin-right:6px" href="#!/shows/venue/{{markerWindow.venue}}">Shows</a>
+                                <a class="btn btn-default btn-sm" ng-if="markerWindow.address" href="https://www.google.com/maps/dir/?api=1&destination={{markerWindow.location}}, {{markerWindow.address.join(', ')}}" target="_blank">Directions</a>
+                            </p>
+                        </div>
+                    </info-window>
+                </ng-map>
+            </div>
+        </div>
+    </div>
+</div>    </script>
+    <script type="text/ng-template" id="app/myFringe/myFringe.html">
+    <div class="my-fringe">
+    <div class="jumbotron">
+        <div class="container">
+            <div class="pull-right col-md-3" style="margin-top: 16px" bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}">
+                <p class="lead" style="margin-bottom: 5px">Fringe Level: {{statuses[status].name}}</p>
+                <uib-progress max="maxLevel" animate="false" style="margin-bottom:2px">
+                    <uib-bar value="level" type="success"></uib-bar>
+                    <uib-bar value="nextLevelCount" class="level-progress"></uib-bar>
+                </uib-progress>
+                <small class="small" ng-if="nextLevelRemaining">
+                    Add <ng-pluralize count="nextLevelRemaining" when="plurals.aShow"></ng-pluralize> to your schedule to level up!
+                </small>
+            </div>
+            <h1>My Fringe</h1>
+            <div bs-active-pane="tabs.activeTab" bs-tabs>
+                <div data-title="My Schedule" name="My Schedule" bs-pane></div>
+                <div data-title="My Availability" name="My Availability" bs-pane></div>
+                <div data-title="Schedule Generator" name="Schedule Generator" bs-pane></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <my-fringe-schedule ng-if="tabs.activeTab == 'My Schedule'"></my-fringe-schedule>
+        <my-fringe-availability ng-if="tabs.activeTab == 'My Availability'"></my-fringe-availability>
+        <my-fringe-generator ng-if="tabs.activeTab == 'Schedule Generator'"></my-fringe-generator>
+    </div>
+</div>    </script>
+    <script type="text/ng-template" id="app/myFringe/availability/availability.html">
+    <div class="pull-right availability-legend">
+    <strong>Legend:</strong>
+    &nbsp;
+    <span class="availability-block bg-info" bs-tooltip="{title:'You have a show scheduled during this slot.'}">Scheduled</span>
+    <span class="availability-block bg-success">Available</span>
+    <span class="availability-block unavailable">Unavailable</span>
+</div>
+<p>Select the time slots you are available. Use the Previous/Next buttons to view all the days.</p>
+<ul uib-pager items-per-page="1" total-items="totalItems" ng-model="currentPage" previous-text="&larr; Previous" next-text="Next &rarr;"></ul>
+<div class="lead text-center" ng-if="!availabilitySlotsAll">Loading...</div>
+<table class="table table-bordered" ng-if="availabilitySlotsAll">
+    <thead>
+    <tr>
+        <th></th>
+        <th ng-repeat="(key, x) in availabilitySlots" class="text-center" ng-show="$index >= currentPage - 1 && $index < currentPage + 4">{{moment(key, 'X').format('ddd, MMM Do')}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <div class="availability-block" ng-repeat="slot in availabilitySlotsAll">
+                <strong>{{moment(slot + 1494820800, 'X').format('hh:mma')}}</strong>
+            </div>
+        </td>
+        <td ng-repeat="(dayId, daySlots) in availabilitySlots" ng-if="$index >= currentPage - 1 && $index < currentPage + 4">
+            <div ng-repeat="start in daySlots track by $index" ng-init="stop = start + 1800">
+                <div ng-if="start == 0" class="availability-block">&nbsp;</div>
+                <div ng-if="start > 0 && performancesInSlot[start].length > 0" class="pointer availability-block bg-info" bs-tooltip="{title:'Click to see performances'}" ng-click="showPerformances(start, stop, performancesInSlot[start])">
+                    {{moment(start, 'X').format('hh:mma')}} - {{moment(stop, 'X').format('hh:mma')}}
+                </div>
+                <div ng-if="start > 0 && performancesInSlot[start].length == 0" class="pointer availability-block" ng-class="hasAvailability(start) ? 'bg-success' : 'unavailable'" ng-click="toggleAvailability(start)">
+                    {{moment(start, 'X').format('hh:mma')}} - {{moment(stop, 'X').format('hh:mma')}}
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<ul uib-pager items-per-page="1" total-items="totalItems" ng-model="currentPage" previous-text="&larr; Previous" next-text="Next &rarr;"></ul>    </script>
+    <script type="text/ng-template" id="app/myFringe/generator/generator.html">
+    <div ng-if="!generatePossible" class="container">
+    <p class="lead">Hooray! Your schedule is full!</p>
+    <p>It is not possible to add any more shows to <a href="#" ng-click="setPage('My Schedule')">your schedule</a>.</p>
+    <p>If you don't like your schedule, you remove items and start again.</p>
+</div>
+<div class="container" ng-if="generatePossible">
+    <p class="lead">Step 1: Choose the shows you want to see</p>
+    <p ng-if="! hasSelectedShows">You haven't selected any shows you want to see yet. To add shows, use the <a href="#" ng-click="setPage('Shows')">Shows</a> screen.</p>
+    <div ng-if="hasSelectedShows">
+        <p>You have selected {{desiredShowCount}} shows. To add shows, use the <a href="#" ng-click="setPage('Shows')">Shows</a> screen.</p>
+    </div>
+    <hr />
+    <p class="lead">Step 2: Select the specific showtimes you definitely going to (optional)</p>
+    <div ng-if="! userData.schedule.length">
+        <p>You haven't selected any showtimes. That's ok!</p>
+        <p>But, if you have bought tickets to anything, make sure you go and select those on the <a href="#" ng-click="setPage('Schedule')">Schedule</a> screen. Otherwise, let's move on!</p>
+    </div>
+    <div ng-if="userData.schedule.length">
+        <p>There are already {{userData.schedule.length}} shows on your calendar. We won't touch those. If you need to make any changes, use the <a href="#" ng-click="setPage('Schedule')">Schedule</a> screen.</p>
+    </div>
+    <hr />
+    <p class="lead">Step 3: Set your availability</p>
+    <p>Select your availability on the <a href="#" ng-click="tabs.activeTab = 'My Availability'">My Availability</a> tab.</p>
+    <hr />
+    <p class="lead">Step 4: Generate a suggested schedule</p>
+    <div>
+        <p>When you click <b>Generate Schedule</b>, this tool will generate a schedule for you while doing the following:</p>
+        <ol>
+            <li>trying to fit as many shows in as possible</li>
+            <li>ensuring you have enough time to get to every show</li>
+            <li>attempting to group shows to reduce travel between locations</li>
+            <li>preferring to clump shows together so you have larger blocks of time off</li>
+        </ol>
+        <p>You'll have an opportunity to review the schedule before it is saved.</p>
+        <p><button class="btn btn-primary" ng-click="generate()">Generate Schedule</button></p>
+    </div>
+</div>    </script>
+    <script type="text/ng-template" id="app/myFringe/schedule/schedule.html">
+    <div class="row" ng-if="! hasSchedule">
+    <div ng-if="! hasPreferences">
+        <h1>Welcome!</h1>
+    </div>
+    <div ng-if="hasPreferences">
+        <h1>Your schedule is empty :(</h1>
+
+    </div>
+</div>
+
+<table class="table table-striped amazing-schedule" ng-if="hasSchedule">
+    <tbody ng-repeat="(day, amazingScheduleDay) in amazingSchedule">
+    <tr class="header">
+        <th colspan="5">
+            <h3 class="bg-info">{{moment(day, 'X').format('dddd, MMM D')}}</h3>
+        </th>
+    </tr>
+    <tr>
+        <th>Start</th>
+        <th>Stop</th>
+        <th>Show</th>
+        <th>Venue</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="item in amazingScheduleDay" ng-class="item.as">
+        <td ng-if="item.as=='performance'">{{moment(item.start, 'X').format('h:mm a')}}</td>
+        <td ng-if="item.as=='performance'">{{moment(item.stop, 'X').format('h:mm a')}}</td>
+        <td ng-if="item.as=='performance'"><a href="#!/shows/show/{{item.show}}">{{shows[item.show].name}}</a></td>
+        <td ng-if="item.as=='performance'">
+                <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
+                    {{venues[shows[item.show].venue].name}}
+                </span>
+            </a>
+        </td>
+        <td ng-if="item.as=='performance'">
+            <button class="btn btn-xs btn-danger" ng-click="removeFromSchedule(item.id)" bs-tooltip="{title:'Remove'}">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </td>
+        <td ng-if="item.as!=='performance'" colspan="5" ng-class="item.as">{{item.text}}</td>
+    </tr>
+    </tbody>
+</table>    </script>
+    <script type="text/ng-template" id="app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">
+        {{moment(slotStart, 'X').format('ddd, MMM Do hh:mma')}} - {{moment(slotStop, 'X').format('hh:mma')}}
+    </h3>
+</div>
+<div class="modal-body">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Time</th>
+            <th>Show</th>
+            <th>Venue</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="performanceId in slotPerformances" ng-init="performance = performances[performanceId]">
+            <td nowrap="nowrap">{{moment(performance.start, 'X').format('h:mm a')}} - {{moment(performance.stop, 'X').format('h:mm a')}}</td>
+            <td><strong>{{shows[performance.show].name}}</strong></td>
+            <td>
+                <span class="label label-venue-default label-venue-{{shows[performance.show].venue}}">
+                    {{venues[shows[performance.show].venue].name}}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-xs btn-danger" ng-click="remove(performanceId)" bs-tooltip="{title: 'Remove'}">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+</div>    </script>
+<script type="text/javascript">
+    document.body.className += ' js';
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-route.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/store2/2.5.9/store2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/compiler.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dimensions.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/parse-options.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.tpl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.tpl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
+<script src="res/genetics.js"></script>
+<script src="res/ng-map.min.js"></script>
+<script src="res/scheduler.js"></script>
+<script src="res/angular-location-update.min.js"></script>
+<script src="res/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
+<script src="app/app.js"></script>
+<script src="app/app.config.js"></script>
+<script src="app/core/filters/highlight.js"></script>
+<script src="app/core/filters/price.js"></script>
+<script src="app/core/filters/startFrom.js"></script>
+<script src="app/core/directives/interest.js"></script>
+<script src="app/core/directives/scrollYModel.js"></script>
+<script src="app/core/directives/showRating.js"></script>
+<script src="app/core/directives/staticMap.js"></script>
+<script src="app/core/services/availability.js"></script>
+<script src="app/core/services/data.js"></script>
+<script src="app/core/services/error.js"></script>
+<script src="app/core/services/schedule.js"></script>
+<script src="app/core/services/userData.js"></script>
+<script src="app/core/core.js"></script>
+<script src="app/about/about.js"></script>
+<script src="app/help/help.js"></script>
+<script src="app/myFringe/myFringe.js"></script>
+<script src="app/myFringe/availability/availability.js"></script>
+<script src="app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.js"></script>
+<script src="app/myFringe/generator/generator.js"></script>
+<script src="app/myFringe/schedule/schedule.js"></script>
+<script src="app/map/map.js"></script>
+<script src="app/schedule/schedule.js"></script>
+<script src="app/shows/shows.js"></script>
+<script src="app/venues/venues.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDdE91DU1mNa65N7Utpolt787MKFpFo0z4"></script>
+</body>
+</html>

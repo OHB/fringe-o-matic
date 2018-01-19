@@ -1,0 +1,74 @@
+<div class="jumbotron" style="margin-bottom:10px">
+    <div class="container">
+        <h1>Shows</h1>
+    </div>
+</div>
+<div data-offset-top="-51" bs-affix style="z-index:10000; background: white">
+    <div class="container" style="padding-top: 20px">
+        <nav class="navbar navbar-default" style="margin-bottom: 0">
+            <form class="navbar-form navbar-left">
+                <button type="button" class="btn btn-default" ng-model="selectedVenue" bs-options="o.value as o.label for o in venueOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <button type="button" class="btn btn-default" ng-model="selectedRating" bs-options="o.value as o.label for o in ratingOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <button type="button" class="btn btn-default" ng-model="selectedPrice" bs-options="o.value as o.label for o in priceOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <button type="button" class="btn btn-default" ng-model="selectedOther" bs-options="o.value as o.label for o in otherOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Search" ng-model="search" ng-change="searchTextEntered()">
+                    <span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show="searchText" ng-click="clearSearch()"></span>
+                </div>
+            </form>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-right" ng-show="allShows.length > perPage">
+                    <li>
+                        <ul uib-pagination total-items="allShows.length" ng-model="currentPage" items-per-page="perPage" rotate="true" max-size="5" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" style="margin: 8px 15px 0" ng-change="scroll()"></ul>
+                    </li>
+                </ul>
+                <p class="navbar-text navbar-right"><ng-pluralize count="allShows.length" when="plurals.show"></ng-pluralize></p>
+            </div>
+        </nav>
+    </div>
+</div>
+<div scroll-y-model="pixelsScrolled" class="container" ng-style="{marginTop: pixelsScrolled > 204 ? '112px' : '30px'}">
+    <div class="row text-center" style="margin-top:100px" ng-if="allShows.length === 0">
+        <p class="lead">No matching shows</p>
+        <p><button class="btn btn-sm" ng-click="resetFilters() && buildData()">Clear Filters</button></p>
+    </div>
+    <div class="row" ng-repeat="showId in allShows | startFrom:(currentPage-1)*perPage | limitTo:perPage" ng-init="show=shows[showId]">
+        <hr ng-if="! $first" />
+        <div class="col-md-2">
+            <img ng-src="img/show/{{show.image}}" style="width:100%" ng-if="show.image" />
+        </div>
+        <div class="col-md-8">
+            <div class="h4" style="margin-top: 0; margin-bottom: 10px"><strong ng-bind-html="show.name|highlight:searchText"></strong></div>
+            <p ng-if="show.artist">
+                <em>
+                    by <strong ng-bind-html="show.artist|highlight:searchText"></strong><span ng-if="show.artistLocation">, {{show.artistLocation}}</span>
+                </em>
+            </p>
+            <p style="margin-top: 20px" ng-bind-html="show.description|highlight:searchText"></p>
+            <p ng-if="show.warnings"><br /><em class="small">Note: {{show.warnings.join(', ')}}</em></p>
+            <p style="margin: 20px 0 0">
+                <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
+                <show-rating value="ratings[show.rating]"></show-rating>
+                <span class="label label-success">{{show.price|price}}</span>
+            </p>
+        </div>
+        <div class="col-md-2">
+            <strong class="small">Interest:</strong>
+            <div class="lead">
+                <interest show-id="showId"></interest>
+            </div>
+            <div class="small" ng-init="firstPerformance = performances[show.performances[0]]">
+                <p>{{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</p>
+                <strong><ng-pluralize count="show.performances.length" when="plurals.Performance"></ng-pluralize>:</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="pId in show.performances | limitTo:allShowPerformances[showId] ? show.performances.length : 10">{{moment(performances[pId].start, 'X').format('MMM D, h:mm a')}} <i ng-if="isUserAttendingPerformance(pId)" class="glyphicon glyphicon-check text-success" style="margin-left:5px"></i></li>
+                    <li ng-if="! allShowPerformances[showId] && show.performances.length > 10"><a href ng-click="showAllPerformances(showId)">(show all)</a></li>
+                </ul>
+                <p><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop">Buy Tickets <i class="glyphicon glyphicon glyphicon-new-window"></i></a></p>
+            </div>
+        </div>
+    </div>
+    <div class="text-center" style="margin: 20px 0 40px">
+        <ul uib-pagination total-items="allShows.length" ng-model="currentPage" items-per-page="perPage" rotate="true" max-size="10" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" ng-change="scroll()"></ul>
+    </div>
+</div>

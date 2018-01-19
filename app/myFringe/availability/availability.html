@@ -1,0 +1,39 @@
+<div class="pull-right availability-legend">
+    <strong>Legend:</strong>
+    &nbsp;
+    <span class="availability-block bg-info" bs-tooltip="{title:'You have a show scheduled during this slot.'}">Scheduled</span>
+    <span class="availability-block bg-success">Available</span>
+    <span class="availability-block unavailable">Unavailable</span>
+</div>
+<p>Select the time slots you are available. Use the Previous/Next buttons to view all the days.</p>
+<ul uib-pager items-per-page="1" total-items="totalItems" ng-model="currentPage" previous-text="&larr; Previous" next-text="Next &rarr;"></ul>
+<div class="lead text-center" ng-if="!availabilitySlotsAll">Loading...</div>
+<table class="table table-bordered" ng-if="availabilitySlotsAll">
+    <thead>
+    <tr>
+        <th></th>
+        <th ng-repeat="(key, x) in availabilitySlots" class="text-center" ng-show="$index >= currentPage - 1 && $index < currentPage + 4">{{moment(key, 'X').format('ddd, MMM Do')}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <div class="availability-block" ng-repeat="slot in availabilitySlotsAll">
+                <strong>{{moment(slot + 1494820800, 'X').format('hh:mma')}}</strong>
+            </div>
+        </td>
+        <td ng-repeat="(dayId, daySlots) in availabilitySlots" ng-if="$index >= currentPage - 1 && $index < currentPage + 4">
+            <div ng-repeat="start in daySlots track by $index" ng-init="stop = start + 1800">
+                <div ng-if="start == 0" class="availability-block">&nbsp;</div>
+                <div ng-if="start > 0 && performancesInSlot[start].length > 0" class="pointer availability-block bg-info" bs-tooltip="{title:'Click to see performances'}" ng-click="showPerformances(start, stop, performancesInSlot[start])">
+                    {{moment(start, 'X').format('hh:mma')}} - {{moment(stop, 'X').format('hh:mma')}}
+                </div>
+                <div ng-if="start > 0 && performancesInSlot[start].length == 0" class="pointer availability-block" ng-class="hasAvailability(start) ? 'bg-success' : 'unavailable'" ng-click="toggleAvailability(start)">
+                    {{moment(start, 'X').format('hh:mma')}} - {{moment(stop, 'X').format('hh:mma')}}
+                </div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<ul uib-pager items-per-page="1" total-items="totalItems" ng-model="currentPage" previous-text="&larr; Previous" next-text="Next &rarr;"></ul>
