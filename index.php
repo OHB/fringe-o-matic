@@ -1,10 +1,18 @@
-<?php ob_start(); ?><!DOCTYPE html>
+<?php
+$build = json_decode(file_get_contents('build.json'));
+ob_start("ob_gzhandler");
+?><!DOCTYPE html>
 <html ng-app="fringeApp">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Fringe-o-Matic</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="./res/style.css" />
+    <?php foreach (isset($_REQUEST['compiled']) ? ['compiled.css'] : $build->css as $script) { ?>
+        <link rel="stylesheet" type="text/css" href="<?php echo $script; ?>" />
+    <?php } ?>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:500,700" rel="stylesheet">
     <!--<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />-->
     <style>
         [ng-cloak] {
@@ -12,6 +20,8 @@
         }
         body {
             padding-top: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -76,13 +86,10 @@
 </div>
 <p style="height: 20px">&nbsp;</p>
 <?php
-$templates = [
-    'about', 'help', 'venues', 'shows', 'schedule', 'map',
-    'myFringe', 'myFringe/availability', 'myFringe/generator', 'myFringe/schedule',
-    'myFringe/availability/slotPerformancesModal',
-    'myFringe/generate/generateModal',
-];
-foreach ($templates as $component) { $filename = 'app/' . $component . '/' . basename($component) . '.html'; ?>
+if (isset($_REQUEST['compiled'])) {
+    echo file_get_contents('compiled.html');
+}
+foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $component) { ?>
     <script type="text/ng-template" id="<?php echo $filename; ?>">
     <?php echo file_get_contents($filename); ?>
     </script>
@@ -106,39 +113,10 @@ foreach ($templates as $component) { $filename = 'app/' . $component . '/' . bas
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
-<script src="res/genetics.js"></script>
-<script src="res/ng-map.min.js"></script>
-<script src="res/angular-location-update.min.js"></script>
-<script src="res/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
-<script src="app/app.js"></script>
-<script src="app/app.config.js"></script>
-<script src="app/core/filters/highlight.js"></script>
-<script src="app/core/filters/price.js"></script>
-<script src="app/core/filters/startFrom.js"></script>
-<script src="app/core/directives/interest.js"></script>
-<script src="app/core/directives/scrollYModel.js"></script>
-<script src="app/core/directives/showRating.js"></script>
-<script src="app/core/directives/staticMap.js"></script>
-<script src="app/core/services/availability.js"></script>
-<script src="app/core/services/data.js"></script>
-<script src="app/core/services/error.js"></script>
-<script src="app/core/services/schedule.js"></script>
-<script src="app/core/services/userData.js"></script>
-<script src="app/core/core.js"></script>
-<script src="app/about/about.js"></script>
-<script src="app/help/help.js"></script>
-<script src="app/myFringe/myFringe.js"></script>
-<script src="app/myFringe/availability/availability.js"></script>
-<script src="app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.js"></script>
-<script src="app/myFringe/generator/generator.js"></script>
-<script src="app/myFringe/generator/generateModal/generateModal.js"></script>
-<script src="app/myFringe/generator/services/generatorFactory.js"></script>
-<script src="app/myFringe/schedule/schedule.js"></script>
-<script src="app/map/map.js"></script>
-<script src="app/schedule/schedule.js"></script>
-<script src="app/shows/shows.js"></script>
-<script src="app/venues/venues.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDdE91DU1mNa65N7Utpolt787MKFpFo0z4"></script>
+<?php foreach (isset($_REQUEST['compiled']) ? ['compiled.js'] : $build->js as $script) { ?>
+<script src="<?php echo $script; ?>"></script>
+<?php } ?>
 </body>
 </html>
 <?php file_put_contents('index.html', ob_get_contents());

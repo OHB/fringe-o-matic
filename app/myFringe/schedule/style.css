@@ -1,0 +1,13 @@
+.amazing-schedule > tbody > .header {
+    background-color: transparent !important;
+}
+
+.amazing-schedule > tbody > .header > th {
+    padding: 0;
+    border-top: 0
+}
+
+.amazing-schedule > tbody > .header > th > h3 {
+    margin: 40px 0 0 0;
+    padding: 8px;
+}

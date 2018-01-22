@@ -1,0 +1,179 @@
+<div ng-if="!screen">
+    <h1>Analyzing...</h1>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" style="width: 100%">
+        </div>
+    </div>
+</div>
+<div ng-if="screen">
+    <div ng-if="screen == 'intro'">
+        <h1>Introduction</h1>
+        <p class="lead">The Auto-Scheduler helps build your schedule automatically. It needs to know two things:</p>
+        <div class="step">
+            <div class="step-number bg-primary">1</div>
+            <div class="step-title">What shows do you want to see?</div>
+            <div class="step-body">
+                <p>On the <a href="#!/shows">Shows</a> and <a href="#!/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
+                <br />
+                <p>
+                <div ng-repeat="i in [0, 1, 2, 3, 4]" style="width:20%; display: inline-block; text-align: center">
+                    <interest desire="i" class="lead"></interest><br />
+                    {{interestText[i]}}
+                </div>
+                </p>
+                <br />
+                <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
+            </div>
+        </div>
+        <hr />
+        <div class="step">
+            <div class="step-number bg-primary">2</div>
+            <div class="step-title">When are you available?</div>
+            <div class="step-body">
+                <p>On the <a href="#!/my-fringe/availability">My Availability</a> tab, you can select which times you are available to see shows.</p>
+                <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
+            </div>
+        </div>
+        <hr />
+        <div class="text-center">
+            <button class="btn btn-lg btn-primary" ng-click="completeIntro()">Got it!</button>
+        </div>
+    </div>
+    <div ng-if="screen == 'no-interests'">
+        <h1>Not so fast!</h1>
+        <p>Before you can use the Auto-Schedule you must select which shows you're interested in.</p>
+        <p>On the <a href="#!/shows">Shows</a> and <a href="#!/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
+        <br />
+        <p>
+        <div ng-repeat="i in [0, 1, 2, 3, 4]" style="width:20%; display: inline-block; text-align: center">
+            <interest desire="i" class="lead"></interest><br />
+            {{interestText[i]}}
+        </div>
+        </p>
+        <br />
+        <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
+        <p>Once you've done that, come back to this screen.</p>
+    </div>
+    <div class="row" ng-if="screen != 'intro' && screen != 'no-interests'">
+        <div class="col-md-9">
+            <div ng-if="screen == 'schedule-full'">
+                <h1>Your schedule is full!</h1>
+                <br />
+                <p>It's not possible to add any more shows to your schedule.</p>
+                <p ng-if="allDesiredShowsOnSchedule">But, all of the shows you're interested in are on your schedule.</p>
+            </div>
+            <div ng-if="screen == 'schedule-complete'">
+                <h1>Good news!</h1>
+                <br />
+                <p>Every show you want to see is on your schedule.</p>
+                <p>But, there's still room on your schedule for other shows.</p>
+            </div>
+            <div ng-if="screen == 'no-possible-desired'">
+                <h1>There's bad news and there's good news</h1>
+                <br />
+                <p><strong>Bad news:</strong> there's no room on your schedule for any more of the shows you're interested in.</p>
+                <p><strong>Good news:</strong> there's still room on your schedule for other shows.</p>
+            </div>
+            <div ng-if="screen == 'instant-add'">
+                <h1>I found
+                    <ng-pluralize
+                            count="instantAddPerformances.length"
+                            when="instantAddScreenCount == 1 ? plurals.showSome : plurals.showSomeMore"
+                    ></ng-pluralize>
+                    you can see!</h1>
+                <br />
+                <p>These shows can be added to your schedule without impacting your ability to see other shows.</p>
+                <br/>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date/Time</th>
+                        <th>Show</th>
+                        <th>Interest</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="entry in instantAddPerformances">
+                        <td nowrap>
+                            <strong>{{::moment(entry.performance.start, 'X').format('dddd, MMMM D')}}</strong><br />
+                            {{::moment(entry.performance.start, 'X').format('h:mm a')}} -
+                            {{::moment(entry.performance.stop, 'X').format('h:mm a')}}
+                        </td>
+                        <td>
+                            <p class="h4" style="margin:0 0 10px;"><a href="#!/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
+                            <span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>
+                            <show-rating value="::entry.show.rating"></show-rating>
+                            <span class="label label-success">{{entry.show.price|price}}</span>
+                        </td>
+                        <td nowrap class="align-middle"><interest show-id="entry.showId"></interest></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br />
+                <p><button class="btn btn-primary" ng-click="addInstantAdd()">Add Shows &amp; Continue</button></p>
+            </div>
+            <div ng-if="screen == 'generator'">
+                <h1>It's time to generate!</h1>
+                <br />
+                <div class="alert alert-warning">
+                    <i class="glyphicon glyphicon-exclamation-sign"></i>
+                    <strong>Beware!</strong>
+                    Don't use this until you have assigned an Interest to each show you're interested in.
+                </div>
+                <p>When you click <strong>Generate Schedule</strong>, I will:</p>
+                <ul>
+                    <li>try to fit in as many shows that you're interested in as possible</li>
+                    <li>ensure you have enough time to get to every show</li>
+                    <li>prefer to place shows in nearby venues to reduce travel between locations</li>
+                    <li ng-if="showsOnScheduleCount > 0">
+                        not touch the <ng-pluralize count="showsOnScheduleCount" when="plurals.show"></ng-pluralize> already on your schedule
+                    </li>
+                </ul>
+                <br />
+                <p>You'll have an opportunity to review the schedule before it is saved.</p>
+                <br />
+                <p><button class="btn btn-primary" ng-click="generate()">Generate Schedule</button></p>
+            </div>
+            <div ng-if="screen == 'done'">
+                <h1>Done!</h1>
+                <br />
+                <p>I've done all I can do for now. Have a look at your schedule to double-check that you're happy with it.</p>
+                <br />
+                <br />
+                <p><a href="#!/my-fringe" class="btn btn-primary">View Schedule</a></p>
+            </div>
+        </div>
+        <div class="col-md-3" style="padding-top: 25px">
+            <div class="panel panel-default" data-offset-top="-80" bs-affix>
+                <div class="panel-heading">
+                    <h3 class="panel-title">Schedule Progress</h3>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <strong>Fullness</strong>
+                        <uib-progressbar
+                                class="progress"
+                                max="availablePerformanceCount"
+                                value="availablePerformanceCount - possiblePerformanceCount"
+                                animate="true"
+                                type="primary"></uib-progressbar>
+                    </div>
+                    <hr />
+                    <div ng-repeat="desire in [4, '3', '2', '1']">
+                        <small>
+                            <interest desire="desire"></interest>
+                            <em class="pull-right">{{progressByDesire[desire]}}/{{progressByDesireMax[desire]}}</em>
+                        </small>
+                        <uib-progressbar
+                                class="progress"
+                                ng-style="$last && {marginBottom: 0}"
+                                max="progressByDesireMax[desire]"
+                                value="progressByDesire[desire]"
+                                animate="true"
+                                type="{{getProgressType(progressByDesire[desire], progressByDesireMax[desire])}}"></uib-progressbar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

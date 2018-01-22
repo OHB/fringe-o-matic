@@ -1,62 +1,97 @@
 angular.module('fringeApp').component('myFringeAvailability', {
     templateUrl: 'app/myFringe/availability/availability.html',
-    controller: ['$scope', '$uibModal', '$timeout', '$q', 'Data', 'Schedule', 'Availability', function($scope, $uibModal, $timeout, $q, Data, Schedule, Availability) {
-        $scope.moment = moment;
-        $scope.currentPage = 1;
+    controller: [
+        '$scope', '$uibModal', '$timeout', '$q', 'Data', 'Schedule', 'Availability', 'Configuration',
+        function($scope, $uibModal, $timeout, $q, Data, Schedule, Availability, Configuration) {
+            var performances;
 
-        $scope.performancesInSlot = {};
+            $scope.moment = moment;
+            $scope.slotSize = Configuration.slotSize;
+            $scope.availability = {};
 
-        $timeout(function() {
-            Data.getAvailabilitySlots().then(function(availabilitySlots) {
-                $scope.availabilitySlots = availabilitySlots;
-                $scope.totalItems = Object.keys($scope.availabilitySlots).length - 4;
+            var refreshPerformancesInSlots = function() {
+                var schedule = Schedule.getSchedule();
 
-                var qList = {};
-                angular.forEach(availabilitySlots, function(slots) {
+                $scope.slotPerformances = {};
+
+                angular.forEach($scope.availabilitySlots, function(slots) {
                     angular.forEach(slots, function(slot) {
-                        qList[slot] = Schedule.getPerformancesInSlot(slot, slot + 1800);
+                        $scope.slotPerformances[slot] = [];
+
+                        for (var i = 0; i < schedule.length; i ++) {
+                            var pId = schedule[i],
+                                performance = performances[pId];
+
+                            if (! (performance.stop <= slot || performance.start >= slot + Configuration.slotSize)) {
+                                $scope.slotPerformances[slot].push(pId)
+                            }
+                        }
                     });
                 });
-                $q.all(qList).then(function(slotPerformances) {
-                    $scope.performancesInSlot = slotPerformances;
+            };
 
-                    Data.getAvailabilitySlotsAll().then(function(availabilitySlotsAll) {
-                        $scope.availabilitySlotsAll = availabilitySlotsAll;
+            $timeout(function() {
+                $q.all([
+                    Data.getPerformances(),
+                    Data.getAvailabilitySlots(),
+                    Data.getAvailabilitySlotsAll()
+                ]).then(function(results) {
+                    performances = results[0];
+                    $scope.availabilitySlots = results[1];
+                    $scope.availabilitySlotsAll = results[2];
+
+                    angular.forEach($scope.availabilitySlots, function(slots) {
+                        angular.forEach(slots, function(slot) {
+                            $scope.availability[slot] = Availability.isSlotAvailable(slot);
+                        });
                     });
+
+                    refreshPerformancesInSlots();
                 });
             });
-        }, 100);
 
-        $scope.hasAvailability = function(slot) {
-            return Availability.isSlotAvailable(slot);
-        };
+            $scope.toggleAvailability = function(slot) {
+                $scope.availability[slot] ? Availability.setSlotUnavailable(slot) : Availability.setSlotAvaialble(slot);
+                $scope.availability[slot] = ! $scope.availability[slot];
+            };
 
-        $scope.toggleAvailability = function(slot) {
-            if ($scope.hasAvailability(slot)) {
-                Schedule.setSlotUnavaialble(slot);
-            } else {
-                Schedule.setSlotAvaialble(slot);
-            }
-        };
+            var dragType;
 
-        $scope.showPerformances = function(start, stop, performances) {
-            $uibModal.open({
-                templateUrl: 'app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.html',
-                controller: 'slotPerformancesModalCtrl',
-                size: 'lg',
-                scope: $scope,
-                resolve: {
-                    slotStart: function() {
-                        return start;
-                    },
-                    slotStop: function() {
-                        return stop;
-                    },
-                    slotPerformances: function() {
-                        return performances;
-                    }
+            $scope.dragStart = function(slot) {
+                $scope.toggleAvailability(slot);
+                dragType = $scope.availability[slot];
+                $scope.dragging = true;
+            };
+
+            $scope.dragStop = function() {
+                $scope.dragging = false;
+            };
+
+            $scope.dragOver = function (slot) {
+                if ($scope.dragging && $scope.availability[slot] !== dragType) {
+                    $scope.toggleAvailability(slot);
                 }
-            });
-        };
-    }]
+            };
+
+            $scope.showPerformances = function(start, stop, performances) {
+                $uibModal.open({
+                    templateUrl: 'app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.html',
+                    controller: 'slotPerformancesModalCtrl',
+                    size: 'lg',
+                    scope: $scope,
+                    resolve: {
+                        slotStart: function() {
+                            return start;
+                        },
+                        slotStop: function() {
+                            return stop;
+                        },
+                        slotPerformances: function() {
+                            return performances;
+                        }
+                    }
+                });
+            };
+        }
+    ]
 });

@@ -9,7 +9,7 @@ angular.module('fringeApp').directive('staticMap', function() {
         replace: true,
         template: '<img ng-src="{{url}}" />',
         controller: ['$scope', function($scope) {
-            var params = [];
+            var params = ['key=AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys'];
 
             if ($scope.center) {
                 params.push('center=' + $scope.center);

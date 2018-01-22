@@ -155,7 +155,6 @@ $json = json_decode(file_get_contents('shows.json'));
 $events = [];
 $performances = [];
 $venues = [];
-$schedule = [];
 $availabilitySlots = [];
 $availabilitySlotsAll = [];
 
@@ -229,22 +228,13 @@ foreach ($json as $showId => $show) {
 
         $day = strtotime(date('Y-m-d', $start));
 
-        if (! isset($schedule[$day])) {
-            $schedule[$day] = [];
-        }
-
-        $schedule[$day][] = [
-            'start' => $start,
-            'stop' => $end,
-            'performance' => (string) $performanceId
-        ];
-
         if (! isset($availabilitySlots[$day])) {
             $availabilitySlots[$day] = [];
         }
 
-        for ($i = $start; $i < $end + 900; $i += 1800) {
-            $slot = $i - ($i % 1800);
+        // why was this $end + 900 ???
+        for ($i = $start; $i < $end; $i += 3600) {
+            $slot = $i - ($i % 3600);
             $availabilitySlots[$day][$slot] = true;
             $availabilitySlotsAll[$slot - $day] = true;
         }
@@ -260,35 +250,10 @@ uasort($events, function($a, $b) {
 
 $availabilitySlotsAll = array_keys($availabilitySlotsAll);
 sort($availabilitySlotsAll);
-$adjustedAvailabilitySlots = [];
 
-ksort($schedule);
-foreach ($schedule as $day => &$shows) {
-    usort($shows, function($a, $b) {
-        if ($a['start'] == $b['start']) {
-            return $a['stop'] - $b['stop'];
-        }
-
-        return $a['start'] > $b['start'];
-    });
-
-    $shows = array_map(function($item) {
-        return $item['performance'];
-    }, $shows);
-
-    $adjustedAvailabilitySlots[$day] = [];
-
-    foreach ($availabilitySlotsAll as $slot) {
-        $adjustedAvailabilitySlots[$day][] = isset($availabilitySlots[$day][$day + $slot]) ? $day + $slot : 0;
-    }
+foreach ($availabilitySlots as $day => &$slots) {
+    $slots = array_keys($slots);
 }
-
-foreach ($adjustedAvailabilitySlots as &$slots) {
-    while (end($slots) == 0) {
-        array_pop($slots);
-    }
-}
-
 
 $distances = array_combine(array_keys($venues), array_fill(0, count($venues), []));
 
@@ -314,8 +279,7 @@ $json = json_encode([
     'venues' => $venues,
     'venueHosts' => $venueHosts,
     'distances' => $distances,
-    'schedule' => $schedule,
-    'availabilitySlots' => $adjustedAvailabilitySlots,
+    'availabilitySlots' => $availabilitySlots,
     'availabilitySlotsAll' => $availabilitySlotsAll,
 ], JSON_UNESCAPED_UNICODE + JSON_UNESCAPED_SLASHES);
 

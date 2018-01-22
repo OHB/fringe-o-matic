@@ -1,30 +1,43 @@
 angular.module('fringeApp')
-    .value('GOOGLE_MAPS_API_KEY', 'AIzaSyDdE91DU1mNa65N7Utpolt787MKFpFo0z4')
     .value('Sorters', {
         performance: function(a, b) {
             return a.start - b.start || a.stop - b.stop;
         }
     })
-    .value('InterestText', [
-        'Eh...maybe.',
-        "I wouldn't mind seeing this.",
-        "I'd love to see this!",
-        'I HAVE to see this!'
-    ])
-    .value('FringeLevels', [
-        {min: 0, name: 'New Recruit'},
-        {min: 1, name: 'Newbie'},
-        {min: 3, name: 'Rookie'},
-        {min: 5, name: 'Amateur'},
-        {min: 10, name: 'Awesome'},
-        {min: 20, name: 'Rockstar'},
-        {min: 30, name: 'Hero'},
-        {min: 40, name: 'Fanatic'},
-        {min: 50, name: 'Legend'},
-        {min: 65, name: 'BOSS'}
-    ])
+    .value('Configuration', {
+        slotSize: 3600,
+        minimumArriveBeforeShowTime: 600,
+        interestText: [
+            'Not Interested',
+            'Eh...maybe.',
+            "I wouldn't mind seeing this.",
+            "I'd love to see this!",
+            'I HAVE to see this!'
+        ],
+        generatorMessages: [
+            'This may take a few seconds or several minutes.',
+            'You may see the lower progress bars fluctuate back and forth. This is normal.',
+            'It may not be possible to see all of the shows you want.',
+            'The longer you let this run, the better the schedule will be.',
+            'If the generator gets \'stuck\', it will be stopped automatically.'
+        ],
+        fringeLevels: [
+            {min: 0, name: 'New Recruit'},
+            {min: 1, name: 'Newbie'},
+            {min: 3, name: 'Rookie'},
+            {min: 5, name: 'Amateur'},
+            {min: 10, name: 'Awesome'},
+            {min: 20, name: 'Rockstar'},
+            {min: 30, name: 'Hero'},
+            {min: 40, name: 'Fanatic'},
+            {min: 50, name: 'Legend'},
+            {min: 65, name: 'BOSS'}
+        ]
+    })
     .value('Plurals', {
         show: {0: 'no shows', one: 'one show', other: '{} shows'},
+        showSome: {0: 'no shows', one: 'a show', other: 'some shows'},
+        showSomeMore: {0: 'no more shows', one: 'another show', other: 'some more shows'},
         aShow: {0: 'no shows', one: 'a show', other: '{} shows'},
         performance: {0: 'no performances', one: 'one performance', other: '{} performances'},
         Performance: {0: 'No performances', one: '1 Performance', other: '{} Performances'}
@@ -43,7 +56,7 @@ angular.module('fringeApp')
         views: [
             {name: 'Fringe Central', center: [28.572253, -81.367035], zoom: 18, markerGroups: true},
             {name: 'Green Lawn of Fabulousness', markerGroups: true, center: [28.571914, -81.366537], zoom: 19},
-            {name: 'Venues', markerGroups: ['venues', 'byov']},
+            {name: 'All Venues', markerGroups: ['venues', 'byov']},
             {name: 'Parking', markerGroups: ['parking']}
         ],
         markerGroups: [
@@ -181,7 +194,7 @@ angular.module('fringeApp')
                     template: '<my-fringe></my-fringe>'
                 }).when('/my-fringe/availability', {
                     template: '<my-fringe></my-fringe>'
-                }).when('/my-fringe/generate', {
+                }).when('/my-fringe/auto-scheduler', {
                     template: '<my-fringe></my-fringe>'
                 }).when('/shows', {
                     template: '<shows></shows>'

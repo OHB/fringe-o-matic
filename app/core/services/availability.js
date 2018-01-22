@@ -9,7 +9,7 @@ angular.module('fringeApp').service('Availability', ['UserData', function(UserDa
         UserData.setUnavailability(unavailability);
     };
 
-    this.setSlotUnavaialble = function(slot) {
+    this.setSlotUnavailable = function(slot) {
         if (this.isSlotAvailable(slot)) {
             var unavailability = UserData.getUnavailability();
             unavailability.push(slot);

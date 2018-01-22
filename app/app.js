@@ -1,3 +1,24 @@
+Array.prototype.diff = function(a) {
+    return this.filter(function(i) {
+        return a.indexOf(i) < 0;
+    });
+};
+
+Array.prototype.shuffle = function() {
+    var array = this.slice(0),
+        j = 0,
+        temp = null;
+
+    for (var i = this.length - 1; i > 0; i -= 1) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    return array;
+};
+
 Array.prototype.randomElement = function () {
     return this[Math.floor(Math.random() * this.length)]
 };

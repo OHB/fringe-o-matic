@@ -1,15 +1,53 @@
 angular.module('fringeApp').component('schedule', {
     templateUrl: 'app/schedule/schedule.html',
-    controller: [
-        '$scope', '$timeout', '$window', '$q', 'Data', 'Schedule', 'UserData', 'Plurals',
-        function($scope, $timeout, $window, $q, Data, Schedule, UserData, Plurals) {
-            var baseSchedule;
+    controller: ['$scope', '$q', '$timeout', '$window', 'UserData', 'Data', 'Schedule', 'Availability', 'Plurals', 'debounce', function($scope, $q, $timeout, $window, UserData, Data, Schedule, Availability, Plurals, debounce) {
+        $scope.moment = moment;
+        $scope.plurals = Plurals;
 
-            $scope.moment = moment;
-            $scope.plurals = Plurals;
+        $scope.settings = {scheduleMode: UserData.getSettings().scheduleMode};
+        $scope.preferences = UserData.getPreferences();
 
-            $scope.userData = {settings: UserData.getSettings(), preferences: UserData.getPreferences()};
+        var baseSchedule;
 
+        var refresh = function() {
+            if (! baseSchedule) {
+                return;
+            }
+
+            $q.all([
+                Schedule.getPossiblePerformances(),
+                Schedule.getShowsAttending()
+            ]).then(function(results) {
+                var possiblePerformances = results[0],
+                    showsAttending = results[1],
+                    performancesAttending = Schedule.getSchedule();
+
+                $scope.schedule = baseSchedule.filter(function(entry) {
+                    var dayStart = $scope.days[$scope.currentDay - 1];
+
+                    if ($scope.settings.scheduleMode === 'smart' && Schedule.getShowDesire(entry.showId) < 1) {
+                        return false;
+                    }
+
+                    return (! (entry.performance.start < dayStart || entry.performance.start > dayStart + 86400));
+                }).map(function(entry) {
+                    entry.isAttending = performancesAttending.indexOf(entry.id) > -1;
+                    entry.canAttend = Availability.isUserAvailable(entry.performance.start, entry.performance.stop);
+                    entry.canBeScheduled = possiblePerformances.indexOf(entry.id) > -1;
+                    entry.attendState = Schedule.getPerformanceScheduleState(entry.id);
+
+                    return entry;
+                }).filter(function(entry) {
+                    if ($scope.settings.scheduleMode === 'full' || entry.attendState === 'yes') {
+                        return true;
+                    }
+
+                    return entry.canBeScheduled && showsAttending.indexOf(entry.showId) === -1;
+                });
+            });
+        };
+
+        $timeout(function() {
             $q.all([
                 Data.getAvailabilitySlots(),
                 Data.getSortedPerformances(),
@@ -18,18 +56,16 @@ angular.module('fringeApp').component('schedule', {
                 Data.getVenues(),
                 Data.getRatings()
             ]).then(function(results) {
-                var availabilitySlots = results[0],
-                    sortedPerformances = results[1],
+                $scope.days = Object.keys(results[0]).map(function(i) {
+                    return +i;
+                });
+                $scope.currentDay = ($scope.days.indexOf(moment().startOf('day').unix()) + 1) || 1;
+
+                var sortedPerformances = results[1],
                     performances = results[2],
                     shows = results[3],
                     venues = results[4],
                     ratings = results[5];
-
-                $scope.days = Object.keys(availabilitySlots).map(function(i) {
-                    return +i;
-                });
-
-                $scope.currentDay = ($scope.days.indexOf(moment().startOf('day').unix()) + 1) || 1;
 
                 baseSchedule = sortedPerformances.map(function(pId) {
                     var performance = performances[pId],
@@ -43,6 +79,7 @@ angular.module('fringeApp').component('schedule', {
                         venueId: show.venue,
                         venue: venues[show.venue],
                         rating: ratings[show.rating],
+                        isAttending: false,
                         canAttend: false,
                         canBeScheduled: false,
                         attendState: 'no'
@@ -51,99 +88,46 @@ angular.module('fringeApp').component('schedule', {
 
                 refresh();
             });
+        });
 
-            $scope.attendState = {};
+        var updateHeight = function() {
+            $scope.innerHeight = $window.innerHeight;
+        };
 
-            var refresh = function() {
-                if (! baseSchedule) {
-                    return;
-                }
+        angular.element($window).on('resize', debounce(function() {
+            $scope.$apply(updateHeight);
+        }, 100));
 
-                var entries = baseSchedule.filter(function(entry) {
-                    var dayStart = $scope.days[$scope.currentDay - 1];
+        updateHeight();
 
-                    return (! (entry.performance.start < dayStart || entry.performance.start > dayStart + 86400));
-                });
+        $scope.$watch('settings', function() {
+            var settings = UserData.getSettings();
+            settings.scheduleMode = $scope.settings.scheduleMode;
+            UserData.setSettings(settings);
+            refresh();
+        }, true);
+        $scope.$watch('userData.preferences', refresh, true);
 
-                var qLists = {
-                    canUserAttendPerformance: {},
-                    canPerformanceBeAddedToSchedule: {},
-                    isUserAttendingShow: {}
-                };
-                entries.map(function(entry) {
-                    entry.isAttending = Schedule.isUserAttendingPerformance(entry.id);
-                    entry.attendState = Schedule.getPerformanceScheduleState(entry.id);
-                    if (! entry.isAttending) {
-                        qLists.canUserAttendPerformance[entry.id] = Schedule.canUserAttendPerformance(entry.id);
-                        qLists.canPerformanceBeAddedToSchedule[entry.id] = Schedule.canPerformanceBeAddedToSchedule(entry.id);
-
-                        if (qLists.isUserAttendingShow[entry.showId] === undefined) {
-                            qLists.isUserAttendingShow[entry.showId] = Schedule.isUserAttendingShow(entry.showId);
-                        }
-                    }
-
-                    return entry;
-                });
-                $q.all([
-                    qLists.canUserAttendPerformance,
-                    qLists.canPerformanceBeAddedToSchedule,
-                    qLists.isUserAttendingShow
-                ]).then(function(results) {
-                    var canUserAttendPerformance = results[0],
-                        canPerformanceBeAddedToSchedule = results[1],
-                        isUserAttendingShow = results[2];
-
-                    $scope.schedule = entries.map(function(entry) {
-                        entry.canAttend = ! entry.isAttending && canUserAttendPerformance[entry.id];
-                        entry.canBeScheduled = entry.canAttend && canPerformanceBeAddedToSchedule[entry.id];
-
-                        return entry;
-
-                    }).filter(function(entry) {
-                        if ($scope.userData.settings.scheduleMode === 'smart') {
-                            if (entry.attendState === 'yes') {
-                                return true;
-                            }
-                            if (! entry.canAttend) {
-                                return false;
-                            }
-                            if (isUserAttendingShow[entry.showId]) {
-                                return false;
-                            }
-                        }
-
-                        return true;
-                    });
-                });
-            };
-
-            $scope.$watch('userData.settings', function() {
-                UserData.setSettings($scope.userData.settings);
-
-                refresh();
+        $scope.setDay = function(dayId) {
+            $scope.currentDay = dayId;
+            refresh();
+            $timeout(function() {
+                $window.scroll(0, 196);
             });
-            $scope.$watch('userData.preferences', refresh);
+        };
 
-            $scope.setDay = function(dayId) {
-                $scope.currentDay = dayId;
-                refresh();
-                $timeout(function() {
-                    $window.scroll(0, 196);
-                });
-            };
+        $scope.addToSchedule = function(performanceId) {
+            Schedule.add(performanceId);
+            refresh();
+        };
+        $scope.removeFromSchedule = function(performanceId) {
+            Schedule.remove(performanceId);
+            refresh();
+        };
+        $scope.addMaybe = function(performanceId) {
+            Schedule.addMaybe(performanceId);
+            refresh();
+        };
 
-            $scope.addToSchedule = function(performanceId) {
-                Schedule.add(performanceId);
-                refresh();
-            };
-            $scope.removeFromSchedule = function(performanceId) {
-                Schedule.remove(performanceId);
-                refresh();
-            };
-            $scope.addMaybe = function(performanceId) {
-                Schedule.addMaybe(performanceId);
-                refresh();
-            };
-        }
-    ]
+    }]
 });

@@ -1,7 +1,7 @@
-<div class="my-fringe">
-    <div class="jumbotron">
+<div>
+    <div class="jumbotron has-tabs">
         <div class="container">
-            <div class="pull-right col-md-3" style="margin-top: 16px" bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}">
+            <div class="pull-right col-md-3" style="margin-top: 21px" bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}">
                 <p class="lead" style="margin-bottom: 5px">Fringe Level: {{statuses[status].name}}</p>
                 <uib-progress max="maxLevel" animate="false" style="margin-bottom:2px">
                     <uib-bar value="level" type="success"></uib-bar>
@@ -15,13 +15,13 @@
             <div bs-active-pane="tabs.activeTab" bs-tabs>
                 <div data-title="My Schedule" name="My Schedule" bs-pane></div>
                 <div data-title="My Availability" name="My Availability" bs-pane></div>
-                <div data-title="Schedule Generator" name="Schedule Generator" bs-pane></div>
+                <div data-title="Auto-Scheduler" name="Auto-Scheduler" bs-pane></div>
             </div>
         </div>
     </div>
     <div class="container">
         <my-fringe-schedule ng-if="tabs.activeTab == 'My Schedule'"></my-fringe-schedule>
         <my-fringe-availability ng-if="tabs.activeTab == 'My Availability'"></my-fringe-availability>
-        <my-fringe-generator ng-if="tabs.activeTab == 'Schedule Generator'"></my-fringe-generator>
+        <my-fringe-auto-scheduler ng-if="tabs.activeTab == 'Auto-Scheduler'"></my-fringe-auto-scheduler>
     </div>
 </div>

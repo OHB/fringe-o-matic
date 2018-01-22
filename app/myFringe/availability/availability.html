@@ -1,39 +1,67 @@
-<div class="pull-right availability-legend">
-    <strong>Legend:</strong>
-    &nbsp;
-    <span class="availability-block bg-info" bs-tooltip="{title:'You have a show scheduled during this slot.'}">Scheduled</span>
-    <span class="availability-block bg-success">Available</span>
-    <span class="availability-block unavailable">Unavailable</span>
+<div ng-if="availabilitySlots">
+    <div class="pull-right availability-legend">
+        <strong>Legend:</strong>
+        &nbsp;
+        <span class="availability-block bg-info" bs-tooltip="{title:'You have a show scheduled during this slot.'}">Scheduled</span>
+        <span class="availability-block bg-success">Available</span>
+        <span class="availability-block unavailable">Unavailable</span>
+    </div>
+    <p>Select the time slots you are available by clicking them. Each slot is an hour.</p>
+    <p>You can click and drag to select multiple slots at once.</p>
+    <table class="availability-buffer">
+        <tr>
+            <td colspan="3" ng-mouseover="dragStop()"></td>
+        </tr>
+        <tr>
+            <td ng-mouseover="dragStop()"></td>
+            <td>
+                <table class="table table-bordered table-condensed table-bordered availability" ng-mouseup="dragStop()" draggable="false">
+                    <thead>
+                    <tr ng-mouseover="dragStop()">
+                        <th
+                                class="text-center"
+                                ng-mouseover="dragStop()"
+                                ng-repeat="(dayId, x) in ::availabilitySlots"
+                                ng-init="dow = moment(dayId, 'X').format('ddd')"
+                                ng-class="{'weekend': dow == 'Sat' || dow == 'Sun'}"
+                        >
+                            {{::dow}}<br />
+                            <span class="lead">{{::moment(dayId, 'X').format('D')}}</span><br />
+                            {{::moment(dayId, 'X').format('MMM')}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="timeId in ::availabilitySlotsAll">
+                        <td
+                                ng-repeat="(dayId, daySlots) in ::availabilitySlots"
+                                ng-init="start = +dayId + timeId; stop = start + slotSize; empty = daySlots.indexOf(start) == -1; dow = moment(dayId, 'X').format('ddd')"
+                                ng-class="::{empty: empty, weekend: dow == 'Sat' || dow == 'Sun'}"
+                                ng-mousedown="slotPerformances[start].length ? showPerformances(start, stop, slotPerformances[start]) : dragStart(start)"
+                                ng-mouseover="! slotPerformances[start].length && start > 0 && dragOver(start)"
+                        >
+                            <div
+                                    class="availability-block"
+                                    ng-class="!empty && (slotPerformances[start].length ? 'bg-info' : (availability[start] ? 'bg-success' : 'unavailable'))"
+                                    ng-if="::!empty"
+                                    bs-tooltip="!dragging && {title:slotPerformances[start].length ? 'Click to see performances' : moment(start, 'X').format('h:mm a') + ' - ' + moment(stop, 'X').format('h:mm a')}"
+                            >
+                                {{::moment(start, 'X').format('h a')}}
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+            <td ng-mouseover="dragStop()"></td>
+        </tr>
+        <tr>
+            <td colspan="3" ng-mouseover="dragStop()"></td>
+        </tr>
+    </table>
+    <div class="availability-buffer" ng-mouseover="dragStop()">
+        <div>
+
+        </div>
+    </div>
 </div>
-<p>Select the time slots you are available. Use the Previous/Next buttons to view all the days.</p>
-<ul uib-pager items-per-page="1" total-items="totalItems" ng-model="currentPage" previous-text="&larr; Previous" next-text="Next &rarr;"></ul>
-<div class="lead text-center" ng-if="!availabilitySlotsAll">Loading...</div>
-<table class="table table-bordered" ng-if="availabilitySlotsAll">
-    <thead>
-    <tr>
-        <th></th>
-        <th ng-repeat="(key, x) in availabilitySlots" class="text-center" ng-show="$index >= currentPage - 1 && $index < currentPage + 4">{{moment(key, 'X').format('ddd, MMM Do')}}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>
-            <div class="availability-block" ng-repeat="slot in availabilitySlotsAll">
-                <strong>{{moment(slot + 1494820800, 'X').format('hh:mma')}}</strong>
-            </div>
-        </td>
-        <td ng-repeat="(dayId, daySlots) in availabilitySlots" ng-if="$index >= currentPage - 1 && $index < currentPage + 4">
-            <div ng-repeat="start in daySlots track by $index" ng-init="stop = start + 1800">
-                <div ng-if="start == 0" class="availability-block">&nbsp;</div>
-                <div ng-if="start > 0 && performancesInSlot[start].length > 0" class="pointer availability-block bg-info" bs-tooltip="{title:'Click to see performances'}" ng-click="showPerformances(start, stop, performancesInSlot[start])">
-                    {{moment(start, 'X').format('hh:mma')}} - {{moment(stop, 'X').format('hh:mma')}}
-                </div>
-                <div ng-if="start > 0 && performancesInSlot[start].length == 0" class="pointer availability-block" ng-class="hasAvailability(start) ? 'bg-success' : 'unavailable'" ng-click="toggleAvailability(start)">
-                    {{moment(start, 'X').format('hh:mma')}} - {{moment(stop, 'X').format('hh:mma')}}
-                </div>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<ul uib-pager items-per-page="1" total-items="totalItems" ng-model="currentPage" previous-text="&larr; Previous" next-text="Next &rarr;"></ul>

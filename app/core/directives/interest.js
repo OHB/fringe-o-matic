@@ -10,7 +10,7 @@ angular.module('fringeApp').directive('interest', function() {
                 html = '<span';
 
             if (! clickable) {
-                html += ' bs-tooltip="{title:interestText[get() - 1]}"';
+                html += ' bs-tooltip="{title:interestText[get()]}"';
             } else {
                 html += ' ng-mouseleave="reset()"'
             }
@@ -21,7 +21,7 @@ angular.module('fringeApp').directive('interest', function() {
                 html += '<i class="rating-icon glyphicon" ng-class="icon(' + i + ')"';
 
                 if (clickable) {
-                    html += ' bs-tooltip="{title: interestText[' + i + ']}" ng-click="click(' + (i + 1) + ')" ng-mouseenter="enter(' + i + ')"';
+                    html += ' bs-tooltip="{title: interestText[' + (i + 1) + ']}" ng-click="click(' + (i + 1) + ')" ng-mouseenter="enter(' + i + ')"';
                 }
                 html += '></i>';
             }
@@ -30,10 +30,10 @@ angular.module('fringeApp').directive('interest', function() {
 
             return html;
         },
-        controller: ['$scope', 'Schedule', 'InterestText', function($scope, Schedule, InterestText) {
+        controller: ['$scope', 'Schedule', 'Configuration', function($scope, Schedule, Configuration) {
             var hoveredOver;
 
-            $scope.interestText = InterestText;
+            $scope.interestText = Configuration.interestText;
 
             $scope.get = function() {
                 return $scope.desire || Schedule.getShowDesire($scope.showId);

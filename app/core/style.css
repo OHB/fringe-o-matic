@@ -1,0 +1,64 @@
+.label-venue-3, .label-venue-15, .label-venue-16, .label-venue-17, .label-venue-18, .label-venue-19,
+.label-venue-20, .label-venue-21, .label-venue-22, .label-venue-23, .label-venue-24 {
+    background: #40cdbd;
+    background: -webkit-linear-gradient(to right, #40cdbd, #ff8c00, #ff0080);
+    background: linear-gradient(to right, #40cdbd, #ff8c00, #ff0080);
+    color: #fff;
+    text-shadow: 0 0 1px #000;
+}
+.label-venue-1 {
+    background: #000000;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #0f9b0f 10%, #000000 30%);
+    background: linear-gradient(to top, #0f9b0f 10%, #000000 30%);
+}
+.label-venue-2 {
+    background: #f15922;
+}
+.label-venue-4 {
+    background: #ff69b4;
+    text-shadow: 0 0 1px #000;
+}
+.label-venue-5 {
+    background: #c0c0c0;
+    background: radial-gradient(ellipse farthest-corner at right bottom, #ada996 0%, #f2f2f2 8%, #dbdbdb 30%, #eaeaea 40%, transparent 80%),
+    radial-gradient(ellipse farthest-corner at left top, #ada996 0%, #f2f2f2 25%, #dbdbdb 62.5%, #eaeaea 100%);
+    color: black;
+}
+.label-venue-6 {
+    background: #8b4513;
+}
+.label-venue-7 {
+    background: #ebeb00;
+    color: black;
+}
+.label-venue-8 {
+    background: #a2238d;
+}
+.label-venue-9 {
+    background: #0000cd;
+}
+.label-venue-10 {
+    background: #cc0000;
+}
+.label-venue-11 {
+    background: black;
+}
+.label-venue-12 {
+    background: #b8860b;
+    background: radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
+    radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
+    text-shadow: 0 0 1px #000;
+}
+.label-venue-13 {
+    background: #7cfc00;
+    color: black;
+}
+.label-venue-14 {
+    background: white;
+    color: black;
+    border: 1px solid black;
+}
+
+.rating-icon {
+    margin-right: 3px;
+}

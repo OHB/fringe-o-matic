@@ -1,16 +1,17 @@
 angular.module('fringeApp').component('myFringe', {
     templateUrl: 'app/myFringe/myFringe.html',
-    controller: ['$scope', '$location', 'Schedule', 'UserData', 'FringeLevels', function($scope, $location, Schedule, UserData, FringeLevels) {
+    controller: ['$scope', '$location', 'Schedule', 'UserData', 'Configuration', 'Plurals', function($scope, $location, Schedule, UserData, Configuration, Plurals) {
+        $scope.plurals = Plurals;
         $scope.tabs = {
             activeTab: 'My Schedule'
         };
         if ($location.path() === '/my-fringe/availability') {
             $scope.tabs.activeTab = 'My Availability';
-        } else if ($location.path() === '/my-fringe/generate') {
-            $scope.tabs.activeTab = 'Schedule Generator';
+        } else if ($location.path() === '/my-fringe/auto-scheduler') {
+            $scope.tabs.activeTab = 'Auto-Scheduler';
         }
 
-        $scope.statuses = FringeLevels;
+        $scope.statuses = Configuration.fringeLevels;
 
         var update = function() {
             $scope.goingCount = Schedule.getPerformancesAttending().length;
@@ -41,8 +42,8 @@ angular.module('fringeApp').component('myFringe', {
                 $location.updatePath('/my-fringe');
             } else if ($scope.tabs.activeTab === 'My Availability') {
                 $location.updatePath('/my-fringe/availability');
-            } else if ($scope.tabs.activeTab === 'Schedule Generator') {
-                $location.updatePath('/my-fringe/generate');
+            } else if ($scope.tabs.activeTab === 'Auto-Scheduler') {
+                $location.updatePath('/my-fringe/auto-scheduler');
             }
         });
     }]

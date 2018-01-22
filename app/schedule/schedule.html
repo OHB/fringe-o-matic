@@ -1,18 +1,24 @@
-<div class="jumbotron" style="margin-bottom:0">
+<div class="jumbotron">
     <div class="container">
         <h1>Schedule</h1>
     </div>
 </div>
 <div class="container">
-    <div class="row">
-        <div class="col-md-2" style="margin-top:30px">
+    <div class="row" ng-if="days">
+        <div class="col-md-2">
             <div data-offset-top="-80" bs-affix>
-                <div class="btn-group" ng-model="userData.settings.scheduleMode" bs-radio-group style="width:100%; margin-top: 3px">
-                    <label class="btn btn-default" style="width:50%" ng-class="userData.settings.scheduleMode=='smart' && 'btn-primary'" bs-tooltip="{title: 'Hides performances you\'re not interested in, can\'t attend, or are seeing at a different time.'}">
-                        <input type="radio" value="smart"> Smart
-                    </label>
-                    <label class="btn btn-default" style="width:50%" ng-class="userData.settings.scheduleMode=='full' && 'btn-primary'" bs-tooltip="{title: 'Shows full schedule.'}">
+                <div class="btn-group" ng-model="settings.scheduleMode" bs-radio-group style="width:100%; margin-top: 3px">
+                    <label class="btn btn-default" style="width:50%"
+                           ng-class="settings.scheduleMode=='full' && 'btn-primary'"
+                           bs-tooltip="{title: 'Shows full schedule.'}"
+                    >
                         <input type="radio" value="full"> Full
+                    </label>
+                    <label class="btn btn-default" style="width:50%"
+                           ng-class="settings.scheduleMode=='smart' && 'btn-primary'"
+                           bs-tooltip="{title: 'Hides performances you\'re not interested in, can\'t attend, or are seeing at a different time.'}"
+                    >
+                        <input type="radio" value="smart"> Smart
                     </label>
                 </div>
                 <br />
@@ -25,21 +31,21 @@
             </div>
         </div>
         <div class="col-md-10">
-            <div data-offset-top="-51" bs-affix style="z-index:10000; background: white; padding-top:30px; margin-bottom:10px">
+            <div>
                 <div class="page-header" style="margin:0">
                     <h1 style="margin:0 0 20px">
                         {{moment(days[currentDay-1], 'X').format('dddd, MMMM D')}}
                         <small><ng-pluralize count="schedule.length" when="plurals.show"></ng-pluralize></small>
                     </h1>
-                    <ul uib-pager items-per-page="1" total-items="days.length" ng-model="currentDay" previous-text="&larr; Previous Day" next-text="Next Day &rarr;" ng-change="setDay(currentDay)" style="margin-bottom: 10px;"></ul>
+                    <!--<ul uib-pager items-per-page="1" total-items="days.length" ng-model="currentDay" previous-text="&larr; Previous Day" next-text="Next Day &rarr;" ng-change="setDay(currentDay)" style="margin-bottom: 10px;"></ul>-->
                 </div>
             </div>
             <div class="row text-center" style="margin:100px 0" ng-if="!schedule.length">
                 <p class="lead text-center">No shows to display for this day.</p>
-                <p><button class="btn btn-sm" ng-click="userData.settings.scheduleMode='full'">Switch to Full Schedule</button></p>
+                <p><button class="btn btn-sm" ng-click="settings.scheduleMode='full'">Switch to Full Schedule</button></p>
             </div>
-            <div ng-style="{marginTop: pixelsScrolled > 194 && '150px'}">
-                <table scroll-y-model="pixelsScrolled" class="table table-striped" ng-hide="!schedule.length">
+            <div ng-style="{minHeight: (innerHeight-200) + 'px'}">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>Time</th>
@@ -50,25 +56,49 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="entry in schedule">
-                        <td nowrap>{{moment(entry.performance.start, 'X').format('h:mm a')}} -
-                            {{moment(entry.performance.stop, 'X').format('h:mm a')}}</td>
+                        <td nowrap>
+                            {{::moment(entry.performance.start, 'X').format('h:mm a')}} -
+                            {{::moment(entry.performance.stop, 'X').format('h:mm a')}}
+                        </td>
                         <td>
-                            <p class="h4" style="margin:0 0 10px;"><a href="#!/shows/show/{{entry.showId}}">{{entry.show.name}}</a></p>
-                            <span class="label label-venue-default label-venue-{{entry.venueId}}">{{entry.venue.name}}</span>
-                            <show-rating value="entry.rating"></show-rating>
+                            <p class="h4" style="margin:0 0 10px;"><a href="#!/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
+                            <span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>
+                            <show-rating value="::entry.rating"></show-rating>
                             <span class="label label-success">{{entry.show.price|price}}</span>
                         </td>
-                        <td nowrap style="vertical-align: middle"><interest show-id="entry.showId"></interest></td>
-                        <td nowrap style="vertical-align: middle">
-                            <div class="btn-group" ng-model="entry.attendState" bs-radio-group>
-                                <label class="btn btn-default" ng-class="entry.attendState == 'no' && 'btn-danger'" ng-click="removeFromSchedule(entry.id)" bs-tooltip="entry.attendState == 'no' && {title: entry.attendState == 'maybe' ? 'Not attending' : 'Remove from schedule'}">
+                        <td nowrap class="align-middle"><interest show-id="entry.showId"></interest></td>
+                        <td nowrap class="align-middle">
+                            <div ng-if="entry.attendState=='no'" class="btn-group" bs-radio-group ng-model="entry.attendState">
+                                <label class="btn btn-danger">
                                     <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
                                 </label>
-                                <label class="btn btn-default" ng-class="entry.attendState == 'maybe' && 'btn-warning'" ng-click="addMaybe(entry.id)" bs-tooltip="entry.attendState != 'maybe' && {title: entry.attendState == 'no' ? 'Maybe attending' : 'Remove from schedule, maybe attending'}">
+                                <label class="btn btn-default" ng-click="addMaybe(entry.id)" bs-tooltip="{title:'Maybe attending'}">
                                     <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
                                 </label>
-                                <label class="btn btn-default" ng-class="{'btn-success': entry.attendState == 'yes', 'disabled': entry.attendState != 'yes' && !entry.canBeScheduled}" bs-tooltip="entry.attendState != 'yes' && {title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-click="entry.canBeScheduled && addToSchedule(entry.id)">
-                                    <input type="radio" value="yes" ng-disabled="entry.attendState != 'yes' && !entry.canBeScheduled"><span class="glyphicon glyphicon-thumbs-up"></span>
+                                <label class="btn btn-default" bs-tooltip="{title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-click="entry.canBeScheduled && addToSchedule(entry.id)" ng-class="{disabled: !entry.canBeScheduled}">
+                                    <input type="radio" value="yes" ng-disabled="!entry.canBeScheduled"><span class="glyphicon glyphicon-thumbs-up"></span>
+                                </label>
+                            </div>
+                            <div ng-if="entry.attendState=='maybe'" class="btn-group" bs-radio-group ng-model="entry.attendState">
+                                <label class="btn btn-default" ng-click="removeFromSchedule(entry.id)" bs-tooltip="{title: 'Not attending'}">
+                                    <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
+                                </label>
+                                <label class="btn btn-warning">
+                                    <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
+                                </label>
+                                <label class="btn btn-default" bs-tooltip="{title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-class="{disabled: !entry.canBeScheduled}">
+                                    <input type="radio" value="yes" ng-disabled="!entry.canBeScheduled"><span class="glyphicon glyphicon-thumbs-up"></span>
+                                </label>
+                            </div>
+                            <div ng-if="entry.attendState=='yes'" class="btn-group" bs-radio-group ng-model="entry.attendState">
+                                <label class="btn btn-default"ng-click="removeFromSchedule(entry.id)" bs-tooltip="{title: 'Remove from schedule'}">
+                                    <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
+                                </label>
+                                <label class="btn btn-default" ng-click="addMaybe(entry.id)" bs-tooltip="{title:'Remove from schedule, maybe attending'}">
+                                    <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
+                                </label>
+                                <label class="btn btn-success">
+                                    <input type="radio" value="yes"><span class="glyphicon glyphicon-thumbs-up"></span>
                                 </label>
                             </div>
                             <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px"><img src="img/ticket.png" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}"></a>

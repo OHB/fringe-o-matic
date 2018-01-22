@@ -8,6 +8,10 @@
     </div>
 </div>
 
+<div class="alert alert-success" ng-if="hasSchedule">
+    <i class="glyphicon glyphicon-hand-right"></i> Don't forget to buy tickets!
+</div>
+
 <table class="table table-striped amazing-schedule" ng-if="hasSchedule">
     <tbody ng-repeat="(day, amazingScheduleDay) in amazingSchedule">
     <tr class="header">

@@ -1,35 +1,34 @@
-warn about shows user cannot possibly attend before starting generater
-	new version doesn't both with them
+no ticket links for free shows
 
-new version doesn't both with <2 possible performances for a show
-	so add those before generating as well
+auto-scheduler
+    after done
+    find shows with conflicts
+    shuffle
+    attempt to add to proposed schedule using shuffled performance order
 
+    OR
 
-schedule is WAY too slow now
-
+    calculate fitness taking this into account???
+        pass in shuffled shows with shuffled performances
+        make a not conflicts list = []
+        for each conflict, if it doesn't conflict with something in the no conflicts list,
+            add fitness
+            add to not conflicts list
+        if getdetails, return not conflicts list
+        when processing, use not conflicts list and add to scheduled and accept
 
 extra points for empty days! + 100?
 
-on full schedule warn when adding if
-	not enough time to travel (popup yes/no with time comparison)
-	show already on schedule (popup with keep 1, 2, both)
-		if > 1, list with deletes and with yes/no
-
 after generate, manually check unscheduled for possible performances?
 
-generate infos
-
-before generating, modal for performances without conflicts to add to slots.
-	determine list by trying recursively
+generate result infos
 
 my schedule
-	fringe level help
-		this is just our way of getting people to see more shows!
-	as calendar
+	as calendar (google, ical, etc?)
 
 
 
-ticket links (my schedule, shows, full schedule)
+ticket links to my schedule
 
 
 when floriduh was scheduled it auto accepted the ladies of the peekaboo lounge at same time 24th 11:59p

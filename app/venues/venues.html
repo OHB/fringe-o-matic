@@ -13,31 +13,31 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label>From</label>
-                        <select class="form-control" ng-options="item as item.label for item in venueOptions" ng-model="distanceCalcFrom"></select>
+                        <select class="form-control" ng-options="item as item.label for item in venueOptions" ng-model="distanceCalc.from"></select>
                     </div>
                     <div class="form-group">
                         <label>To</label>
-                        <select class="form-control" ng-options="item as item.label for item in venueOptions" ng-model="distanceCalcTo"></select>
+                        <select class="form-control" ng-options="item as item.label for item in venueOptions" ng-model="distanceCalc.to"></select>
                     </div>
                     <p>
                         <strong>Distance:</strong>
-                        <span ng-show="distanceCalcFrom==distanceCalcTo">No time at all!</span>
-                        <span ng-show="distanceCalcFrom!=distanceCalcTo && venues[distanceCalcFrom.value].host==venues[distanceCalcTo.value].host">
+                        <span ng-show="distanceCalc.from==distanceCalc.to">No time at all!</span>
+                        <span ng-show="distanceCalc.from!=distanceCalc.to && venues[distanceCalc.from.value].host==venues[distanceCalc.to.value].host">
                             These venues are at the same location...so a minute, maybe?
                         </span>
-                        <span ng-show="venues[distanceCalcFrom.value].host!=venues[distanceCalcTo.value].host">
-                            {{distances[distanceCalcFrom.value][distanceCalcTo.value] / 60}} minutes
+                        <span ng-show="venues[distanceCalc.from.value].host!=venues[distanceCalc.to.value].host">
+                            {{distances[distanceCalc.from.value][distanceCalc.to.value] / 60}} minutes
                         </span>
                     </p>
-                    <p ng-if="venues[distanceCalcFrom.value].host!=venues[distanceCalcTo.value].host">
+                    <p ng-if="venues[distanceCalc.from.value].host!=venues[distanceCalc.to.value].host">
                         <strong>Drive or walk?</strong>
-                        <span ng-show="drivingCalc=='assumed'">Drive</span>
-                        <span ng-show="drivingCalc=='recommended'">Drive</span>
-                        <span ng-show="drivingCalc=='possible'">Either</span>
-                        <span ng-show="drivingCalc==''">Walk</span>
+                        <span ng-show="distanceCalc.driving=='assumed'">Drive</span>
+                        <span ng-show="distanceCalc.driving=='recommended'">Drive</span>
+                        <span ng-show="distanceCalc.driving=='possible'">Either</span>
+                        <span ng-show="distanceCalc.driving==''">Walk</span>
                     </p>
-                    <p ng-show="drivingCalc!=''">
-                        <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalcFrom.value].host].name}}, {{venueHosts[venues[distanceCalcFrom.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalcTo.value].host].name}}, {{venueHosts[venues[distanceCalcTo.value].host].address.join(', ')}}&travelmode={{(drivingCalc=='possible') ? 'walking' : 'driving'}}" target="_blank">Get Directions</a>
+                    <p ng-show="distanceCalc.driving!=''">
+                        <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalc.from.value].host].name}}, {{venueHosts[venues[distanceCalc.from.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalc.to.value].host].name}}, {{venueHosts[venues[distanceCalc.to.value].host].address.join(', ')}}&travelmode={{(distanceCalc.driving=='possible') ? 'walking' : 'driving'}}" target="_blank">Get Directions</a>
                     </p>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="row" ng-repeat="(hostId, host) in venueHosts">
                 <hr ng-if="! $first" />
                 <div class="col-md-8">
-                    <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&destination={{host.name}}, {{host.address.join(', ')}}" target="_blank">Directions</a>
+                    <a class="btn btn-default btn-sm pull-right" style="margin: 0 6px 0 10px" href="https://www.google.com/maps/dir/?api=1&destination={{host.name}}, {{host.address.join(', ')}}" target="_blank">Directions</a>
                     <h3 style="margin-top:0">{{host.name}}</h3>
                     <p>{{host.address.join(', ')}}</p>
                     <table class="table table-condensed">

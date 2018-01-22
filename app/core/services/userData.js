@@ -6,7 +6,7 @@ angular.module('fringeApp').service('UserData', ['$q', 'debounce', function($q, 
             schedule: [],
             maybe: [],
             settings: {
-                scheduleMode: 'smart'
+                scheduleMode: 'full'
             }
         },
         basicGetter = function(type) {
