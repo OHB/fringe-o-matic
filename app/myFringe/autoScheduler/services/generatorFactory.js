@@ -2,10 +2,6 @@ angular.module('fringeApp').factory('generatorFactory', function() {
     var create = function() {
         var genetic = Genetic.create();
 
-        genetic.optimize = Genetic.Optimize.Maximize;
-        // genetic.select1 = Genetic.Select1.RandomLinearRank;
-        // genetic.select2 = Genetic.Select2.RandomLinearRank;
-
         genetic.seed = function () {
             var schedule = [],
                 j = this.userData.showIds.length;
@@ -19,31 +15,30 @@ angular.module('fringeApp').factory('generatorFactory', function() {
         };
 
         genetic.mutate = function mutate(schedule) {
-            var i = schedule.length,
-                toMake = 2 || Math.floor((Math.random() * 2) + 1);
+            var toMake = 2;
 
-            while (i --) {
+            while (toMake --) {
                 var idx = Math.floor(Math.random() * schedule.length),
-                    performances = this.userData.shows[this.userData.performances[schedule[idx]].show].performances,
-                    l = performances.length;
+                    performances = this.userData.shows[this.userData.performances[schedule[idx]].show].performances;
 
-                if (l > 1) {
-                    schedule[idx] = performances[Math.floor(Math.random() * performances.length)];
-                    toMake --;
-
-                    if (toMake === 0) {
-                        break;
-                    }
-                }
+                schedule[idx] = performances[Math.floor(Math.random() * performances.length)];
+                toMake --;
             }
 
             return schedule;
         };
 
         genetic.crossover = function crossover(mother, father) {
-            var len = mother.length;
-            var ca = Math.floor(Math.random() * len);
-            var cb = Math.floor(Math.random() * len);
+            var performances = this.userData.performances,
+                len = mother.length,
+                ca = Math.floor(Math.random() * len),
+                cb = Math.floor(Math.random() * len),
+                parents = [mother, father].map(function(schedule) {
+                    return schedule.slice(0).sort(function(a, b) {
+                        return performances[a].show - performances[b].show;
+                    });
+                });
+
             if (ca > cb) {
                 var tmp = cb;
                 cb = ca;
@@ -51,42 +46,38 @@ angular.module('fringeApp').factory('generatorFactory', function() {
             }
 
             return [
-                mother.slice(0, ca).concat(father.slice(ca, cb)).concat(mother.slice(cb)),
-                father.slice(0, ca).concat(mother.slice(ca, cb)).concat(father.slice(cb))
+                parents[0].slice(0, ca).concat(parents[1].slice(ca, cb)).concat(parents[0].slice(cb)),
+                parents[1].slice(0, ca).concat(parents[0].slice(ca, cb)).concat(parents[1].slice(cb))
             ];
         };
 
         genetic.fitness = function fitness(unsortedSchedule, returnDetails) {
-            var that = this,
-                i = unsortedSchedule.length,
-                l = i,
-                j = 0,
-                k = 0,
-                conflictFound = false,
-                fitness = 0,
-                conflictsByDesire = [[], [], [], [], []],
-                conflicts = [],
-                extraPoints = 0,
-                schedule = unsortedSchedule.slice().sort(function sorter(a, b) {
-                    var pa = that.userData.performances[a], pb = that.userData.performances[b];
-                    return pb.start - pa.start || pb.stop - pa.stop;
-                }),
-                groups = [0, 0, 0, 0, 0],
-                p1, p2, show1, show2,
-                tudPerformances = this.userData.performances,
+            var tudPerformances = this.userData.performances,
                 tudShows = this.userData.shows,
-                debugInfo = {};
+                schedule = unsortedSchedule.slice().sort(function sorter(a, b) {
+                    return tudPerformances[a].sortOrder - tudPerformances[b].sortOrder;
+                }),
+                fitness = 0,
+                extraPoints = 0,
+                groups = [0, 0, 0, 0, 0],
+                performanceConflicts = {},
+                conflicts = [],
+                conflictFound = false,
+                l = schedule.length,
+                i = l, j = 0, k = 0,
+                pId1, pId2, p1, p2, show1, show2;
 
-            outerWhile: while (i --) {
-                p1 = tudPerformances[schedule[i]];
+            while (i --) {
+                pId1 = schedule[i];
+                p1 = tudPerformances[pId1];
                 show1 = tudShows[p1.show];
                 conflictFound = false;
                 j = 0;
                 k = 0;
 
+                performanceConflicts[pId1] = [];
+
                 var desire1 = show1.desire;
-
-
 
                 // minus is next!
                 for (j = 1; j < l; j ++) {
@@ -96,15 +87,17 @@ angular.module('fringeApp').factory('generatorFactory', function() {
                         break;
                     }
 
-                    p2 = tudPerformances[schedule[k]];
+                    pId2 = schedule[k];
+                    p2 = tudPerformances[pId2];
                     show2 = tudShows[p2.show];
 
                     if (desire1 <= show2.desire && p2.start < p1.offsetTimes[show2.venue].stop) {
-                        conflictsByDesire[show1.desire].push(p1.show);
+                        performanceConflicts[pId1].push(pId2);
                         conflicts.push(p1.show);
                         conflictFound = true;
-                        continue outerWhile;
-                    } else if (p2.start > p1.stop + 3000) {
+                    }
+
+                    if (p2.start > p1.stop + 3600) {
                         break;
                     }
                 }
@@ -117,15 +110,17 @@ angular.module('fringeApp').factory('generatorFactory', function() {
                         break;
                     }
 
+                    pId2 = schedule[k];
                     p2 = tudPerformances[schedule[k]];
                     show2 = tudShows[p2.show];
 
                     if (desire1 <= show2.desire && p2.stop > p1.offsetTimes[show2.venue].start) {
-                        conflictsByDesire[show1.desire].push(p1.show);
+                        performanceConflicts[pId1].push(pId2);
                         conflicts.push(p1.show);
                         conflictFound = true;
-                        continue outerWhile;
-                    } else if (p2.stop < p1.start - 3000) {
+                    }
+
+                    if (p2.stop < p1.start - 3600) {
                         break;
                     }
                 }
@@ -136,56 +131,42 @@ angular.module('fringeApp').factory('generatorFactory', function() {
                 }
             }
 
-            schedule = schedule.filter(function(pId) {
-                return conflicts.indexOf(tudPerformances[pId].show) === -1;
-            });
+            if (conflicts.length) {
+                var unconflictedPerformances = [];
 
-            if (false && conflicts.length) {
-                var notConflicts = [];
+                for (var desire = 5; --desire;) {
+                    nextConflict: for (i = 0; i < this.userData.performanceIds.length; i ++) {
+                        pId1 = this.userData.performanceIds[i];
+                        p1 = tudPerformances[pId1];
 
-                for (i = 5; --i;) {
-                    for (j = 0; j < conflicts.length; j ++) {
-                        if (conflictsByDesire[i].indexOf(this.userData.showIds[j]) === -1) {
+                        if (! performanceConflicts[pId1] || ! performanceConflicts[pId1].length || tudShows[p1.show].desire !== desire) {
                             continue;
                         }
 
-                        // a conflict to resolve (this is a show)
-                        show1 = tudShows[this.userData.showIds[j]];
+                        for (j = 0; j < performanceConflicts[pId1].length; j ++) {
+                            pId2 = performanceConflicts[pId1][j];
 
-                        // for each show performance
-                        forEachShowPerformance: for (k = 0; k < show1.performances.length; k ++) {
-                            p1 = tudPerformances[show1.performances[k]];
-
-                            // if it conflicts with something in schedule that isn't a conflict, continue
-                            for (var n = 0; n < schedule.length; n ++) {
-                                p2 = tudPerformances[schedule[n]];
-                                show2 = tudShows[p2.show];
-
-                                if (! (p2.start > p1.offsetTimes[show2.venue].stop || p2.stop < p1.offsetTimes[show2.venue].start)) {
-                                    continue forEachShowPerformance;
-                                }
+                            // conflicts with an unconflicted
+                            if (unconflictedPerformances.indexOf(pId2) > -1) {
+                                continue nextConflict;
                             }
 
-                            schedule.push(show1.performances[k]);
-                            fitness += this.userData.desireToFitnessMap[i];
-                            groups[i] ++;
-                            notConflicts.push(p1.show);
+                            // conflicts with a conflict
+                            if (performanceConflicts[pId2] !== undefined && performanceConflicts[pId2].length > 0) {
+                                continue;
+                            }
 
-                            break;
+                            continue nextConflict;
                         }
+
+
+                        // doesn't conflict, add to unconflicted
+                        unconflictedPerformances.push(pId1);
+                        fitness += this.userData.desireToFitnessMap[desire];
+                        groups[desire] ++;
+                        conflicts.splice(conflicts.indexOf(tudPerformances[pId1].show), 1);
                     }
                 }
-
-                // for each notConflicts
-                for (i = 0; i < notConflicts.length; i ++) {
-                    // remove from conflicts
-                    conflicts.splice(conflicts.indexOf(notConflicts[i]), 1);
-                }
-
-                schedule.sort(function sorter(a, b) {
-                    var pa = that.userData.performances[a], pb = that.userData.performances[b];
-                    return pb.start - pa.start || pb.stop - pa.stop;
-                });
             }
 
             // assign extra points

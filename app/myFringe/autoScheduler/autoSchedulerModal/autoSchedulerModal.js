@@ -34,7 +34,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
             $scope.venues = results[7];
 
             $scope.generationCount = Math.max(500, Math.min(1000, possiblePerformances.length * 2));
-            $scope.populationSize = Math.floor(Math.max(500, Math.min(20000, Math.pow(possiblePerformances.length, 1.05))));
+            $scope.populationSize = Math.floor(Math.max(500, Math.min(20000, Math.pow(possiblePerformances.length, 1.2))));
 
             // $scope.generationCount = 2;
             // $scope.populationSize = 5;
@@ -120,11 +120,21 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
                         };
                     });
                 });
-
-                data.shows[showId].performances = data.shows[showId].performances.shuffle();
             });
 
-            data.showIds = data.showIds.shuffle();
+            data.performanceIds = Object.keys(data.performances).shuffle();
+
+            var sortedPerformanceIds = Object.keys(data.performances).sort(function(a, b) {
+                var pa = data.performances[a], pb = data.performances[b];
+
+                return pb.start - pa.start || pb.stop - pa.stop;
+            });
+
+            for (var i = 0; i < sortedPerformanceIds.length; i ++) {
+                data.performances[sortedPerformanceIds[i]].sortOrder = i;
+            }
+
+
 
             $scope.idealFitness = data.idealFitness;
 

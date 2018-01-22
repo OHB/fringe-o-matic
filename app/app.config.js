@@ -18,8 +18,9 @@ angular.module('fringeApp')
             'This may take a few seconds or several minutes.',
             'You may see the lower progress bars fluctuate back and forth. This is normal.',
             'It may not be possible to see all of the shows you want.',
-            'The longer you let this run, the better the schedule will be.',
-            'If the generator gets \'stuck\', it will be stopped automatically.'
+            'You can stop the generator at any time, but the longer you let this run, the better the schedule will be.',
+            'If the generator gets \'stuck\', it will be stopped automatically.',
+            'The Auto-Scheduler uses a lot of computing power. It will slow down if you do other things.'
         ],
         fringeLevels: [
             {min: 0, name: 'New Recruit'},
@@ -49,7 +50,8 @@ angular.module('fringeApp')
         {route: 'venues', title: 'Venues'},
         {route: 'map', title: 'Map'},
         {route: 'about', title: 'About'},
-        {route: 'help', title: 'Help'}
+        {route: 'help', title: 'Help'},
+        {route: 'test', title: 'Test'}
     ])
     .value('MapConfig', {
         initialView: 0,
@@ -202,7 +204,7 @@ angular.module('fringeApp')
                     template: '<shows></shows>'
                 }).when('/shows/venue/:venue', {
                     template: '<shows></shows>'
-                }).when('/schedule', {
+                }).when('/schedule/:param1?/:param2?', {
                     template: '<schedule></schedule>'
                 }).when('/venues', {
                     template: '<venues></venues>'
@@ -216,6 +218,8 @@ angular.module('fringeApp')
                     template: '<about></about>'
                 }).when('/help', {
                     template: '<help></help>'
-                }).otherwise({redirectTo: '/about'});
+                }).when('/test', {
+                    template: '<test></test>'
+                }).otherwise({redirectTo: '/my-fringe'});
         }
     ]);

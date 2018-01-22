@@ -259,7 +259,7 @@ $distances = array_combine(array_keys($venues), array_fill(0, count($venues), []
 
 foreach ($groupDistances as $fromGroup => $tos) {
     if (! isset($tos['*'])) {
-        $tos['*'] = 5;
+        $tos['*'] = 2;
     }
     foreach ($venueGroups[$fromGroup] as $from) {
         foreach ($tos as $toGroup => $time) {

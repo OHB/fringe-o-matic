@@ -2,6 +2,7 @@
   "templates": [
     "app/about/about.html",
     "app/help/help.html",
+    "app/test/test.html",
     "app/venues/venues.html",
     "app/shows/shows.html",
     "app/schedule/schedule.html",
@@ -54,6 +55,7 @@
     "app/map/map.js",
     "app/schedule/schedule.js",
     "app/shows/shows.js",
-    "app/venues/venues.js"
+    "app/venues/venues.js",
+    "app/test/test.js"
   ]
 }
