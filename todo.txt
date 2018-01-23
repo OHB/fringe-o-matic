@@ -1,66 +1,18 @@
 no ticket links for free shows
 
-auto-scheduler
-    after done
-    find shows with conflicts
-    shuffle
-    attempt to add to proposed schedule using shuffled performance order
-
-    OR
-
-    calculate fitness taking this into account???
-        pass in shuffled shows with shuffled performances
-        make a not conflicts list = []
-        for each conflict, if it doesn't conflict with something in the no conflicts list,
-            add fitness
-            add to not conflicts list
-        if getdetails, return not conflicts list
-        when processing, use not conflicts list and add to scheduled and accept
-
-extra points for empty days! + 100?
-
-after generate, manually check unscheduled for possible performances?
-
-generate result infos
-
 my schedule
 	as calendar (google, ical, etc?)
 
-
-
 ticket links to my schedule
-
-
-when floriduh was scheduled it auto accepted the ladies of the peekaboo lounge at same time 24th 11:59p
-
-
-schedule gen hooray schedule is full says that when it's empty if there's no shows with interest to look at
-	check actual availability -> your schedule has room for more shows if you'd be interested
-	check my availability -> there are more shows if you can make more time
-
-
-how to let the scheduler continue after finding a match in order to see about a better match?
-	minimum # of generations
-	extra generations after fitness increase
-	update progress bar to match with that
-	store data in userData???
-	gen stop disabled for now
-
-need a better way of determining population/generation
-	
 
 i need the extra points for empty days
 	this is tricky
 	points for close together (current does venue distance, but it should only apply if the two performances are close together in the schedule)
 	points for empty days (needs to include from fringe start to first show and last show to fringe end)
 
-scheduler auto select is fucked and it also needs upgraded to include maybe
-
 my schedule
 	add tri-select
 	option to hide maybes
-
-schedule pin top previous/next buttons, remove lower
 
 tickets buying screen
 	mark tickets as bought
@@ -68,8 +20,7 @@ tickets buying screen
 		auto populate cart???
 		mark tickets bought (optional deselect)
 
-
-bingo reminder
 progressbar in nav to encourage exploring?
 	welcome modal, optional tell about each page the first land
-context sensitive help	
+
+context sensitive help

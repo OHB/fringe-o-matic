@@ -34,10 +34,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
             $scope.venues = results[7];
 
             $scope.generationCount = Math.max(500, Math.min(1000, possiblePerformances.length * 2));
-            $scope.populationSize = Math.floor(Math.max(500, Math.min(20000, Math.pow(possiblePerformances.length, 1.2))));
-
-            // $scope.generationCount = 2;
-            // $scope.populationSize = 5;
+            $scope.populationSize = Math.floor(Math.max(500, Math.min(3000, Math.pow(possiblePerformances.length, 1.175))));
 
             $scope.crossoverRate = 0.9;
             $scope.mutationRate = 0.2;
@@ -49,7 +46,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
                 size: $scope.populationSize,
                 crossover: $scope.crossoverRate,
                 mutation: $scope.mutationRate,
-                skip: 5,
+                skip: Math.ceil((($scope.generationCount * $scope.populationSize) - (500*500)) / 920000) + 2,
                 maxResults: 1
             };
             data = {
@@ -134,28 +131,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
                 data.performances[sortedPerformanceIds[i]].sortOrder = i;
             }
 
-
-
             $scope.idealFitness = data.idealFitness;
-
-
-            if (false) {
-                data.shows = {
-                    '1': {desire: 2, name:'A', performances: ['10'], venue: 'V'},
-                    '2': {desire: 1, name:'B', performances: ['20'], venue: 'V'}
-                };
-                data.performances = {
-                    '10': {start: 1495304400, stop: 1495311000, show: '1', offsetTimes: {'V': {start: 1495304400, stop: 1495311000}}},
-                    '20': {start: 1495304400, stop: 1495311000, show: '2', offsetTimes: {'V': {start: 1495304400, stop: 1495311000}}}
-                };
-                data.idealFitness = 6;
-                data.showIds = ['1', '2'];
-                data.venueDistances = {'V': {'V': 0}};
-                config.iterations = $scope.generationCount = 10;
-                config.size = $scope.populationSize = 10;
-            }
-
-
 
             console.log("Generator Config: ", data);
 
@@ -178,22 +154,13 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
                 if (conflicts.indexOf(showId) === -1) {
                     $scope.proposed.push(schedule[i]);
                     proposedByDesire[Schedule.getShowDesire(showId)].push(schedule[i]);
+                    $scope.accept[schedule[i]] = true;
                 }
             }
 
             for (i = 0; i < sortedShows.length; i ++) {
                 if (conflicts.indexOf(sortedShows[i]) > -1) {
                     $scope.unscheduled.push(sortedShows[i]);
-                }
-            }
-
-            for (i = 4; i > 0; i --) {
-                if ($scope.progressByDesire[i] !== $scope.progressByDesireMax[i]) {
-                    // break;
-                }
-
-                for (var j = 0; j < proposedByDesire[i].length; j ++) {
-                    $scope.accept[proposedByDesire[i][j]] = true;
                 }
             }
         };
@@ -239,15 +206,15 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
                 };
 
                 if (isFinished) {
-                    $scope.progress = this.userData.idealFitness;
+                    $scope.progress = 100;
                     $scope.done = true;
                     $timeout(function() {
                         processGeneratedSchedule(best.entity, bestDetails.conflicts);
-                    }, 500);
+                    }, 750);
                     disableMessageRotation();
                 } else {
-                    $scope.progress = Math.max(best.fitness - bestDetails.extraPoints, this.userData.idealFitness) / 2;
-                    $scope.progress += this.userData.idealFitness / 2 / this.userData.iterations * generation;
+                    $scope.progress = (best.fitness - bestDetails.extraPoints) / $scope.idealFitness * 90;
+                    $scope.progress += (generation / $scope.generationCount) * 10;
                     $scope.bestSchedule = best.entity;
                     $scope.bestConflicts = bestDetails.conflicts;
 
@@ -302,7 +269,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
         $scope.stop = function() {
             disableMessageRotation();
             generator.stop();
-            $scope.progress = $scope.idealFitness;
+            $scope.progress = 100;
             $timeout(function() {
                 processGeneratedSchedule($scope.bestSchedule, $scope.bestConflicts);
             }, 1000);
@@ -327,5 +294,34 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
         $scope.close = function() {
             $uibModalInstance.dismiss();
         };
+
+        $scope.examplePowers = [{
+            w: 5,
+            p: [
+                {i: 1, p: '6'},
+                {i: 2, p: '36'},
+                {i: 3, p: '216'},
+                {i: 4, p: '1,296'},
+                {i: 5, p: '7,776'},
+                {i: 6, p: '46,656'},
+                {i: 7, p: '279,936'},
+                {i: 8, p: '1,679,616'},
+                {i: 9, p: '10,077,696'}
+            ]
+        }, {
+            w: 7,
+            p: [
+                {i: 10, p: '60,466,176'},
+                {i: 15, p: '470,184,984,576'},
+                {i: 20, p: '3,656,158,440,062,976'},
+                {i: 25, p: '28,430,288,029,929,700,000'},
+                {i: 30, p: '221,073,919,720,733,357,899,776'},
+                {i: 35, p: '1,719,070,799,748,422,591,028,658,176'},
+                {i: 40, p: '13,367,494,538,843,734,067,838,845,976,576'},
+                {i: 45, p: '103,945,637,534,048,876,111,514,866,313,854,976'},
+                {i: 50, p: '808,281,277,464,764,060,643,139,600,456,536,293,376'}
+            ]
+        }
+        ];
     }
 ]);

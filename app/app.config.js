@@ -19,7 +19,7 @@ angular.module('fringeApp')
             'You may see the lower progress bars fluctuate back and forth. This is normal.',
             'It may not be possible to see all of the shows you want.',
             'You can stop the generator at any time, but the longer you let this run, the better the schedule will be.',
-            'If the generator gets \'stuck\', it will be stopped automatically.',
+            'If the generator can\'t find a better schedule, it will stop automatically.',
             'The Auto-Scheduler uses a lot of computing power. It will slow down if you do other things.'
         ],
         fringeLevels: [
@@ -200,9 +200,7 @@ angular.module('fringeApp')
                     template: '<my-fringe></my-fringe>'
                 }).when('/shows', {
                     template: '<shows></shows>'
-                }).when('/shows/show/:show', {
-                    template: '<shows></shows>'
-                }).when('/shows/venue/:venue', {
+                }).when('/shows/venue/:venue?', {
                     template: '<shows></shows>'
                 }).when('/schedule/:param1?/:param2?', {
                     template: '<schedule></schedule>'

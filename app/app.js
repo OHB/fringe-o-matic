@@ -44,6 +44,7 @@ String.prototype.localeCompareSmart = function(other) {
 };
 
 angular.module('fringeApp', [
+    'ngAnimate',
     'ngRoute',
     'ui.bootstrap',
     'mgcrea.ngStrap.affix',

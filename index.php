@@ -12,6 +12,7 @@ ob_start("ob_gzhandler");
     <?php foreach (isset($_REQUEST['compiled']) ? ['compiled.css'] : $build->css as $script) { ?>
         <link rel="stylesheet" type="text/css" href="<?php echo $script; ?>" />
     <?php } ?>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-motion/0.4.4/angular-motion.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Quicksand:500,700" rel="stylesheet">
     <!--<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />-->
     <style>
@@ -72,12 +73,11 @@ ob_start("ob_gzhandler");
     <div class="jumbotron" ng-if="! loaded">
         <div class="container">
             <h1>Loading...</h1>
-            <p>
+            <br />
             <div class="progress">
                 <div class="progress-bar progress-bar-striped active" style="width: 100%">
                 </div>
             </div>
-            </p>
         </div>
     </div>
 </div>
@@ -89,7 +89,7 @@ ob_start("ob_gzhandler");
 if (isset($_REQUEST['compiled'])) {
     echo file_get_contents('compiled.html');
 }
-foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $component) { ?>
+foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?>
     <script type="text/ng-template" id="<?php echo $filename; ?>">
     <?php echo file_get_contents($filename); ?>
     </script>
@@ -99,6 +99,7 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $component) { 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-route.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-animate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/store2/2.5.9/store2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/compiler.min.js"></script>

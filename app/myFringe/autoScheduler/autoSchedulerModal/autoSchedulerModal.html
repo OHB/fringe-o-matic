@@ -12,7 +12,7 @@
             </small>
             <uib-progressbar
                     class="progress-striped active"
-                    max="idealFitness"
+                    max="100"
                     value="progress"
                     animate="true"
                     type="primary"></uib-progressbar>
@@ -70,8 +70,8 @@
         >
             <i class="glyphicon glyphicon-dashboard"></i>
         </button>
-        <button class="btn btn-default" type="button" ng-click="restart()" ng-disabled="done">Restart</button>
-        <button class="btn btn-danger" type="button" ng-click="stop()" ng-disabled="done">Stop</button>
+        <button class="btn btn-default" type="button" ng-click="restart()" ng-disabled="progress === 0 || done">Restart</button>
+        <button class="btn btn-danger" type="button" ng-click="stop()" ng-disabled="progress === 0 || done">Stop</button>
     </div>
 </div>
 
@@ -95,14 +95,24 @@
                 </uib-progressbar>
             </div>
         </div>
-        <div bs-active-pane="tabs.activeTab" bs-tabs>
+        <div bs-active-pane="tabs.activeTab" bs-tabs ng-if="unscheduled.length > 0">
             <div data-title="Proposed Schedule" bs-pane></div>
-            <div data-title="Unable to Schedule" bs-pane></div>
+            <div data-title="Unscheduled Shows" bs-pane></div>
+            <div data-title="More Information" bs-pane></div>
         </div>
     </div>
     <div class="modal-body" inner-height="innerHeight" ng-style="{maxHeight: (innerHeight-295) + 'px'}" style="overflow-y: scroll">
-        <div ng-if="tabs.activeTab == 0">
-            <p>Here is the schedule I put together for you. To keep this, click <strong>Save</strong> at the bottom of this window. If you want generate another schedule, click <strong>Try Again</strong>.</p>
+        <div ng-show="tabs.activeTab == 0">
+            <div class="alert alert-success" ng-if="!unscheduled.length">
+                <strong>Success!</strong>
+                Every show you want to see is on the schedule.
+            </div>
+            <div class="alert alert-warning" ng-if="unscheduled.length">
+                <strong>Oh no!</strong>
+                I wasn't able to fit all of the shows you want to see on the schedule.
+                <a href ng-click="tabs.activeTab=1">Which ones?</a>
+                <a href ng-click="tabs.activeTab=2">Why?</a>
+            </div>
             <table class="table" style="margin-bottom:0">
                 <thead>
                 <tr>
@@ -128,10 +138,10 @@
                         <interest desire="userData.preferences[performance.show]"></interest>
                     </td>
                     <td ng-if="isUserAttendingPerformance(pId)" class="align-middle" nowrap bs-tooltip="{title:'Already on your schedule.'}">
-                        <button class="btn" disabled>
+                        <button class="btn disabled">
                             <span class="glyphicon glyphicon-thumbs-down"></span>
                         </button>
-                        <button class="btn btn-success" disabled>
+                        <button class="btn btn-success disabled">
                             <span class="glyphicon glyphicon-thumbs-up"></span>
                         </button>
                     </td>
@@ -147,8 +157,9 @@
                 </tbody>
             </table>
         </div>
-        <div ng-if="tabs.activeTab == 1">
-            <p>I was unable to add the following <ng-pluralize count="unscheduled" when="plurals.show"></ng-pluralize> to the schedule.</p>
+        <div ng-show="tabs.activeTab == 1">
+            <p class="lead">{{unscheduled.length > 1 ? 'These are the shows' : 'This is the show'}} I couldn't fit on the schedule.</p>
+            <p>Want <a href ng-click="tabs.activeTab=2">more information</a>?</p>
             <table class="table" style="margin-bottom:0">
                 <thead>
                 <tr>
@@ -165,6 +176,68 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div ng-show="tabs.activeTab == 2">
+            <p class="lead">So, why can't you find a schedule where I can see every show?</p>
+            <ol>
+                <li>Such a schedule may not be possible.</li>
+                <li>This is actually a very difficult thing for computers to do.</li>
+            </ol>
+            <hr />
+            <p class="lead">What can I do?</p>
+            <p>You have a few options:</p>
+            <ol>
+                <li>You can click <strong>Try Again</strong>.
+                    <ul class="small">
+                        <li>PRO: You may get a better schedule with more shows.</li>
+                        <li>CON: You may get a worse schedule.</li>
+                    </ul>
+                    <br />
+                </li>
+                <li>You can hand-pick some show times that you like, reject the rest, and run the generator again.
+                    <ul class="small">
+                        <li>PRO: The size of the problem is reduced making it easier to solve.</li>
+                        <li>CON: You're locked-in to the show times you hand-pick and consequences of that.</li>
+                    </ul>
+                    <br />
+                </li>
+                <li>You can accept the schedule.
+                    <ul class="small">
+                        <li>PRO: You have a schedule!</li>
+                        <li>CON: [some annoying life lesson about not always getting what you want]</li>
+                    </ul>
+                </li>
+            </ol>
+            <hr />
+            <p class="lead">Why is this such a hard problem for computers? [Nerd alert!]</p>
+            <p>Let's do a simple example, and we'll assume the following:</p>
+            <ol>
+                <li>Each show has 6 show times.</li>
+                <li>You're available to see any show at any time.</li>
+                <li>We take Interest level and travel time between venues out of the equation.</li>
+            </ol>
+            <br />
+            <p>With that information, we can calculate the number of possible schedules depending on how many shows you want to see:</p>
+            <div class="row">
+                <div class="col-md-{{section.w}}" ng-repeat="section in examplePowers">
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th>Shows</th>
+                                <th>Possible Schedules</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="power in section.p" bs-tooltip="power.i == 25 && {title:'Weird how that\'s the only one that doesn\'t end with a 6!'}">
+                            <th>{{power.i}}</th>
+                            <td>{{power.p}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p>So, it quickly becomes impractical to look at every possible schedule. This is the type of problem that would be <em>perfect</em> for a <a href="https://en.wikipedia.org/wiki/Quantum_computing" target="_blank">Quantum Computer</a>.</p>
+            <p>The Auto-Scheduler uses a custom <a href="https://en.wikipedia.org/wiki/Genetic_algorithm">Genetic Algorithm</a>. Instead of looking for the best possible schedule, it looks for a really great schedule. If there is a possible combination of show times that would allow you to see every show you want, the algorithm will almost certainly never find it...but it <em>will</em> find something that's really <em>close</em> to an ideal schedule. The longer it runs, the closer it can get.</p>
         </div>
     </div>
     <div class="modal-footer">
