@@ -24,3 +24,16 @@ progressbar in nav to encourage exploring?
 	welcome modal, optional tell about each page the first land
 
 context sensitive help
+
+speed up generator by creating fake performance ids which are the actual sort order
+    then the sort function doesn't need a callback
+
+store using token id instead of plain id
+
+store in anonymous session
+on sign-in
+    if new account, store
+    otherwise if there are preferences or a schedule in anonymous
+        Signing-in will remove current and restore saved. Continue?
+            if not, sign out
+            if so, restore

@@ -14,7 +14,7 @@ angular.module('fringeApp').component('myFringe', {
         $scope.statuses = Configuration.fringeLevels;
 
         var update = function() {
-            $scope.goingCount = Schedule.getPerformancesAttending().length;
+            $scope.goingCount = Schedule.getSchedule().length;
             $scope.level = 0;
             $scope.nextLevelCount = 0;
             $scope.nextLevelRemaining = 0;

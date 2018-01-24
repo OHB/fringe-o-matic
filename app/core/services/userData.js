@@ -1,14 +1,7 @@
-angular.module('fringeApp').service('UserData', ['$q', 'debounce', function($q, debounce) {
+angular.module('fringeApp').service('UserData', ['$q', '$http', 'debounce', function($q, $http, debounce) {
     var self = this,
-        initData = {
-            preferences: {},
-            unavailability: [],
-            schedule: [],
-            maybe: [],
-            settings: {
-                scheduleMode: 'full'
-            }
-        },
+        currentUserId,
+        data,
         basicGetter = function(type) {
             return function() {
                 return data[type];
@@ -20,8 +13,53 @@ angular.module('fringeApp').service('UserData', ['$q', 'debounce', function($q, 
                 self.save();
             };
         },
-        onSave = function() {},
-        data = store.has('fringeData') ? store.get('fringeData') : angular.copy(initData);
+        onSave = function() {}
+
+    this.load = function(userId) {
+        var deferred = $q.defer();
+        currentUserId = userId;
+
+        if (userId) {
+            $http.get('api/getUserData.php?id=' + userId).then(function(response) {
+                data = response.data;
+                deferred.resolve();
+                console.log('User data loaded');
+            }, function() {
+                deferred.reject();
+            });
+        } else {
+            deferred.reject();
+        }
+
+        return deferred.promise;
+    };
+
+    this.save = debounce(function() {
+        var deferred = $q.defer();
+
+        onSave(deferred.promise);
+
+        if (currentUserId !== undefined) {
+            $http.post('api/setUserData.php', {id: currentUserId, data: data}).then(deferred.resolve, deferred.reject);
+        } else {
+            deferred.reject();
+        }
+    }, 5000);
+
+    this.reset = function() {
+        data = {
+            preferences: {},
+            unavailability: [],
+            schedule: [],
+            maybe: [],
+            settings: {
+                scheduleMode: 'full'
+            }
+        };
+        currentUserId = undefined;
+    };
+
+    this.reset();
 
     this.getPreferences  = basicGetter('preferences');
     this.setPreferences = basicSetter('preferences');
@@ -34,27 +72,12 @@ angular.module('fringeApp').service('UserData', ['$q', 'debounce', function($q, 
     this.getSettings = basicGetter('settings');
     this.setSettings = basicSetter('settings');
 
-    this.reset = function() {
-        store.set('fringeData', angular.copy(initData));
-        data = store.get('fringeData');
-    };
-    this.save = debounce(function() {
-        var deferred = $q.defer();
-        onSave(deferred.promise);
-
-        store.set('fringeData', data);
-        setTimeout(deferred.resolve, 2000);
-    }, 5000);
-
     this.export = function() {
         return JSON.stringify(data);
     };
+
     this.import = function(input) {
-        var newData = JSON.parse(input);
-
-        this.reset();
-        angular.extend(data, newData);
-
+        data = JSON.parse(input);
         this.save();
     };
 

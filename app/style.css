@@ -28,11 +28,11 @@ body.js .js-required {
     color: white;
     background-color: transparent;
 }
-.navbar-primary .navbar-nav > .active > a, .navbar-primary .navbar-nav > .active > a:focus, .navbar-primary .navbar-nav > .active > a:hover {
+.navbar-primary .navbar-nav > .active > a, .navbar-primary .navbar-nav > .active > a:focus, .navbar-primary .navbar-nav > .active > a:hover,
+.navbar-primary .navbar-nav .open > a, .navbar-primary .navbar-nav .open > a:hover {
     background-color: #428bca;
     color: white;
 }
-
 .jumbotron {
     border-bottom: 1px solid #ddd;
     background: #eee url(/img/skulls.png);

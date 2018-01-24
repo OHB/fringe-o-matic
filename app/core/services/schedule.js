@@ -31,12 +31,7 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
             UserData.setSchedule(schedule);
         }
 
-        Data.getPerformance(performanceId).then(function(performance) {
-            return Data.getShow(performance.show);
-        }).then(function(show) {
-            self.removeMaybe(show.performance);
-            return show.performances;
-        });
+        this.removeMaybe(performanceId);
     };
     this.remove = function(performanceId) {
         this.removeMaybe(performanceId);
@@ -62,10 +57,10 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
     };
 
     this.getSortedSchedule = function() {
-        return Data.getPerformances().then(function(performances) {
-            return UserData.getSchedule().sort(function(a, b) {
-                return Sorters.performance(performances[a], performances[b]);
-            });
+        var performances = Data.getPerformances();
+
+        return UserData.getSchedule().sort(function(a, b) {
+            return Sorters.performance(performances[a], performances[b]);
         });
     };
 
@@ -86,64 +81,63 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
     };
 
     this.getShowsAttending = function() {
-        return Data.getPerformances().then(function(performances) {
-            var shows = [],
-                attendingPerformances = self.getPerformancesAttending();
+        var performances = Data.getPerformances(),
+            shows = [],
+            attendingPerformances = self.getPerformancesAttending();
 
-            for (var i = 0; i < attendingPerformances.length; i ++) {
-                shows.push(performances[attendingPerformances[i]].show);
-            }
+        for (var i = 0; i < attendingPerformances.length; i ++) {
+            shows.push(performances[attendingPerformances[i]].show);
+        }
 
-            return shows;
-        });
+        return shows;
     };
 
-    this.isUserAttendingShow = function(showId) {
-        return Data.getShow(showId).then(function(show) {
-            for (var i = 0; i < show.performances.length; i ++) {
-                if (self.isUserAttendingPerformance(show.performances[i])) {
-                    return true;
-                }
-            }
-
-            return false;
-        });
-    };
-
-    this.canUserAttendPerformance = function(performanceId) {
-        return Data.getPerformance(performanceId).then(function(performance) {
-            return Availability.isUserAvailable(performance.start, performance.stop);
-        });
-    };
-
-    this.canPerformanceBeAddedToSchedule = function(performanceId) {
-        return $q.all({
-            performances: Data.getPerformances(),
-            shows: Data.getShows(),
-            venueDistances: Data.getVenueDistances()
-        }).then(function(results) {
-            var performances = results.performances,
-                shows = results.shows,
-                venueDistances = results.venueDistances,
-                performance1 = performances[performanceId],
-                start = performance1.start,
-                stop = performance1.stop,
-                userSchedule = UserData.getSchedule(),
-                i = userSchedule.length;
-
-            while (i --) {
-                var performance2 = performances[userSchedule[i]],
-                    offset = venueDistances[shows[performance1.show].venue][shows[performance2.show].venue];
-
-                if (! (stop < performance2.start - offset || start > performance2.stop + offset)) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-    };
-
+    // this.isUserAttendingShow = function(showId) {
+    //     var performances = Data.getShow(showId).performances;
+    //
+    //     for (var i = 0; i < performances.length; i ++) {
+    //         if (self.isUserAttendingPerformance(performances[i])) {
+    //             return true;
+    //         }
+    //     }
+    //
+    //     return false;
+    // };
+    //
+    // this.canUserAttendPerformance = function(performanceId) {
+    //     return Data.getPerformance(performanceId).then(function(performance) {
+    //         return Availability.isUserAvailable(performance.start, performance.stop);
+    //     });
+    // };
+    //
+    // this.canPerformanceBeAddedToSchedule = function(performanceId) {
+    //     return $q.all({
+    //         performances: Data.getPerformances(),
+    //         shows: Data.getShows(),
+    //         venueDistances: Data.getVenueDistances()
+    //     }).then(function(results) {
+    //         var performances = results.performances,
+    //             shows = results.shows,
+    //             venueDistances = results.venueDistances,
+    //             performance1 = performances[performanceId],
+    //             start = performance1.start,
+    //             stop = performance1.stop,
+    //             userSchedule = UserData.getSchedule(),
+    //             i = userSchedule.length;
+    //
+    //         while (i --) {
+    //             var performance2 = performances[userSchedule[i]],
+    //                 offset = venueDistances[shows[performance1.show].venue][shows[performance2.show].venue];
+    //
+    //             if (! (stop < performance2.start - offset || start > performance2.stop + offset)) {
+    //                 return false;
+    //             }
+    //         }
+    //
+    //         return true;
+    //     });
+    // };
+    //
     // this.canUserAttendShow = function(showId) {
     //     return Data.getShow(showId).then(function(show) {
     //         return $q.all(show.performances.map(function(performanceId) {
@@ -156,45 +150,43 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
 
     // performances that can be added to the schedule, unless user is already seeing the show, includes undesired
     this.getPossiblePerformances = function() {
-        return $q.all([Data.getPerformances(), Data.getShows(), Data.getVenueDistances()]).then(function(results) {
-            var performances = results[0],
-                shows = results[1],
-                venueDistances = results[2],
-                possiblePerformances = [],
-                userSchedule = UserData.getSchedule(),
-                i = 0;
+        var performances = Data.getPerformances(),
+            shows = Data.getShows(),
+            venueDistances = Data.getVenueDistances(),
+            possiblePerformances = [],
+            userSchedule = UserData.getSchedule(),
+            i = 0;
 
-            angular.forEach(performances, function(performance1, performanceId) {
-                if (userSchedule.indexOf(performanceId) > -1 || ! Availability.isUserAvailable(performance1.start, performance1.stop)) {
+        angular.forEach(performances, function(performance1, performanceId) {
+            if (userSchedule.indexOf(performanceId) > -1 || ! Availability.isUserAvailable(performance1.start, performance1.stop)) {
+                return true;
+            }
+
+            var show1 = shows[performance1.show];
+
+            for (i = 0; i < show1.performances.length; i ++) {
+                if (userSchedule.indexOf(show1.performances[i]) > -1) {
                     return true;
                 }
+            }
 
-                var show1 = shows[performance1.show];
+            var start = performance1.start,
+                stop = performance1.stop;
 
-                for (i = 0; i < show1.performances.length; i ++) {
-                    if (userSchedule.indexOf(show1.performances[i]) > -1) {
-                        return true;
-                    }
+            i = userSchedule.length;
+
+            while (i --) {
+                var performance2 = performances[userSchedule[i]],
+                    offset = venueDistances[show1.venue][shows[performance2.show].venue] + Configuration.minimumArriveBeforeShowTime;
+
+                if (! (stop < performance2.start - offset || start > performance2.stop + offset)) {
+                    return true;
                 }
+            }
 
-                var start = performance1.start,
-                    stop = performance1.stop;
-
-                i = userSchedule.length;
-
-                while (i --) {
-                    var performance2 = performances[userSchedule[i]],
-                        offset = venueDistances[show1.venue][shows[performance2.show].venue] + Configuration.minimumArriveBeforeShowTime;
-
-                    if (! (stop < performance2.start - offset || start > performance2.stop + offset)) {
-                        return true;
-                    }
-                }
-
-                possiblePerformances.push(performanceId);
-            });
-
-            return possiblePerformances;
+            possiblePerformances.push(performanceId);
         });
+
+        return possiblePerformances;
     };
 }]);

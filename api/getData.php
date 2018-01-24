@@ -1,5 +1,12 @@
 <?php
 ob_start("ob_gzhandler");
+
+header('Content-type: application/json');
+if (file_exists('cache.json')) {
+    echo file_get_contents('cache.json');
+    exit;
+}
+
 $showsToSuppress = range(164, 185);
 $colorVenues = [11, 2, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 23];
 $byov = [3, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
@@ -103,13 +110,6 @@ $groupDistances = [
 ];
 
 $ratings = ['All Ages', '7+', '13+', '16+', '18+', 'TBD'];
-
-header('Content-type: application/json');
-
-if (file_exists('cache.json')) {
-//    echo file_get_contents('cache.json');
-//    exit;
-}
 
 $supplementalData = [];
 $csv = parse_csv(file_get_contents('data.csv'));

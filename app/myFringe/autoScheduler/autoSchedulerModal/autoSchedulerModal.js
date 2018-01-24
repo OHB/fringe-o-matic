@@ -1,6 +1,6 @@
 angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
-    '$uibModalInstance', '$q', '$scope', '$timeout', 'Configuration', 'Data', 'Schedule', 'UserData', 'generatorFactory', 'Plurals',
-    function($uibModalInstance, $q, $scope, $timeout, Configuration, Data, Schedule, UserData, generatorFactory, Plurals) {
+    '$uibModalInstance', '$scope', '$timeout', 'Configuration', 'Data', 'Schedule', 'UserData', 'generatorFactory', 'Plurals',
+    function($uibModalInstance, $scope, $timeout, Configuration, Data, Schedule, UserData, generatorFactory, Plurals) {
         var config, data, sortedShows;
 
         $scope.moment = moment;
@@ -11,131 +11,6 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
         $scope.userData = {settings: UserData.getSettings(), preferences: UserData.getPreferences()};
         $scope.$watch('userData.settings', function() {
             UserData.setSettings($scope.userData.settings);
-        });
-
-        $q.all([
-            Schedule.getPossiblePerformances(),
-            Schedule.getShowsAttending(),
-            Data.getShows(),
-            Data.getPerformances(),
-            Data.getVenueDistances(),
-            Data.getSortedShows(),
-            Data.getSortedPerformances(),
-            Data.getVenues()
-        ]).then(function(results) {
-            var possiblePerformances = results[0],
-                alreadyAttending = results[1];
-
-            $scope.shows = results[2];
-            $scope.performances = results[3];
-            $scope.distances = results[4];
-            sortedShows = results[5];
-            $scope.sortedPerformances = results[6];
-            $scope.venues = results[7];
-
-            $scope.generationCount = Math.max(500, Math.min(1000, possiblePerformances.length * 2));
-            $scope.populationSize = Math.floor(Math.max(500, Math.min(3000, Math.pow(possiblePerformances.length, 1.175))));
-
-            $scope.crossoverRate = 0.9;
-            $scope.mutationRate = 0.2;
-            $scope.desireFitnessPoints = [0, 3, 7, 15, 31];
-            $scope.arrivalThreshold = Configuration.minimumArriveBeforeShowTime;
-
-            config = {
-                iterations: $scope.generationCount,
-                size: $scope.populationSize,
-                crossover: $scope.crossoverRate,
-                mutation: $scope.mutationRate,
-                skip: Math.ceil((($scope.generationCount * $scope.populationSize) - (500*500)) / 920000) + 2,
-                maxResults: 1
-            };
-            data = {
-                shows: {},
-                showIds: [],
-                performances: {},
-                venueDistances: $scope.distances,
-                desireToFitnessMap: $scope.desireFitnessPoints,
-                extraPointsForAdjacentVenues: 1,
-                extraPointsForTimeOff: 1,
-                timeOffThreshold: 7200,
-                adjacentVenueThreshold: 600,
-                extraPointsForEmptyDays: 1,
-                idealFitness: 0,
-                iterations: $scope.generationCount,
-                populationSize: $scope.populationSize,
-                arrivalThreshold: $scope.arrivalThreshold
-            };
-
-            $scope.progressByDesireMax = {1: 0, 2: 0, 3: 0, 4: 0};
-            $scope.progressByDesireBase = {1: 0, 2: 0, 3: 0, 4: 0};
-
-            angular.forEach($scope.shows, function(show, showId) {
-                var desire = Schedule.getShowDesire(showId),
-                    possibleShowPerformances = show.performances.filter(function(performanceId) {
-                        return possiblePerformances.indexOf(performanceId) > -1;
-                    });
-
-                if (alreadyAttending.indexOf(showId) > -1) {
-                    $scope.progressByDesireMax[desire] ++;
-                    $scope.progressByDesireBase[desire] ++;
-                }
-
-                if (desire === 0 || possibleShowPerformances.length === 0 || alreadyAttending.indexOf(showId) > -1) {
-                    return true;
-                }
-
-                $scope.progressByDesireMax[desire] ++;
-
-                data.showIds.push(showId);
-
-                // @todo consider adding distances here to speed up fitness slightly
-                data.shows[showId] = {
-                    name: show.name,
-                    desire: desire,
-                    venue: show.venue,
-                    performances: []
-                };
-
-                data.idealFitness += data.desireToFitnessMap[desire];
-
-                angular.forEach(possibleShowPerformances, function(performanceId) {
-                    var performance = $scope.performances[performanceId];
-
-                    data.performances[performanceId] = {
-                        start: performance.start,
-                        stop: performance.stop,
-                        show: showId,
-                        offsetTimes: {}
-                    };
-
-                    data.shows[showId].performances.push(performanceId);
-
-                    angular.forEach($scope.distances, function(venueDistances, venueId) {
-                        data.performances[performanceId].offsetTimes[venueId] = {
-                            start: performance.start - venueDistances[show.venue] - $scope.arrivalThreshold,
-                            stop: performance.stop + venueDistances[show.venue] + $scope.arrivalThreshold
-                        };
-                    });
-                });
-            });
-
-            data.performanceIds = Object.keys(data.performances).shuffle();
-
-            var sortedPerformanceIds = Object.keys(data.performances).sort(function(a, b) {
-                var pa = data.performances[a], pb = data.performances[b];
-
-                return pb.start - pa.start || pb.stop - pa.stop;
-            });
-
-            for (var i = 0; i < sortedPerformanceIds.length; i ++) {
-                data.performances[sortedPerformanceIds[i]].sortOrder = i;
-            }
-
-            $scope.idealFitness = data.idealFitness;
-
-            console.log("Generator Config: ", data);
-
-            $scope.start();
         });
 
         var processGeneratedSchedule = function(schedule, conflicts) {
@@ -321,7 +196,126 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
                 {i: 45, p: '103,945,637,534,048,876,111,514,866,313,854,976'},
                 {i: 50, p: '808,281,277,464,764,060,643,139,600,456,536,293,376'}
             ]
+        }];
+
+
+        var possiblePerformances = Schedule.getPossiblePerformances(),
+            alreadyAttending = Schedule.getShowsAttending();
+
+        $scope.shows = Data.getShows();
+        $scope.performances = Data.getPerformances();
+        $scope.distances = Data.getVenueDistances();
+        sortedShows = Data.getSortedShows();
+        $scope.sortedPerformances = Data.getSortedPerformances();
+        $scope.venues = Data.getVenues();
+
+        // @todo possible performances always returns everything. this needs to be POTENTIAL performances
+        var potentialPerformances = possiblePerformances.filter(function(performance) {
+            return Schedule.getShowDesire($scope.performances[performance].show) > 0;
+        });
+
+        $scope.generationCount = Math.max(500, Math.min(1000, potentialPerformances.length * 2));
+        $scope.populationSize = Math.floor(Math.max(500, Math.min(3000, Math.pow(potentialPerformances.length, 1.175))));
+
+        $scope.crossoverRate = 0.9;
+        $scope.mutationRate = 0.2;
+        $scope.desireFitnessPoints = [0, 3, 7, 15, 31];
+        $scope.arrivalThreshold = Configuration.minimumArriveBeforeShowTime;
+
+        config = {
+            iterations: $scope.generationCount,
+            size: $scope.populationSize,
+            crossover: $scope.crossoverRate,
+            mutation: $scope.mutationRate,
+            skip: Math.ceil((($scope.generationCount * $scope.populationSize) - (500*500)) / 920000) + 2,
+            maxResults: 1
+        };
+        data = {
+            shows: {},
+            showIds: [],
+            performances: {},
+            venueDistances: $scope.distances,
+            desireToFitnessMap: $scope.desireFitnessPoints,
+            extraPointsForAdjacentVenues: 1,
+            extraPointsForTimeOff: 1,
+            timeOffThreshold: 7200,
+            adjacentVenueThreshold: 600,
+            extraPointsForEmptyDays: 1,
+            idealFitness: 0,
+            iterations: $scope.generationCount,
+            populationSize: $scope.populationSize,
+            arrivalThreshold: $scope.arrivalThreshold
+        };
+
+        $scope.progressByDesireMax = {1: 0, 2: 0, 3: 0, 4: 0};
+        $scope.progressByDesireBase = {1: 0, 2: 0, 3: 0, 4: 0};
+
+        angular.forEach($scope.shows, function(show, showId) {
+            var desire = Schedule.getShowDesire(showId),
+                possibleShowPerformances = show.performances.filter(function(performanceId) {
+                    return possiblePerformances.indexOf(performanceId) > -1;
+                });
+
+            if (alreadyAttending.indexOf(showId) > -1) {
+                $scope.progressByDesireMax[desire] ++;
+                $scope.progressByDesireBase[desire] ++;
+            }
+
+            if (desire === 0 || possibleShowPerformances.length === 0 || alreadyAttending.indexOf(showId) > -1) {
+                return true;
+            }
+
+            $scope.progressByDesireMax[desire] ++;
+
+            data.showIds.push(showId);
+
+            // @todo consider adding distances here to speed up fitness slightly
+            data.shows[showId] = {
+                name: show.name,
+                desire: desire,
+                venue: show.venue,
+                performances: []
+            };
+
+            data.idealFitness += data.desireToFitnessMap[desire];
+
+            angular.forEach(possibleShowPerformances, function(performanceId) {
+                var performance = $scope.performances[performanceId];
+
+                data.performances[performanceId] = {
+                    start: performance.start,
+                    stop: performance.stop,
+                    show: showId,
+                    offsetTimes: {}
+                };
+
+                data.shows[showId].performances.push(performanceId);
+
+                angular.forEach($scope.distances, function(venueDistances, venueId) {
+                    data.performances[performanceId].offsetTimes[venueId] = {
+                        start: performance.start - venueDistances[show.venue] - $scope.arrivalThreshold,
+                        stop: performance.stop + venueDistances[show.venue] + $scope.arrivalThreshold
+                    };
+                });
+            });
+        });
+
+        data.performanceIds = Object.keys(data.performances).shuffle();
+
+        var sortedPerformanceIds = Object.keys(data.performances).sort(function(a, b) {
+            var pa = data.performances[a], pb = data.performances[b];
+
+            return pb.start - pa.start || pb.stop - pa.stop;
+        });
+
+        for (var i = 0; i < sortedPerformanceIds.length; i ++) {
+            data.performances[sortedPerformanceIds[i]].sortOrder = i;
         }
-        ];
+
+        $scope.idealFitness = data.idealFitness;
+
+        console.log("Generator Config: ", data);
+
+        $scope.start();
     }
 ]);

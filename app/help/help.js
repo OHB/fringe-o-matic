@@ -4,7 +4,15 @@ angular.module('fringeApp').component('help', {
         $scope.userData = UserData.export();
 
         $scope.import = function(data) {
-            data.settings = angular.extend({scheduleMode: 'smart', displaySchedulerStats: true}, data.settings || {});
+            var base = {
+                "preferences": [],
+                "unavailability": [],
+                "schedule": [],
+                "maybe": [],
+                "settings": {"scheduleMode": "full", "displaySchedulerStats": true}
+            };
+
+            data = angular.extend({}, base, data);
             UserData.import(JSON.stringify(data));
             $scope.userData = UserData.export();
         };

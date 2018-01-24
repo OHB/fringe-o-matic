@@ -7,6 +7,7 @@ ob_start("ob_gzhandler");
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-signin-client_id" content="728570220201-2tkhj9m3stsqgprscc77o256r0f441au.apps.googleusercontent.com">
     <title>Fringe-o-Matic</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <?php foreach (isset($_REQUEST['compiled']) ? ['compiled.css'] : $build->css as $script) { ?>
@@ -44,7 +45,14 @@ ob_start("ob_gzhandler");
                     <a href="#!/{{item.route}}" >{{item.title}}</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" ng-cloak>
+                <li style="padding-top:7px" ng-show="! signedIn && loaded"><div id="google-sign-in-button"></div></li>
+                <li class="dropdown" ng-show="signedIn && loaded">
+                    <a href bs-dropdown>Signed in as {{signedInName}} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href ng-click="signOut()">Sign Out</a></li>
+                    </ul>
+                </li>
                 <li><a><i class="glyphicon glyphicon-saved" ng-class="{'glyphicon-transfer': !loaded || saving}" bs-tooltip="{title:'Your data is saved automatically.'}" data-placement="bottom"></i></a></li>
             </ul>
         </div>
@@ -97,6 +105,7 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script type="text/javascript">
     document.body.className += ' js';
 </script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-route.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-animate.min.js"></script>
@@ -108,6 +117,8 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/parse-options.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.min.js"></script>

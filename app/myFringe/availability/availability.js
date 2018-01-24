@@ -1,8 +1,8 @@
 angular.module('fringeApp').component('myFringeAvailability', {
     templateUrl: 'app/myFringe/availability/availability.html',
     controller: [
-        '$scope', '$uibModal', '$timeout', '$q', 'Data', 'Schedule', 'Availability', 'Configuration',
-        function($scope, $uibModal, $timeout, $q, Data, Schedule, Availability, Configuration) {
+        '$scope', '$uibModal', '$timeout', 'Data', 'Schedule', 'Availability', 'Configuration',
+        function($scope, $uibModal, $timeout, Data, Schedule, Availability, Configuration) {
             var performances;
 
             $scope.moment = moment;
@@ -29,26 +29,6 @@ angular.module('fringeApp').component('myFringeAvailability', {
                     });
                 });
             };
-
-            $timeout(function() {
-                $q.all([
-                    Data.getPerformances(),
-                    Data.getAvailabilitySlots(),
-                    Data.getAvailabilitySlotsAll()
-                ]).then(function(results) {
-                    performances = results[0];
-                    $scope.availabilitySlots = results[1];
-                    $scope.availabilitySlotsAll = results[2];
-
-                    angular.forEach($scope.availabilitySlots, function(slots) {
-                        angular.forEach(slots, function(slot) {
-                            $scope.availability[slot] = Availability.isSlotAvailable(slot);
-                        });
-                    });
-
-                    refreshPerformancesInSlots();
-                });
-            });
 
             $scope.toggleAvailability = function(slot) {
                 $scope.availability[slot] ? Availability.setSlotUnavailable(slot) : Availability.setSlotAvaialble(slot);
@@ -92,6 +72,18 @@ angular.module('fringeApp').component('myFringeAvailability', {
                     }
                 });
             };
+
+            performances = Data.getPerformances();
+            $scope.availabilitySlots = Data.getAvailabilitySlots();
+            $scope.availabilitySlotsAll = Data.getAvailabilitySlotsAll();
+
+            angular.forEach($scope.availabilitySlots, function(slots) {
+                angular.forEach(slots, function(slot) {
+                    $scope.availability[slot] = Availability.isSlotAvailable(slot);
+                });
+            });
+
+            refreshPerformancesInSlots();
         }
     ]
 });

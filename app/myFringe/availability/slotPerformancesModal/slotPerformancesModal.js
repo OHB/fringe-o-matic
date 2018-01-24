@@ -4,18 +4,12 @@ angular.module('fringeApp').controller('slotPerformancesModalCtrl', [
         $scope.slotStart = slotStart;
         $scope.slotStop = slotStop;
 
-        Data.getShows().then(function(shows) {
-            $scope.shows = shows;
-        });
-        Data.getPerformances().then(function(performances) {
-            $scope.performances = performances;
+        $scope.shows = Data.getShows();
+        $scope.performances = Data.getPerformances();
+        $scope.venues = Data.getVenues();
 
-            $scope.slotPerformances = slotPerformances.sort(function(a, b) {
-                return Sorters.performance(performances[a], performances[b]);
-            });
-        });
-        Data.getVenues().then(function(venues) {
-            $scope.venues = venues;
+        $scope.slotPerformances = slotPerformances.sort(function(a, b) {
+            return Sorters.performance($scope.performances[a], $scope.performances[b]);
         });
 
         $scope.ok = function() {

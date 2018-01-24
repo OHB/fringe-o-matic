@@ -15,8 +15,7 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     schedule = Schedule.getSchedule();
 
                 if (! desiredShows.length) {
-                    $scope.screen = 'no-interests';
-                    return;
+                    return 'no-interests';
                 }
 
                 $scope.progressByDesireMax = {4: 0, 3: 0, 2: 0, 1: 0};
@@ -25,130 +24,116 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     $scope.progressByDesireMax[Schedule.getShowDesire(showId)] ++;
                 });
 
-                $q.all([
-                    Data.getPerformances(),
-                    Data.getShows(),
-                    Data.getVenues(),
-                    Data.getVenueDistances(),
-                    Schedule.getPossiblePerformances(),
-                    Schedule.getShowsAttending()
-                ]).then(function(results) {
-                    var performances = results[0],
-                        shows = results[1],
-                        venues = results[2],
-                        venueDistances = results[3],
-                        possiblePerformances = results[4],
-                        showsAttending = results[5],
-                        desiredShowsNotOnSchedule = desiredShows.diff(showsAttending);
+                var performances = Data.getPerformances(),
+                    shows = Data.getShows(),
+                    venues = Data.getVenues(),
+                    venueDistances = Data.getVenueDistances(),
+                    possiblePerformances = Schedule.getPossiblePerformances(),
+                    showsAttending = Schedule.getShowsAttending(),
+                    desiredShowsNotOnSchedule = desiredShows.diff(showsAttending);
 
-                    schedule.map(function(performanceId) {
-                        $scope.progressByDesire[Schedule.getShowDesire(performances[performanceId].show)] ++;
-                    });
-
-                    $scope.availablePerformanceCount = 0;
-                    angular.forEach(performances, function(performance) {
-                        if (Availability.isUserAvailable(performance.start, performance.stop)) {
-                            $scope.availablePerformanceCount ++;
-                        }
-                    });
-
-                    $scope.possiblePerformanceCount = possiblePerformances.length;
-                    $scope.allDesiredShowsOnSchedule = desiredShowsNotOnSchedule.length === 0;
-
-                    if (! possiblePerformances.length) {
-                        if (generateRun) {
-                            $location.path('/my-fringe');
-                        }
-
-                        return 'schedule-full';
-                    }
-
-                    // everything the user wants is scheduled, and there's extra room.
-                    if (desiredShowsNotOnSchedule.length === 0) {
-                        if (generateRun) {
-                            $location.path('/my-fringe');
-                        }
-
-                        return 'schedule-complete';
-                    }
-
-                    var possiblePerformancesDesired = possiblePerformances.filter(function(performance) {
-                        return desiredShows.indexOf(performances[performance].show) > -1;
-                    });
-
-                    // there are possible performances, but not desired performances
-                    if (! possiblePerformancesDesired.length) {
-                        if (generateRun) {
-                            $location.path('/my-fringe');
-                        }
-
-                        return 'no-possible-desired';
-                    }
-
-                    // find shows which can be added without repercussion
-                    var possibleInstantAddPerformances = possiblePerformancesDesired.filter(function(pId1) {
-                        var performance1 = performances[pId1],
-                            start1 = performance1.start,
-                            stop1 = performance1.stop,
-                            venue1 = shows[performance1.show].venue;
-
-                        for (var i = 0; i < possiblePerformancesDesired.length; i ++) {
-                            var pId2 = possiblePerformancesDesired[i];
-
-                            if (pId1 === pId2) {
-                                continue;
-                            }
-
-                            var performance2 = performances[pId2],
-                                offset = venueDistances[venue1][shows[performance2.show].venue] + Configuration.minimumArriveBeforeShowTime;
-
-                            if (! (stop1 < performance2.start - offset || start1 > performance2.stop + offset)) {
-                                return false;
-                            }
-                        }
-
-                        return true;
-                    }).map(function(pId) {
-                        return {
-                            id: pId,
-                            performance: performances[pId],
-                            showId: performances[pId].show,
-                            show: shows[performances[pId].show],
-                            venueId: shows[performances[pId].show].venue,
-                            venue: venues[shows[performances[pId].show].venue]
-                        };
-                    });
-
-                    possibleInstantAddPerformances = possibleInstantAddPerformances.filter(function(entry) {
-                        for (var i = 0; i < possibleInstantAddPerformances.length; i ++) {
-                            if (possibleInstantAddPerformances[i].id !== entry.id && possibleInstantAddPerformances[i].showId === entry.showId) {
-                                return false;
-                            }
-                        }
-
-                        return true;
-                    });
-
-                    $scope.instantAddScreenCount ++;
-
-                    if (possibleInstantAddPerformances.length) {
-                        $scope.instantAddPerformances = possibleInstantAddPerformances;
-                        return 'instant-add';
-                    }
-
-                    $scope.showsOnScheduleCount = showsAttending.length;
-
-                    if (generateRun) {
-                        return 'done';
-                    }
-
-                    $scope.generate();
-
-                    return 'generator';
-
-                }).then(function(screen) {
-                    $scope.screen = screen;
+                schedule.map(function(performanceId) {
+                    $scope.progressByDesire[Schedule.getShowDesire(performances[performanceId].show)] ++;
                 });
+
+                $scope.availablePerformanceCount = 0;
+                angular.forEach(performances, function(performance) {
+                    if (Availability.isUserAvailable(performance.start, performance.stop)) {
+                        $scope.availablePerformanceCount ++;
+                    }
+                });
+
+                $scope.possiblePerformanceCount = possiblePerformances.length;
+                $scope.allDesiredShowsOnSchedule = desiredShowsNotOnSchedule.length === 0;
+
+                if (! possiblePerformances.length) {
+                    if (generateRun) {
+                        $location.path('/my-fringe');
+                    }
+
+                    return 'schedule-full';
+                }
+
+                // everything the user wants is scheduled, and there's extra room.
+                if (desiredShowsNotOnSchedule.length === 0) {
+                    if (generateRun) {
+                        $location.path('/my-fringe');
+                    }
+
+                    return 'schedule-complete';
+                }
+
+                var possiblePerformancesDesired = possiblePerformances.filter(function(performance) {
+                    return desiredShows.indexOf(performances[performance].show) > -1;
+                });
+
+                // there are possible performances, but not desired performances
+                if (! possiblePerformancesDesired.length) {
+                    if (generateRun) {
+                        $location.path('/my-fringe');
+                    }
+
+                    return 'no-possible-desired';
+                }
+
+                // find shows which can be added without repercussion
+                var possibleInstantAddPerformances = possiblePerformancesDesired.filter(function(pId1) {
+                    var performance1 = performances[pId1],
+                        start1 = performance1.start,
+                        stop1 = performance1.stop,
+                        venue1 = shows[performance1.show].venue;
+
+                    for (var i = 0; i < possiblePerformancesDesired.length; i ++) {
+                        var pId2 = possiblePerformancesDesired[i];
+
+                        if (pId1 === pId2) {
+                            continue;
+                        }
+
+                        var performance2 = performances[pId2],
+                            offset = venueDistances[venue1][shows[performance2.show].venue] + Configuration.minimumArriveBeforeShowTime;
+
+                        if (! (stop1 < performance2.start - offset || start1 > performance2.stop + offset)) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }).map(function(pId) {
+                    return {
+                        id: pId,
+                        performance: performances[pId],
+                        showId: performances[pId].show,
+                        show: shows[performances[pId].show],
+                        venueId: shows[performances[pId].show].venue,
+                        venue: venues[shows[performances[pId].show].venue]
+                    };
+                });
+
+                possibleInstantAddPerformances = possibleInstantAddPerformances.filter(function(entry) {
+                    for (var i = 0; i < possibleInstantAddPerformances.length; i ++) {
+                        if (possibleInstantAddPerformances[i].id !== entry.id && possibleInstantAddPerformances[i].showId === entry.showId) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+
+                $scope.instantAddScreenCount ++;
+
+                if (possibleInstantAddPerformances.length) {
+                    $scope.instantAddPerformances = possibleInstantAddPerformances;
+                    return 'instant-add';
+                }
+
+                $scope.showsOnScheduleCount = showsAttending.length;
+
+                if (generateRun) {
+                    return 'done';
+                }
+
+                return 'generator';
             };
 
             $scope.getProgressType = function(number, max) {
@@ -184,7 +169,9 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
 
             var analyze = function() {
                 $scope.screen = '';
-                $timeout(_analyze, 500);
+                $timeout(function() {
+                    $scope.screen = _analyze();
+                }, 500);
             };
 
             if (! UserData.getSettings().autoScheduleIntroComplete) {

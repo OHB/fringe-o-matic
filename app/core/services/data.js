@@ -1,17 +1,13 @@
 angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function($http, $q, Sorters) {
-    var filename = 'api/getTestSchedule.php',
+    var filename = 'api/getData.php',
         data;
 
-    filename = 'api/cache.json';
-
-    var getData = function() {
-        if (data) {
-            return $q.when(data);
-        }
-
+    this.load = function() {
         var deferred = $q.defer();
         $http.get(filename, {cache: true}).then(function(result) {
-            deferred.resolve(result.data);
+            data = result.data;
+            console.log('Data loaded');
+            deferred.resolve();
         }, function() {
             deferred.reject();
         });
@@ -21,9 +17,7 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
 
     var basicGetter = function(type) {
         return function() {
-            return getData().then(function(data) {
-                return data[type];
-            });
+            return data[type];
         };
     };
 
@@ -37,44 +31,34 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
     this.getAvailabilitySlotsAll = basicGetter('availabilitySlotsAll');
 
     this.getSortedShows = function() {
-        return this.getShows().then(function(shows) {
-            return Object.keys(shows).sort(function(a, b) {
-                return shows[a].name.localeCompareSmart(shows[b].name);
-            });
+        return Object.keys(data.shows).sort(function(a, b) {
+            return data.shows[a].name.localeCompareSmart(data.shows[b].name);
         });
     };
 
     this.getPrices = function() {
-        return this.getShows().then(function(shows) {
-            var p = {};
-            angular.forEach(shows, function(show) {
-                p[show.price] = true;
-            });
+        var p = {};
+        angular.forEach(data.shows, function(show) {
+            p[show.price] = true;
+        });
 
-            return Object.keys(p).map(function(i) {
-                return parseInt(i);
-            }).sort(function(a, b) {
-                return a > b;
-            });
-        })
+        return Object.keys(p).map(function(i) {
+            return parseInt(i);
+        }).sort(function(a, b) {
+            return a > b;
+        });
     };
 
     this.getShow = function(showId) {
-        return this.getShows().then(function(shows) {
-            return shows[showId];
-        })
+        return data.shows[showId];
     };
     this.getPerformance = function(performanceId) {
-        return this.getPerformances().then(function(performances) {
-            return performances[performanceId];
-        })
+        return data.performances[performanceId];
     };
 
     this.getSortedPerformances = function() {
-        return this.getPerformances().then(function(performances) {
-            return Object.keys(performances).sort(function(a, b) {
-                return Sorters.performance(performances[a], performances[b]);
-            });
+        return Object.keys(data.performances).sort(function(a, b) {
+            return Sorters.performance(data.performances[a], data.performances[b]);
         });
     };
 }]);
