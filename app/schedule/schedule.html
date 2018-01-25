@@ -61,7 +61,7 @@
                             {{::moment(entry.performance.stop, 'X').format('h:mm a')}}
                         </td>
                         <td>
-                            <p class="h4" style="margin:0 0 10px;"><a href="#!/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
+                            <p class="h4" style="margin:0 0 10px;"><a href="/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
                             <span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>
                             <show-rating value="::entry.rating"></show-rating>
                             <span class="label label-success">{{entry.show.price|price}}</span>

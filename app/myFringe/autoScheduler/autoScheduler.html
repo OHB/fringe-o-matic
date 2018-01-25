@@ -11,7 +11,7 @@
         <p class="lead">The Auto-Scheduler helps build your schedule automatically. It needs to know two things:</p>
         <br />
         <h3>1. What shows do you want to see?</h3>
-        <p>On the <a href="#!/shows">Shows</a> and <a href="#!/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
+        <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
         <br />
         <div class="row">
             <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-md-2 text-center" ng-class="$first && 'col-md-offset-1'">
@@ -23,7 +23,7 @@
         <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
         <hr />
         <h3>2. When are you available?</h3>
-        <p>On the <a href="#!/my-fringe/availability">My Availability</a> tab, you can select which times you are available to see shows.</p>
+        <p>On the <a href="/my-fringe/availability">My Availability</a> tab, you can select which times you are available to see shows.</p>
         <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
         <hr />
         <div class="text-center">
@@ -33,7 +33,7 @@
     <div ng-if="screen == 'no-interests'">
         <h1>Not so fast!</h1>
         <p>Before you can use the Auto-Schedule you must select which shows you're interested in.</p>
-        <p>On the <a href="#!/shows">Shows</a> and <a href="#!/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
+        <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
         <br />
         <div class="row">
             <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-md-2 text-center" ng-class="$first && 'col-md-offset-1'">
@@ -91,7 +91,7 @@
                             {{::moment(entry.performance.stop, 'X').format('h:mm a')}}
                         </td>
                         <td>
-                            <p class="h4" style="margin:0 0 10px;"><a href="#!/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
+                            <p class="h4" style="margin:0 0 10px;"><a href="/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
                             <span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>
                             <show-rating value="::entry.show.rating"></show-rating>
                             <span class="label label-success">{{entry.show.price|price}}</span>
@@ -131,7 +131,7 @@
                 <p>I've done all I can do for now. Have a look at your schedule to double-check that you're happy with it.</p>
                 <br />
                 <br />
-                <p><a href="#!/my-fringe" class="btn btn-primary">View Schedule</a></p>
+                <p><a href="/my-fringe" class="btn btn-primary">View Schedule</a></p>
             </div>
         </div>
         <div class="col-md-3" style="padding-top: 25px">

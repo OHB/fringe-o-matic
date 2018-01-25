@@ -7,7 +7,7 @@ ob_start("ob_gzhandler");
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--    <meta name="google-signin-client_id" content="728570220201-2tkhj9m3stsqgprscc77o256r0f441au.apps.googleusercontent.com">-->
+    <base href="/">
     <title>Fringe-o-Matic</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <?php foreach (isset($_REQUEST['compiled']) ? ['compiled.css'] : $build->css as $script) { ?>
@@ -42,10 +42,10 @@ ob_start("ob_gzhandler");
         <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}">
             <ul class="nav navbar-nav" ng-cloak>
                 <li ng-repeat="item in ::menu" ng-class="{active:currentRoute == '/' + item.route}">
-                    <a href="#!/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
+                    <a href="/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
                 </li>
                 <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
-                    <a href="#!/test">Testing</a>
+                    <a href="/test">Testing</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak>
@@ -102,7 +102,7 @@ ob_start("ob_gzhandler");
 <p style="height: 20px">&nbsp;</p>
 <?php
 if (isset($_REQUEST['compiled'])) {
-    echo file_get_contents('compiled.html');
+    echo file_get_contents('templates.html');
 }
 foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?>
     <script type="text/ng-template" id="<?php echo $filename; ?>">
@@ -142,4 +142,4 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <?php } ?>
 </body>
 </html>
-<?php file_put_contents('index.html', ob_get_contents());
+<?php file_put_contents('dist/index.html', ob_get_contents());

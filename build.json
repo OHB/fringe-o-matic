@@ -23,7 +23,6 @@
     "app/myFringe/availability/style.css",
     "app/myFringe/schedule/style.css"
   ],
-  "_": ["lib/sortedArray.js"],
   "js": [
     "lib/genetics.js",
     "lib/ng-map.min.js",

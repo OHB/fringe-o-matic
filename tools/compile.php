@@ -1,7 +1,7 @@
 <?php
 $build = json_decode(file_get_contents('../build.json'));
 
-put('compiled.html', getFiles($build->templates, function($filename, $file) {;
+put('templates.html', getFiles($build->templates, function($filename, $file) {;
     return "<script type=\"text/ng-template\" id=\"{$filename}\">\n" .
         post('http://html-minifier.com/raw?', ['input' => $file]) .
         "\n</script>\n";

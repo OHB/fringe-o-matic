@@ -46,7 +46,7 @@
                             </address>
                             <p ng-if="markerWindow.notes">{{markerWindow.notes}}</p>
                             <p ng-if="markerWindow.venue || markerWindow.address">
-                                <a class="btn btn-default btn-sm" ng-if="markerWindow.venue" style="margin-right:6px" href="#!/shows/venue/{{markerWindow.venue}}">Shows</a>
+                                <a class="btn btn-default btn-sm" ng-if="markerWindow.venue" style="margin-right:6px" href="/shows/venue/{{markerWindow.venue}}">Shows</a>
                                 <a class="btn btn-default btn-sm" ng-if="markerWindow.address" href="https://www.google.com/maps/dir/?api=1&destination={{markerWindow.location}}, {{markerWindow.address.join(', ')}}" target="_blank">Directions</a>
                             </p>
                         </div>

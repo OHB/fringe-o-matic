@@ -38,11 +38,11 @@ angular.module('fringeApp').component('myFringe', {
         $scope.$watch('userData.schedule', update);
 
         $scope.$watch('tabs.activeTab', function() {
-            if ($scope.tabs.activeTab === 'My Schedule') {
+            if ($scope.tabs.activeTab === 'My Schedule' && $route.subpage) {
                 $route.updateParams({subpage: ''});
-            } else if ($scope.tabs.activeTab === 'My Availability') {
+            } else if ($scope.tabs.activeTab === 'My Availability' && $route.subpage !== 'availability') {
                 $route.updateParams({subpage: 'availability'});
-            } else if ($scope.tabs.activeTab === 'Auto-Scheduler') {
+            } else if ($scope.tabs.activeTab === 'Auto-Scheduler' && $route.subpage !== 'auto-scheduler') {
                 $route.updateParams({subpage: 'auto-scheduler'});
             }
         });
