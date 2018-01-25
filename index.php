@@ -122,7 +122,7 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dimensions.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/parse-options.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/aside.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/aside.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js"></script>
@@ -142,4 +142,4 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <?php } ?>
 </body>
 </html>
-<?php file_put_contents('dist/index.html', ob_get_contents());
+<?php file_put_contents('index.html', ob_get_contents());

@@ -124,6 +124,9 @@ angular.module('fringeApp').component('schedule', {
                 refresh();
             };
 
+            $timeout(function() {
+                $scope.loaded = true;
+            });
         }
     ]
 });
