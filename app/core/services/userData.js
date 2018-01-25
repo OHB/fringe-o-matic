@@ -13,7 +13,7 @@ angular.module('fringeApp').service('UserData', ['$q', '$http', 'debounce', func
                 self.save();
             };
         },
-        onSave = function() {}
+        onSave = function() {};
 
     this.load = function(userId) {
         var deferred = $q.defer();

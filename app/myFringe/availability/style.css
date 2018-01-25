@@ -22,7 +22,7 @@
     cursor: initial;
 }
 .availability-legend .availability-block {
-    min-width: 100px;
+    min-width: 90px;
     display: inline-block;
 }
 .table.availability .weekend {

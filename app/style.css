@@ -33,6 +33,9 @@ body.js .js-required {
     background-color: #428bca;
     color: white;
 }
+.navbar-primary .navbar-toggle .icon-bar {
+    background: white;
+}
 .jumbotron {
     border-bottom: 1px solid #ddd;
     background: #eee url(/img/skulls.png);
@@ -67,28 +70,6 @@ body.js .js-required {
     cursor: pointer;
 }
 
-.step {
-    margin: 20px 0;
-}
-.step .step-number {
-    display: inline-block;
-    text-align: center;
-    font-size: 36px;
-    height: 50px;
-    width: 50px;
-    line-height: 50px;
-    margin-right: 10px;
-}
-.step .step-title {
-    vertical-align: top;
-    display: inline-block;
-    font-size: 24px;
-    margin-top: 8px;
-}
-.step-body {
-    margin-top: 5px;
-    margin-left: 70px;
-}
 .align-middle {
     vertical-align: middle !important;
 }

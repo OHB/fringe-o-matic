@@ -62,3 +62,7 @@
 .rating-icon {
     margin-right: 3px;
 }
+
+#google-sign-in-button > div {
+    margin: auto;
+}

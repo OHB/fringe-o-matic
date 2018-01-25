@@ -1,3 +1,30 @@
+Sign In link > open modal with button
+    Do login check during loading
+        if logged in, load user data during loading
+    Handle everything in a scoped controller in the modal
+        modal loads the data
+        modal $route.reload()
+
+https://developers.google.com/identity/sign-in/web/reference#googleauthcurrentuserget
+
+remove saving icon
+    reduce save debounce OR save on window close?
+
+Fringe O'Matic on St. Patrick's Day?
+
+make mobile friendly!
+
+store using token id instead of plain id
+
+store in anonymous session
+on sign-in
+    if new account, store
+    otherwise if there are preferences or a schedule in anonymous
+        Signing-in will remove current and restore saved. Continue?
+            if not, sign out
+            if so, restore
+
+
 no ticket links for free shows
 
 my schedule
@@ -27,13 +54,3 @@ context sensitive help
 
 speed up generator by creating fake performance ids which are the actual sort order
     then the sort function doesn't need a callback
-
-store using token id instead of plain id
-
-store in anonymous session
-on sign-in
-    if new account, store
-    otherwise if there are preferences or a schedule in anonymous
-        Signing-in will remove current and restore saved. Continue?
-            if not, sign out
-            if so, restore

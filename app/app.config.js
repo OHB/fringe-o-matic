@@ -5,8 +5,12 @@ angular.module('fringeApp')
         }
     })
     .value('Configuration', {
+        googleAuthClientId: '728570220201-2tkhj9m3stsqgprscc77o256r0f441au.apps.googleusercontent.com',
         slotSize: 3600,
         minimumArriveBeforeShowTime: 600,
+        adminUsers: [
+            'g112311867146833913606'
+        ],
         interestText: [
             'Not Interested',
             'Eh...maybe.',
@@ -49,9 +53,7 @@ angular.module('fringeApp')
         {route: 'schedule', title: 'Schedule'},
         {route: 'venues', title: 'Venues'},
         {route: 'map', title: 'Map'},
-        {route: 'about', title: 'About'},
-        {route: 'help', title: 'Help'},
-        {route: 'test', title: 'Test'}
+        {route: 'about', title: 'About'}
     ])
     .value('MapConfig', {
         initialView: 0,
@@ -192,11 +194,7 @@ angular.module('fringeApp')
             $locationProvider.hashPrefix('!');
 
             $routeProvider
-                .when('/my-fringe', {
-                    template: '<my-fringe></my-fringe>'
-                }).when('/my-fringe/availability', {
-                    template: '<my-fringe></my-fringe>'
-                }).when('/my-fringe/auto-scheduler', {
+                .when('/my-fringe/:subpage?', {
                     template: '<my-fringe></my-fringe>'
                 }).when('/shows', {
                     template: '<shows></shows>'
@@ -214,8 +212,6 @@ angular.module('fringeApp')
                     template: '<fringe-map></fringe-map>' // because ngMap uses map
                 }).when('/about', {
                     template: '<about></about>'
-                }).when('/help', {
-                    template: '<help></help>'
                 }).when('/test', {
                     template: '<test></test>'
                 }).otherwise({redirectTo: '/my-fringe'});

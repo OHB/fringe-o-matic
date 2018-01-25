@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{signingIn ? 'Logging in...' : 'Login/Register'}}</h3>
+</div>
+<div class="modal-body" ng-show="! signingIn">
+    <p>All you need is a Google account. Just connect and go!</p>
+    <br />
+    <div id="google-sign-in-button"></div>
+    <br />
+</div>
+<div class="modal-body" ng-show="signingIn">
+    <br />
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" style="width: 100%"></div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="close()" ng-disabled="signingIn">Close</button>
+</div>

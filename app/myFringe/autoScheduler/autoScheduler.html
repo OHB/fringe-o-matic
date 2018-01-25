@@ -9,31 +9,22 @@
     <div ng-if="screen == 'intro'">
         <h1>Introduction</h1>
         <p class="lead">The Auto-Scheduler helps build your schedule automatically. It needs to know two things:</p>
-        <div class="step">
-            <div class="step-number bg-primary">1</div>
-            <div class="step-title">What shows do you want to see?</div>
-            <div class="step-body">
-                <p>On the <a href="#!/shows">Shows</a> and <a href="#!/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
-                <br />
-                <p>
-                <div ng-repeat="i in [0, 1, 2, 3, 4]" style="width:20%; display: inline-block; text-align: center">
-                    <interest desire="i" class="lead"></interest><br />
-                    {{interestText[i]}}
-                </div>
-                </p>
-                <br />
-                <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
+        <br />
+        <h3>1. What shows do you want to see?</h3>
+        <p>On the <a href="#!/shows">Shows</a> and <a href="#!/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
+        <br />
+        <div class="row">
+            <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-md-2 text-center" ng-class="$first && 'col-md-offset-1'">
+                <interest desire="i" class="lead"></interest><br />
+                {{interestText[i]}}
             </div>
         </div>
+        <br />
+        <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
         <hr />
-        <div class="step">
-            <div class="step-number bg-primary">2</div>
-            <div class="step-title">When are you available?</div>
-            <div class="step-body">
-                <p>On the <a href="#!/my-fringe/availability">My Availability</a> tab, you can select which times you are available to see shows.</p>
-                <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
-            </div>
-        </div>
+        <h3>2. When are you available?</h3>
+        <p>On the <a href="#!/my-fringe/availability">My Availability</a> tab, you can select which times you are available to see shows.</p>
+        <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
         <hr />
         <div class="text-center">
             <button class="btn btn-lg btn-primary" ng-click="completeIntro()">Got it!</button>
@@ -44,12 +35,12 @@
         <p>Before you can use the Auto-Schedule you must select which shows you're interested in.</p>
         <p>On the <a href="#!/shows">Shows</a> and <a href="#!/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
         <br />
-        <p>
-        <div ng-repeat="i in [0, 1, 2, 3, 4]" style="width:20%; display: inline-block; text-align: center">
-            <interest desire="i" class="lead"></interest><br />
-            {{interestText[i]}}
+        <div class="row">
+            <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-md-2 text-center" ng-class="$first && 'col-md-offset-1'">
+                <interest desire="i" class="lead"></interest><br />
+                {{interestText[i]}}
+            </div>
         </div>
-        </p>
         <br />
         <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
         <p>Once you've done that, come back to this screen.</p>

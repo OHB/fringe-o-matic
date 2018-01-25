@@ -1,13 +1,13 @@
 angular.module('fringeApp').component('myFringe', {
     templateUrl: 'app/myFringe/myFringe.html',
-    controller: ['$scope', '$location', 'Schedule', 'UserData', 'Configuration', 'Plurals', function($scope, $location, Schedule, UserData, Configuration, Plurals) {
+    controller: ['$scope', '$route', '$routeParams', 'Schedule', 'UserData', 'Configuration', 'Plurals', function($scope, $route, $routeParams, Schedule, UserData, Configuration, Plurals) {
         $scope.plurals = Plurals;
         $scope.tabs = {
             activeTab: 'My Schedule'
         };
-        if ($location.path() === '/my-fringe/availability') {
+        if ($routeParams.subpage === 'availability') {
             $scope.tabs.activeTab = 'My Availability';
-        } else if ($location.path() === '/my-fringe/auto-scheduler') {
+        } else if ($routeParams.subpage === 'auto-scheduler') {
             $scope.tabs.activeTab = 'Auto-Scheduler';
         }
 
@@ -39,11 +39,11 @@ angular.module('fringeApp').component('myFringe', {
 
         $scope.$watch('tabs.activeTab', function() {
             if ($scope.tabs.activeTab === 'My Schedule') {
-                $location.updatePath('/my-fringe');
+                $route.updateParams({subpage: ''});
             } else if ($scope.tabs.activeTab === 'My Availability') {
-                $location.updatePath('/my-fringe/availability');
+                $route.updateParams({subpage: 'availability'});
             } else if ($scope.tabs.activeTab === 'Auto-Scheduler') {
-                $location.updatePath('/my-fringe/auto-scheduler');
+                $route.updateParams({subpage: 'auto-scheduler'});
             }
         });
     }]

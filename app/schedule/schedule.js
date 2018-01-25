@@ -1,7 +1,7 @@
 angular.module('fringeApp').component('schedule', {
     templateUrl: 'app/schedule/schedule.html',
-    controller: ['$scope', '$timeout', '$routeParams', '$location', 'UserData', 'Data', 'Schedule', 'Availability', 'Plurals',
-        function($scope, $timeout, $routeParams, $location, UserData, Data, Schedule, Availability, Plurals) {
+    controller: ['$scope', '$timeout', '$route', '$routeParams', 'UserData', 'Data', 'Schedule', 'Availability', 'Plurals',
+        function($scope, $timeout, $route, $routeParams, UserData, Data, Schedule, Availability, Plurals) {
             $scope.moment = moment;
             $scope.plurals = Plurals;
 
@@ -85,9 +85,10 @@ angular.module('fringeApp').component('schedule', {
                 if ($scope.days === undefined) {
                     return;
                 }
-                $location.updatePath(
-                    '/schedule/' + $scope.settings.scheduleMode + '/' + moment($scope.days[$scope.currentDay - 1], 'X').format('Y-MM-DD')
-                );
+                $route.updateParams({
+                    param1: $scope.settings.scheduleMode,
+                    param2: moment($scope.days[$scope.currentDay - 1], 'X').format('Y-MM-DD')
+                });
             };
 
             $scope.$watch('settings', function() {

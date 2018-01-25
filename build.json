@@ -1,7 +1,6 @@
 {
   "templates": [
     "app/about/about.html",
-    "app/help/help.html",
     "app/test/test.html",
     "app/venues/venues.html",
     "app/shows/shows.html",
@@ -12,9 +11,12 @@
     "app/myFringe/availability/availability.html",
     "app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.html",
     "app/myFringe/autoScheduler/autoScheduler.html",
-    "app/myFringe/autoScheduler/autoSchedulerModal/autoSchedulerModal.html"
+    "app/myFringe/autoScheduler/autoSchedulerModal/autoSchedulerModal.html",
+    "app/core/help/help.html",
+    "app/core/loginModal/loginModal.html"
   ],
   "css": [
+    "lib/bootstrap-additions.min.css",
     "app/style.css",
     "app/core/style.css",
     "app/myFringe/style.css",
@@ -43,8 +45,9 @@
     "app/core/services/schedule.js",
     "app/core/services/userData.js",
     "app/core/core.js",
+    "app/core/help/help.js",
+    "app/core/loginModal/loginModal.js",
     "app/about/about.js",
-    "app/help/help.js",
     "app/myFringe/myFringe.js",
     "app/myFringe/availability/availability.js",
     "app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.js",

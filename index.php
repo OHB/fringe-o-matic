@@ -7,7 +7,7 @@ ob_start("ob_gzhandler");
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="google-signin-client_id" content="728570220201-2tkhj9m3stsqgprscc77o256r0f441au.apps.googleusercontent.com">
+<!--    <meta name="google-signin-client_id" content="728570220201-2tkhj9m3stsqgprscc77o256r0f441au.apps.googleusercontent.com">-->
     <title>Fringe-o-Matic</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <?php foreach (isset($_REQUEST['compiled']) ? ['compiled.css'] : $build->css as $script) { ?>
@@ -29,9 +29,9 @@ ob_start("ob_gzhandler");
 </head>
 <body ng-controller="CoreCtrl">
 <nav class="navbar-primary navbar navbar-fixed-top">
-    <div class="container">
+    <div class="container" ng-init="nav = {collapsed: true}">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" ng-cloak ng-if="loaded">
+            <button type="button" class="navbar-toggle" ng-cloak ng-show="loaded" ng-click="nav.collapsed = !nav.collapsed">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -39,14 +39,17 @@ ob_start("ob_gzhandler");
             </button>
             <span class="navbar-brand">Fringe-o-Matic</span>
         </div>
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}">
             <ul class="nav navbar-nav" ng-cloak>
-                <li ng-repeat="item in menu" ng-class="{active:currentRoute == '/' + item.route}">
-                    <a href="#!/{{item.route}}" >{{item.title}}</a>
+                <li ng-repeat="item in ::menu" ng-class="{active:currentRoute == '/' + item.route}">
+                    <a href="#!/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
+                </li>
+                <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
+                    <a href="#!/test">Testing</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak>
-                <li style="padding-top:7px" ng-show="! signedIn && loaded"><div id="google-sign-in-button"></div></li>
+                <li ng-show="! signedIn && loaded"><a href ng-click="signIn()">Login/Register</a></li>
                 <li class="dropdown" ng-show="signedIn && loaded">
                     <a href bs-dropdown>Signed in as {{signedInName}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -54,6 +57,10 @@ ob_start("ob_gzhandler");
                     </ul>
                 </li>
                 <li><a><i class="glyphicon glyphicon-saved" ng-class="{'glyphicon-transfer': !loaded || saving}" bs-tooltip="{title:'Your data is saved automatically.'}" data-placement="bottom"></i></a></li>
+                <li><a href ng-click="openHelp()">
+                        <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -116,9 +123,13 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/parse-options.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/aside.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/aside.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.min.js"></script>
