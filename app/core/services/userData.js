@@ -42,9 +42,9 @@ angular.module('fringeApp').service('UserData', ['$q', '$http', 'debounce', func
         if (currentUserId !== undefined) {
             $http.post('api/setUserData.php', {id: currentUserId, data: data}).then(deferred.resolve, deferred.reject);
         } else {
-            deferred.reject();
+            deferred.resolve();
         }
-    }, 5000);
+    }, 1000);
 
     this.reset = function() {
         data = {
@@ -71,6 +71,10 @@ angular.module('fringeApp').service('UserData', ['$q', '$http', 'debounce', func
     this.setMaybes = basicSetter('maybe');
     this.getSettings = basicGetter('settings');
     this.setSettings = basicSetter('settings');
+
+    this.isSignedIn = function() {
+        return currentUserId !== undefined;
+    };
 
     this.export = function() {
         return JSON.stringify(data);

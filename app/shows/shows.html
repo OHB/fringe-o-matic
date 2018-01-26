@@ -3,14 +3,14 @@
         <h1>Shows</h1>
     </div>
 </div>
-<div data-offset-top="-51" bs-affix style="z-index:10000; background: white">
+<div data-offset-top="-51" bs-affix style="z-index:1000; background: white">
     <div class="container" style="padding-top: 20px">
         <nav class="navbar navbar-default" style="margin-bottom: 0">
             <form class="navbar-form navbar-left">
                 <button type="button" class="btn btn-default" ng-model="selectedVenue" bs-options="o.value as o.label for o in venueOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
                 <button type="button" class="btn btn-default" ng-model="selectedRating" bs-options="o.value as o.label for o in ratingOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
                 <button type="button" class="btn btn-default" ng-model="selectedPrice" bs-options="o.value as o.label for o in priceOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
-                <button type="button" class="btn btn-default" ng-model="selectedOther" bs-options="o.value as o.label for o in otherOptions" bs-on-select="refresh" bs-select data-sort="false"></button>
+                <button type="button" class="btn btn-default" ng-model="selectedOther" bs-options="o.value as o.label for o in otherOptions" bs-on-select="refresh" bs-select data-sort="false" ng-show="isSignedIn"></button>
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" placeholder="Search" ng-model="search" ng-change="searchTextEntered()">
                     <span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show="searchText" ng-click="clearSearch()"></span>
@@ -18,7 +18,7 @@
             </form>
             <ul class="nav navbar-right visible-lg" ng-show="allShows.length > perPage">
                 <li>
-                    <ul uib-pagination total-items="allShows.length" ng-model="currentPage" items-per-page="perPage" rotate="true" max-size="5" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" style="margin: 8px 15px 0" ng-change="scroll()"></ul>
+                    <ul uib-pagination total-items="allShows.length" ng-model="currentPage" items-per-page="perPage" rotate="true" max-size="5" force-ellipses="true" previous-text="&lsaquo;" next-text="&rsaquo;" style="margin: 8px 30px 0 15px" ng-change="scroll()"></ul>
                 </li>
             </ul>
             <p class="navbar-text navbar-right visible-lg"><ng-pluralize count="allShows.length" when="plurals.show"></ng-pluralize></p>
@@ -48,15 +48,17 @@
                 <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
                 <show-rating value="ratings[show.rating]"></show-rating>
                 <span class="label label-success">{{show.price|price}}</span>
+                <span class="label label-default"><i class="glyphicon glyphicon-time"></i> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</span>
             </p>
         </div>
         <div class="col-md-2">
-            <strong class="small">Interest:</strong>
-            <div class="lead">
-                <interest show-id="showId"></interest>
+            <div ng-show="isSignedIn">
+                <strong class="small">Interest:</strong>
+                <div class="lead">
+                    <interest show-id="showId"></interest>
+                </div>
             </div>
             <div class="small" ng-init="firstPerformance = performances[show.performances[0]]">
-                <p>{{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</p>
                 <strong><ng-pluralize count="show.performances.length" when="plurals.Performance"></ng-pluralize>:</strong>
                 <ul class="list-unstyled">
                     <li ng-repeat="pId in show.performances | limitTo:allShowPerformances[showId] ? show.performances.length : 10">{{moment(performances[pId].start, 'X').format('MMM D, h:mm a')}} <i ng-if="isUserAttendingPerformance(pId)" class="glyphicon glyphicon-check text-success" style="margin-left:5px"></i></li>

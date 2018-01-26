@@ -6,23 +6,25 @@
 <div class="container">
     <div class="row" ng-if="loaded">
         <div class="col-md-2">
-            <div data-offset-top="-80" bs-affix>
-                <div class="btn-group" ng-model="settings.scheduleMode" bs-radio-group style="width:100%; margin-top: 3px">
-                    <label class="btn btn-default" style="width:50%"
-                           ng-class="settings.scheduleMode=='full' && 'btn-primary'"
-                           bs-tooltip="{title: 'Shows full schedule.'}"
-                    >
-                        <input type="radio" value="full"> Full
-                    </label>
-                    <label class="btn btn-default" style="width:50%"
-                           ng-class="settings.scheduleMode=='smart' && 'btn-primary'"
-                           bs-tooltip="{title: 'Hides performances you\'re not interested in, can\'t attend, or are seeing at a different time.'}"
-                    >
-                        <input type="radio" value="smart"> Smart
-                    </label>
+            <div data-offset-top="-80" bs-affix style="padding-top: 3px">
+                <div ng-if="isSignedIn">
+                    <div class="btn-group" ng-model="settings.scheduleMode" bs-radio-group style="width:100%">
+                        <label class="btn btn-default" style="width:50%"
+                               ng-class="settings.scheduleMode=='full' && 'btn-primary'"
+                               bs-tooltip="{title: 'Shows full schedule.'}"
+                        >
+                            <input type="radio" value="full"> Full
+                        </label>
+                        <label class="btn btn-default" style="width:50%"
+                               ng-class="settings.scheduleMode=='smart' && 'btn-primary'"
+                               bs-tooltip="{title: 'Hides performances you\'re not interested in, can\'t attend, or are seeing at a different time.'}"
+                        >
+                            <input type="radio" value="smart"> Smart
+                        </label>
+                    </div>
+                    <br />
+                    <br />
                 </div>
-                <br />
-                <br />
                 <ul class="nav nav-pills nav-stacked">
                     <li ng-repeat="(dayId, dayStart) in ::days" ng-class="{active:currentDay - 1 == dayId}">
                         <a href ng-click="setDay(dayId+1)">{{moment(days[dayId], 'X').format('ddd, MMM Do')}}</a>
@@ -50,8 +52,8 @@
                     <tr>
                         <th>Time</th>
                         <th>Show</th>
-                        <th>Interest</th>
-                        <th width="195">Going?</th>
+                        <th ng-if="isSignedIn">Interest</th>
+                        <th ng-if="isSignedIn" width="195">Going?</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -66,8 +68,8 @@
                             <show-rating value="::entry.rating"></show-rating>
                             <span class="label label-success">{{entry.show.price|price}}</span>
                         </td>
-                        <td nowrap class="align-middle"><interest show-id="entry.showId"></interest></td>
-                        <td nowrap class="align-middle">
+                        <td nowrap class="align-middle" ng-if="isSignedIn"><interest show-id="entry.showId"></interest></td>
+                        <td nowrap class="align-middle" ng-if="isSignedIn">
                             <div ng-if="entry.attendState=='no'" class="btn-group" bs-radio-group ng-model="entry.attendState">
                                 <label class="btn btn-danger">
                                     <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
@@ -101,7 +103,7 @@
                                     <input type="radio" value="yes"><span class="glyphicon glyphicon-thumbs-up"></span>
                                 </label>
                             </div>
-                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px"><img src="img/ticket.png" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}"></a>
+                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px"><img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}"></a>
                         </td>
                     </tr>
                     </tbody>

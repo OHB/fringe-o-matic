@@ -2,6 +2,7 @@ angular.module('fringeApp').component('schedule', {
     templateUrl: 'app/schedule/schedule.html',
     controller: ['$scope', '$timeout', '$route', '$routeParams', 'UserData', 'Data', 'Schedule', 'Availability', 'Plurals',
         function($scope, $timeout, $route, $routeParams, UserData, Data, Schedule, Availability, Plurals) {
+            $scope.isSignedIn = UserData.isSignedIn();
             $scope.moment = moment;
             $scope.plurals = Plurals;
 

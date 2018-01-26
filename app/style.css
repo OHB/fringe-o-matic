@@ -1,6 +1,41 @@
+body {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+main {
+    padding-top: 62px;
+    padding-bottom: 50px;
+}
+
 mark {
     padding: .2em 0;
 }
+
+body > footer {
+    background-color: #f7f7f7;
+    padding: 30px 0;
+    font-size: 85%;
+}
+
+body > footer ul {
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+body > footer li {
+    display: inline-block;
+}
+
+body > footer li + li {
+    margin-left: 10px;
+}
+
+body > footer a {
+    font-weight: 700;
+    color: #495057;
+}
+
 .no-js {
     display: none;
 }
@@ -14,6 +49,7 @@ body.js .js-required {
 
 .navbar-primary {
     background: #337ab7;
+    padding: 6px 0;
 }
 .navbar-primary .navbar-brand {
     color: white;
@@ -30,7 +66,8 @@ body.js .js-required {
 }
 .navbar-primary .navbar-nav > .active > a, .navbar-primary .navbar-nav > .active > a:focus, .navbar-primary .navbar-nav > .active > a:hover,
 .navbar-primary .navbar-nav .open > a, .navbar-primary .navbar-nav .open > a:hover {
-    background-color: #428bca;
+    /*background-color: #428bca;*/
+    font-weight: 700;
     color: white;
 }
 .navbar-primary .navbar-toggle .icon-bar {
@@ -101,4 +138,33 @@ body.js .js-required {
     background-color: #f6f6f6;
     margin-top: 0;
     padding-bottom: 10px;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    background-color: #337ab7;
+
+    margin: 100px auto;
+    -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+    animation: sk-rotateplane 1.2s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-rotateplane {
+    0% { -webkit-transform: perspective(120px) }
+    50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+    100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+
+@keyframes sk-rotateplane {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+    } 50% {
+          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+          -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+      } 100% {
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        }
 }

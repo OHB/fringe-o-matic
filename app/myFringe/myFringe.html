@@ -1,10 +1,10 @@
-<div class="jumbotron has-tabs">
+<div class="jumbotron" ng-class="{'has-tabs': isSignedIn}">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
                 <h1>My Fringe</h1>
             </div>
-            <div class="col-md-4" bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}" style="margin-top: 20px">
+            <div class="col-md-4" bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}" style="margin-top: 20px" ng-show="isSignedIn">
                 <p class="lead" style="margin-bottom: 5px">Fringe Level: {{statuses[status].name}}</p>
                 <uib-progress max="maxLevel" animate="false" style="margin-bottom:2px">
                     <uib-bar value="level" type="success"></uib-bar>
@@ -15,15 +15,22 @@
                 </small>
             </div>
         </div>
-        <div bs-active-pane="tabs.activeTab" bs-tabs>
+        <div bs-active-pane="tabs.activeTab" bs-tabs ng-if="isSignedIn">
             <div data-title="Schedule" name="My Schedule" bs-pane></div>
             <div data-title="Availability" name="My Availability" bs-pane></div>
             <div data-title="Auto-Scheduler" name="Auto-Scheduler" bs-pane></div>
         </div>
     </div>
 </div>
-<div class="container">
+<div class="container" ng-if="$parent.signedIn">
     <my-fringe-schedule ng-if="tabs.activeTab == 'My Schedule'"></my-fringe-schedule>
     <my-fringe-availability ng-if="tabs.activeTab == 'My Availability'"></my-fringe-availability>
     <my-fringe-auto-scheduler ng-if="tabs.activeTab == 'Auto-Scheduler'"></my-fringe-auto-scheduler>
+</div>
+<div class="container" ng-if="! $parent.signedIn">
+    <h1>You need to sign in to use My Fringe.</h1>
+    <br />
+    <p class="lead">My Fringe allows you to create or generate a schedule.</p>
+    <br />
+    <p><a class="btn btn-primary btn-lg" href role="button" ng-click="$parent.$parent.signIn()">Sign In</a></p>
 </div>

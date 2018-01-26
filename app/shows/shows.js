@@ -3,6 +3,7 @@ angular.module('fringeApp').component('shows', {
     controller: [
         '$scope', '$window', '$timeout', '$filter', '$routeParams', 'debounce', 'Data', 'UserData', 'Plurals', 'Schedule',
         function($scope, $window, $timeout, $filter, $routeParams, debounce, Data, UserData, Plurals, Schedule) {
+            $scope.isSignedIn = UserData.isSignedIn();
             $scope.moment = moment;
             $scope.plurals = Plurals;
             $scope.allShowPerformances = {};

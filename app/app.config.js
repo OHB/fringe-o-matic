@@ -48,6 +48,7 @@ angular.module('fringeApp')
         Performance: {0: 'No performances', one: '1 Performance', other: '{} Performances'}
     })
     .value('Menu', [
+        {route: '', title: 'Home'},
         {route: 'my-fringe', title: 'My Fringe'},
         {route: 'shows', title: 'Shows'},
         {route: 'schedule', title: 'Schedule'},
@@ -195,7 +196,9 @@ angular.module('fringeApp')
             $locationProvider.html5Mode(true);
 
             $routeProvider
-                .when('/my-fringe/:subpage?', {
+                .when('/', {
+                    template: '<home></home>'
+                }).when('/my-fringe/:subpage?', {
                     template: '<my-fringe></my-fringe>'
                 }).when('/shows', {
                     template: '<shows></shows>'
@@ -206,15 +209,17 @@ angular.module('fringeApp')
                 }).when('/venues', {
                     template: '<venues></venues>'
                 }).when('/map', {
-                    template: '<fringe-map></fringe-map>' // because ngMap uses map
+                    template: '<fringe-map></fringe-map>'
                 }).when('/map/venue/:venue', {
-                    template: '<fringe-map></fringe-map>' // because ngMap uses map
+                    template: '<fringe-map></fringe-map>'
                 }).when('/map/host/:host', {
-                    template: '<fringe-map></fringe-map>' // because ngMap uses map
-                }).when('/about', {
-                    template: '<about></about>'
+                    template: '<fringe-map></fringe-map>'
+                }).when('/credits', {
+                    templateUrl: 'pages/credits.html'
+                }).when('/privacy', {
+                    templateUrl: 'pages/privacy.html'
                 }).when('/test', {
                     template: '<test></test>'
-                }).otherwise({redirectTo: '/my-fringe'});
+                }).otherwise({redirectTo: '/'});
         }
     ]);

@@ -1,6 +1,6 @@
 {
   "templates": [
-    "app/about/about.html",
+    "app/home/home.html",
     "app/test/test.html",
     "app/venues/venues.html",
     "app/shows/shows.html",
@@ -26,7 +26,6 @@
   "js": [
     "lib/genetics.js",
     "lib/ng-map.min.js",
-    "lib/angular-location-update.min.js",
     "lib/ui-bootstrap-custom-tpls-2.5.0.min.js",
     "app/app.js",
     "app/app.config.js",
@@ -46,7 +45,7 @@
     "app/core/core.js",
     "app/core/help/help.js",
     "app/core/loginModal/loginModal.js",
-    "app/about/about.js",
+    "app/home/home.js",
     "app/myFringe/myFringe.js",
     "app/myFringe/availability/availability.js",
     "app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.js",

@@ -55,7 +55,6 @@ angular.module('fringeApp', [
     'mgcrea.ngStrap.select',
     'mgcrea.ngStrap.tab',
     'mgcrea.ngStrap.tooltip',
-    'ngMap',
-    'ngLocationUpdate'
+    'ngMap'
 ]);
 

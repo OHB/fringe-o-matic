@@ -3,13 +3,8 @@ angular.module('fringeApp').controller('CoreCtrl', [
     'Data', 'Menu', 'UserData', 'Error', 'Configuration',
     function($rootScope, $scope, $route, $location, $timeout, $window, $q, $aside, $uibModal, Data, Menu, UserData, Error, Configuration) {
         UserData.onSave(function(promise) {
-            $timeout(function() {
-                $scope.saving = true;
-            });
-            promise.then(function() {
-                $timeout(function() {
-                    $scope.saving = false;
-                });
+            promise.then(function() {}, function() {
+                Error.error('Unable to save data to the server.', 'Have you lost your internet connection?');
             });
         });
 
@@ -39,7 +34,12 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 $scope.signedIn = true;
                 $scope.signedInName = user.name;
                 $scope.isUserAdmin = Configuration.adminUsers.indexOf(user.id) > -1;
-                $route.reload();
+
+                if ($location.path() === '/') {
+                    $location.path('/my-fringe');
+                } else {
+                    $route.reload();
+                }
             });
         };
 
@@ -79,6 +79,13 @@ angular.module('fringeApp').controller('CoreCtrl', [
                     UserData.reset();
                     $scope.isUserAdmin = false;
                     $scope.signedIn = false;
+
+                    if ($location.path().indexOf('my-fringe') > -1) {
+                        $location.path('/');
+                    } else {
+                        $route.reload();
+                    }
+
                     $route.reload();
                 });
             });

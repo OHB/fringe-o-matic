@@ -1,27 +1,59 @@
-<script type="text/ng-template" id="app/about/about.html">
-<div class=jumbotron>
-<div class=container>
-<h1>About</h1>
+<script type="text/ng-template" id="app/home/home.html">
+<div class=container style=padding-top:8rem>
+<div class=row>
+<div class="col-md-4 col-md-offset-1 col-md-push-6 text-center">
+<svg version=1.1 id=calendar-image xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink x=0px y=0px viewBox="0 0 409.601 409.601" style=max-width:50vw xml:space=preserve>
+<path style=fill:#428bca d=M393.635,41.834H15.968c-8.818,0-15.966,7.07-15.966,15.791v54.073h409.599V57.625C409.601,48.904,402.453,41.834,393.635,41.834z />
+<g>
+<ellipse style=fill:#337ab7 cx=101.1 cy=75.449 rx=14.029 ry=13.875 />
+<ellipse style=fill:#337ab7 cx=60.601 cy=75.449 rx=14.029 ry=13.875 />
+</g>
+<g>
+<path style=fill:#64798A d=M60.601,0c-6.328,0-11.459,5.073-11.459,11.333v61.001c0,6.259,5.13,11.333,11.459,11.333s11.46-5.074,11.46-11.333V11.333C72.06,5.074,66.929,0,60.601,0z />
+<path style=fill:#64798A d=M101.098,0C94.77,0,89.64,5.074,89.64,11.333v61.001c0,6.259,5.13,11.333,11.458,11.333c6.329,0,11.459-5.074,11.459-11.333V11.333C112.557,5.074,107.427,0,101.098,0z />
+</g>
+<g>
+<ellipse style=fill:#337ab7 cx=348.98 cy=75.449 rx=14.029 ry=13.875 />
+<ellipse style=fill:#337ab7 cx=308.48 cy=75.449 rx=14.029 ry=13.875 />
+</g>
+<g>
+<path style=fill:#64798A d=M308.502,0c-6.327,0-11.458,5.073-11.458,11.333v61.001c0,6.259,5.131,11.333,11.458,11.333c6.329,0,11.46-5.074,11.46-11.333V11.333C319.963,5.074,314.831,0,308.502,0z />
+<path style=fill:#64798A d=M349,0c-6.328,0-11.459,5.073-11.459,11.333v61.001c0,6.259,5.131,11.333,11.459,11.333c6.329,0,11.459-5.074,11.459-11.333V11.333C360.459,5.074,355.329,0,349,0z />
+</g>
+<rect x=0 y=111.698 style=fill:#E1E6E9 width=409.6 height=14.024 />
+<path style=fill:#EBF0F3 d=M0,125.725v268.083c0,8.721,7.15,15.793,15.968,15.793h377.666c8.818,0,15.966-7.071,15.966-15.793V125.725H0z />
+<path class=day style=fill:#D5D6DB d=M218.765,150.95h-27.927c-3.942,0-7.138,3.195-7.138,7.137v27.927c0,3.942,3.196,7.136,7.138,7.136h27.927c3.939,0,7.136-3.194,7.136-7.136v-27.927C225.9,154.145,222.704,150.95,218.765,150.95z />
+<path class=day style=fill:#E56353 d=M292.628,150.95h-27.927c-3.942,0-7.138,3.195-7.138,7.137v27.927c0,3.942,3.196,7.136,7.138,7.136h27.927c3.94,0,7.136-3.194,7.136-7.136v-27.927C299.764,154.145,296.568,150.95,292.628,150.95z />
+<path class=day style=fill:#44C4A1 d=M366.492,150.95h-27.927c-3.942,0-7.138,3.195-7.138,7.137v27.927c0,3.942,3.196,7.136,7.138,7.136h27.927c3.939,0,7.136-3.194,7.136-7.136v-27.927C373.627,154.145,370.431,150.95,366.492,150.95z />
+<g>
+<path class=day style=fill:#D5D6DB d=M71.038,214.692H43.111c-3.942,0-7.138,3.195-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.94,0,7.136-3.195,7.136-7.137v-27.927C78.174,217.887,74.978,214.692,71.038,214.692z />
+<path class=day style=fill:#D5D6DB d=M144.901,214.692h-27.927c-3.942,0-7.138,3.195-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.94,0,7.136-3.195,7.136-7.137v-27.927C152.037,217.887,148.841,214.692,144.901,214.692z />
+<path class=day style=fill:#D5D6DB d=M218.765,214.692h-27.927c-3.942,0-7.138,3.195-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.939,0,7.136-3.195,7.136-7.137v-27.927C225.9,217.887,222.704,214.692,218.765,214.692z />
+</g>
+<path class=day style=fill:#E56353 d=M292.628,214.692h-27.927c-3.942,0-7.138,3.195-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.94,0,7.136-3.195,7.136-7.137v-27.927C299.764,217.887,296.568,214.692,292.628,214.692z />
+<path class=day style=fill:#44C4A1 d=M366.492,214.692h-27.927c-3.942,0-7.138,3.195-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.939,0,7.136-3.195,7.136-7.137v-27.927C373.627,217.887,370.431,214.692,366.492,214.692z />
+<g>
+<path class=day style=fill:#D5D6DB d=M71.038,278.433H43.111c-3.942,0-7.138,3.194-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.94,0,7.136-3.195,7.136-7.137V285.57C78.174,281.628,74.978,278.433,71.038,278.433z />
+<path class=day style=fill:#D5D6DB d=M144.901,278.433h-27.927c-3.942,0-7.138,3.194-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.94,0,7.136-3.195,7.136-7.137V285.57C152.037,281.628,148.841,278.433,144.901,278.433z />
+<path class=day style=fill:#D5D6DB d=M218.765,278.433h-27.927c-3.942,0-7.138,3.194-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.939,0,7.136-3.195,7.136-7.137V285.57C225.9,281.628,222.704,278.433,218.765,278.433z />
+</g>
+<path class=day style=fill:#E56353 d=M292.628,278.433h-27.927c-3.942,0-7.138,3.194-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.94,0,7.136-3.195,7.136-7.137V285.57C299.764,281.628,296.568,278.433,292.628,278.433z />
+<path class=day style=fill:#44C4A1 d=M366.492,278.433h-27.927c-3.942,0-7.138,3.194-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.939,0,7.136-3.195,7.136-7.137V285.57C373.627,281.628,370.431,278.433,366.492,278.433z />
+<g>
+<path class=day style=fill:#D5D6DB d=M71.038,342.175H43.111c-3.942,0-7.138,3.194-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.94,0,7.136-3.195,7.136-7.137v-27.927C78.174,345.37,74.978,342.175,71.038,342.175z />
+<path class=day style=fill:#D5D6DB d=M144.901,342.175h-27.927c-3.942,0-7.138,3.194-7.138,7.136v27.927c0,3.942,3.196,7.137,7.138,7.137h27.927c3.94,0,7.136-3.195,7.136-7.137v-27.927C152.037,345.37,148.841,342.175,144.901,342.175z />
+</g>
+</svg>
+</div>
+<div class="col-md-6 col-md-pull-5">
+<h1 style=font-size:63px;font-weight:700;color:#428bca>Fringe-o-Matic</h1>
+<p class=lead style=font-weight:500>Automatically create your perfect Fringe schedule.</p>
+<p class=lead style=font-weight:400>Fringe-o-Matic is a free tool to help you get the most out of Fringe. Learn about shows and generate a schedule automatically based on your preferences and availability.</p>
+<p class=lead>Registration is not required.</p>
+<br>
+<p><a class="btn btn-primary btn-lg" href role=button ng-click=getStarted()>Get Started</a></p>
 </div>
 </div>
-<div class=container>
-<h3>Notice</h3>
-<p>This tool is not affiliated with the Orlando Fringe, its brought to you for free by an Orlando Fringe fanatic!</p>
-<h3>Credits</h3>
-<ul>
-<li><a href=http://getbootstrap.com/ target=_blank>Bootstrap</a> - makes designing websites easy</li>
-<li><a href=https://angularjs.org/ target=_blank>AngularJS</a> - makes adding functionality easy</li>
-<li><a href=http://mgcrea.github.io/angular-strap target=_blank>AngularStrap</a> with <a href=https://github.com/mgcrea/bootstrap-additions target=_blank>Bootstap Additions</a> - makes Bootstrap components with with AngularJS<br>
-<em class=small>(Affix, Aside, Button, Dropdown, Select, Tooltip)</em></li>
-<li><a href=https://angular-ui.github.io/bootstrap/ target=_blank>UI Bootstrap</a> - has useful easy-to-use components<br>
-<em class=small>(Modal, Pagination, Pager, Progressbar)</em></li>
-<li><a href=https://github.com/anglibs/angular-location-update target=_blank>angular-location-update</a> - used to get the My Fringe tabs working with the router</li>
-<li><a href=https://github.com/subprotocol/genetic-js target=_blank>Genetic.js</a> - a nice genetic algorithm library which powers the Auto-Scheduler<br>
-<em class=small>(heavily optimized)</em></li>
-<li><a href=https://github.com/nbubna/store target=_blank>Store2</a> - an easy way to use local storage</li>
-<li><a href=https://ngmap.github.io/ target=_blank>ngMap</a> - a nice Angular wrapper for the Google Maps API.</li>
-<li><a href=https://www.flaticon.com/authors/daniel-bruce target=_blank>Daniel Bruce</a> - for the lovely ticket icon</li>
-</ul>
 </div>
 </script>
 <script type="text/ng-template" id="app/test/test.html">
@@ -119,14 +151,14 @@ These venues are at the same location...so a minute, maybe?
 <h1>Shows</h1>
 </div>
 </div>
-<div data-offset-top=-51 bs-affix style=z-index:10000;background:#fff>
+<div data-offset-top=-51 bs-affix style=z-index:1000;background:#fff>
 <div class=container style=padding-top:20px>
 <nav class="navbar navbar-default" style=margin-bottom:0>
 <form class="navbar-form navbar-left">
 <button type=button class="btn btn-default" ng-model=selectedVenue bs-options="o.value as o.label for o in venueOptions" bs-on-select=refresh bs-select data-sort=false></button>
 <button type=button class="btn btn-default" ng-model=selectedRating bs-options="o.value as o.label for o in ratingOptions" bs-on-select=refresh bs-select data-sort=false></button>
 <button type=button class="btn btn-default" ng-model=selectedPrice bs-options="o.value as o.label for o in priceOptions" bs-on-select=refresh bs-select data-sort=false></button>
-<button type=button class="btn btn-default" ng-model=selectedOther bs-options="o.value as o.label for o in otherOptions" bs-on-select=refresh bs-select data-sort=false></button>
+<button type=button class="btn btn-default" ng-model=selectedOther bs-options="o.value as o.label for o in otherOptions" bs-on-select=refresh bs-select data-sort=false ng-show=isSignedIn></button>
 <div class="form-group has-feedback">
 <input class=form-control placeholder=Search ng-model=search ng-change=searchTextEntered()>
 <span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show=searchText ng-click=clearSearch()></span>
@@ -134,7 +166,7 @@ These venues are at the same location...so a minute, maybe?
 </form>
 <ul class="nav navbar-right visible-lg" ng-show="allShows.length > perPage">
 <li>
-<ul uib-pagination total-items=allShows.length ng-model=currentPage items-per-page=perPage rotate=true max-size=5 force-ellipses=true previous-text=&lsaquo; next-text=&rsaquo; style="margin:8px 15px 0" ng-change=scroll()></ul>
+<ul uib-pagination total-items=allShows.length ng-model=currentPage items-per-page=perPage rotate=true max-size=5 force-ellipses=true previous-text=&lsaquo; next-text=&rsaquo; style="margin:8px 30px 0 15px" ng-change=scroll()></ul>
 </li>
 </ul>
 <p class="navbar-text navbar-right visible-lg"><ng-pluralize count=allShows.length when=plurals.show></ng-pluralize></p>
@@ -164,15 +196,17 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
 <show-rating value=ratings[show.rating]></show-rating>
 <span class="label label-success">{{show.price|price}}</span>
+<span class="label label-default"><i class="glyphicon glyphicon-time"></i> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</span>
 </p>
 </div>
 <div class=col-md-2>
+<div ng-show=isSignedIn>
 <strong class=small>Interest:</strong>
 <div class=lead>
 <interest show-id=showId></interest>
 </div>
+</div>
 <div class=small ng-init="firstPerformance = performances[show.performances[0]]">
-<p>{{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</p>
 <strong><ng-pluralize count=show.performances.length when=plurals.Performance></ng-pluralize>:</strong>
 <ul class=list-unstyled>
 <li ng-repeat="pId in show.performances | limitTo:allShowPerformances[showId] ? show.performances.length : 10">{{moment(performances[pId].start, 'X').format('MMM D, h:mm a')}} <i ng-if=isUserAttendingPerformance(pId) class="glyphicon glyphicon-check text-success" style=margin-left:5px></i></li>
@@ -195,10 +229,11 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 </div>
 </div>
 <div class=container>
-<div class=row ng-if=days>
+<div class=row ng-if=loaded>
 <div class=col-md-2>
-<div data-offset-top=-80 bs-affix>
-<div class=btn-group ng-model=settings.scheduleMode bs-radio-group style=width:100%;margin-top:3px>
+<div data-offset-top=-80 bs-affix style=padding-top:3px>
+<div ng-if=isSignedIn>
+<div class=btn-group ng-model=settings.scheduleMode bs-radio-group style=width:100%>
 <label class="btn btn-default" style=width:50% ng-class="settings.scheduleMode=='full' && 'btn-primary'" bs-tooltip="{title: 'Shows full schedule.'}">
 <input type=radio value=full> Full
 </label>
@@ -208,6 +243,7 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 </div>
 <br>
 <br>
+</div>
 <ul class="nav nav-pills nav-stacked">
 <li ng-repeat="(dayId, dayStart) in ::days" ng-class="{active:currentDay - 1 == dayId}">
 <a href ng-click=setDay(dayId+1)>{{moment(days[dayId], 'X').format('ddd, MMM Do')}}</a>
@@ -234,8 +270,8 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 <tr>
 <th>Time</th>
 <th>Show</th>
-<th>Interest</th>
-<th width=195>Going?</th>
+<th ng-if=isSignedIn>Interest</th>
+<th ng-if=isSignedIn width=195>Going?</th>
 </tr>
 </thead>
 <tbody>
@@ -249,8 +285,8 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 <show-rating value=::entry.rating></show-rating>
 <span class="label label-success">{{entry.show.price|price}}</span>
 </td>
-<td nowrap class=align-middle><interest show-id=entry.showId></interest></td>
-<td nowrap class=align-middle>
+<td nowrap class=align-middle ng-if=isSignedIn><interest show-id=entry.showId></interest></td>
+<td nowrap class=align-middle ng-if=isSignedIn>
 <div ng-if="entry.attendState=='no'" class=btn-group bs-radio-group ng-model=entry.attendState>
 <label class="btn btn-danger">
 <input type=radio value=no><span class="glyphicon glyphicon-thumbs-down"></span>
@@ -284,7 +320,7 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 <input type=radio value=yes><span class="glyphicon glyphicon-thumbs-up"></span>
 </label>
 </div>
-<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px;margin-left:10px"><img src=img/ticket.png style=width:1.5em bs-tooltip="{title:'Buy Tickets'}"></a>
+<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px;margin-left:10px"><img src=img/ticket.svg style=width:1.5em bs-tooltip="{title:'Buy Tickets'}"></a>
 </td>
 </tr>
 </tbody>
@@ -350,13 +386,13 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 </div>
 </script>
 <script type="text/ng-template" id="app/myFringe/myFringe.html">
-<div class="jumbotron has-tabs">
+<div class=jumbotron ng-class="{'has-tabs': isSignedIn}">
 <div class=container>
 <div class=row>
 <div class=col-md-8>
 <h1>My Fringe</h1>
 </div>
-<div class=col-md-4 bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}" style=margin-top:20px>
+<div class=col-md-4 bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}" style=margin-top:20px ng-show=isSignedIn>
 <p class=lead style=margin-bottom:5px>Fringe Level: {{statuses[status].name}}</p>
 <uib-progress max=maxLevel animate=false style=margin-bottom:2px>
 <uib-bar value=level type=success></uib-bar>
@@ -367,19 +403,25 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </small>
 </div>
 </div>
-<div bs-active-pane=tabs.activeTab bs-tabs>
+<div bs-active-pane=tabs.activeTab bs-tabs ng-if=isSignedIn>
 <div data-title=Schedule name="My Schedule" bs-pane></div>
 <div data-title=Availability name="My Availability" bs-pane></div>
 <div data-title=Auto-Scheduler name=Auto-Scheduler bs-pane></div>
 </div>
 </div>
 </div>
-<div class=container>
+<div class=container ng-if=$parent.signedIn>
 <my-fringe-schedule ng-if="tabs.activeTab == 'My Schedule'"></my-fringe-schedule>
 <my-fringe-availability ng-if="tabs.activeTab == 'My Availability'"></my-fringe-availability>
 <my-fringe-auto-scheduler ng-if="tabs.activeTab == 'Auto-Scheduler'"></my-fringe-auto-scheduler>
 </div>
-
+<div class=container ng-if="! $parent.signedIn">
+<h1>You need to sign in to use My Fringe.</h1>
+<br>
+<p class=lead>My Fringe allows you to create or generate a schedule.</p>
+<br>
+<p><a class="btn btn-primary btn-lg" href role=button ng-click=$parent.$parent.signIn()>Sign In</a></p>
+</div>
 </script>
 <script type="text/ng-template" id="app/myFringe/schedule/schedule.html">
 <div ng-if="! hasSchedule">
@@ -924,7 +966,7 @@ I wasn't able to fit all of the shows you want to see on the schedule.
 </script>
 <script type="text/ng-template" id="app/core/loginModal/loginModal.html">
 <div class=modal-header>
-<h3 class=modal-title>{{signingIn ? 'Logging in...' : 'Login/Register'}}</h3>
+<h3 class=modal-title>{{signingIn ? 'Loading your information...' : 'Sign In'}}</h3>
 </div>
 <div class=modal-body ng-show="! signingIn">
 <p>All you need is a Google account. Just connect and go!</p>

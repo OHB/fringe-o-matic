@@ -14,21 +14,27 @@ ob_start("ob_gzhandler");
         <link rel="stylesheet" type="text/css" href="<?php echo $script; ?>" />
     <?php } ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-motion/0.4.4/angular-motion.min.css" />
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:500,700" rel="stylesheet">
-    <!--<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />-->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
     <style>
         [ng-cloak] {
             display: none !important;
         }
-        body {
-            padding-top: 50px;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 500;
-        }
     </style>
+    <link rel="prefetch" href="img/skulls.png" as="image">
+    <link rel="prefetch" href="img/ticket.svg" as="image">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#337ab7">
+    <meta name="msapplication-TileColor" content="#ffc40d">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body ng-controller="CoreCtrl">
-<nav class="navbar-primary navbar navbar-fixed-top">
+<header class="navbar-primary navbar navbar-fixed-top">
     <div class="container" ng-init="nav = {collapsed: true}">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" ng-cloak ng-show="loaded" ng-click="nav.collapsed = !nav.collapsed">
@@ -37,7 +43,7 @@ ob_start("ob_gzhandler");
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <span class="navbar-brand">Fringe-o-Matic</span>
+            <a href="/" class="navbar-brand">Fringe-o-Matic</a>
         </div>
         <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}">
             <ul class="nav navbar-nav" ng-cloak>
@@ -49,14 +55,13 @@ ob_start("ob_gzhandler");
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak>
-                <li ng-show="! signedIn && loaded"><a href ng-click="signIn()">Login/Register</a></li>
+                <li ng-show="! signedIn && loaded"><a href ng-click="signIn()">Sign In</a></li>
                 <li class="dropdown" ng-show="signedIn && loaded">
                     <a href bs-dropdown>Signed in as {{signedInName}} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href ng-click="signOut()">Sign Out</a></li>
                     </ul>
                 </li>
-                <li><a><i class="glyphicon glyphicon-saved" ng-class="{'glyphicon-transfer': !loaded || saving}" bs-tooltip="{title:'Your data is saved automatically.'}" data-placement="bottom"></i></a></li>
                 <li><a href ng-click="openHelp()">
                         <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>
                     </a>
@@ -64,42 +69,40 @@ ob_start("ob_gzhandler");
             </ul>
         </div>
     </div>
-</nav>
-<noscript>
-    <div class="jumbotron" ng-cloak>
-        <div class="container">
+</header>
+<main inner-height="innerHeight" ng-style="{minHeight:(innerHeight-134)+'px'}">
+    <noscript>
+        <div class="container" style="padding-top: 8rem">
             <h1>Error</h1>
-            <p>This tool requires JavaScript. Please enable JavaScript and refresh the page.</p>
+            <p class="lead">This tool requires JavaScript. Please enable JavaScript and refresh the page.</p>
+        </div>
+    </noscript>
+    <div ng-if="error" ng-cloak>
+        <div class="container" style="padding-top: 8rem">
+            <h1>Error</h1>
+            <p class="lead">{{error.title}}</p>
+            <p ng-bind="error.more"></p>
         </div>
     </div>
-</noscript>
-<div ng-if="error" ng-cloak>
-    <div class="jumbotron">
-        <div class="container">
-            <h1>Error</h1>
-            <p>{{error.title}}</p>
+    <div ng-if="! error && ! loaded" class="js-required">
+        <div class="container" style="padding-top: 10rem">
+            <div class="spinner"></div>
         </div>
     </div>
+    <div ng-if="! error && loaded" ng-cloak>
+        <div ng-view></div>
+    </div>
+</main>
+<footer class="text-muted" ng-cloak>
     <div class="container">
-        <p ng-bind="error.more"></p>
+        <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/credits">Credits</a></li>
+        </ul>
+        <p>Built with &hearts; by Lewis Johnston. Not affiliated with Orlando Fringe.<br />
+            <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>
     </div>
-</div>
-<div ng-if="! error && ! loaded" class="js-required">
-    <div class="jumbotron" ng-if="! loaded">
-        <div class="container">
-            <h1>Loading...</h1>
-            <br />
-            <div class="progress">
-                <div class="progress-bar progress-bar-striped active" style="width: 100%">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div ng-if="! error && loaded" ng-cloak>
-    <div ng-view></div>
-</div>
-<p style="height: 20px">&nbsp;</p>
+</footer>
 <?php
 if (isset($_REQUEST['compiled'])) {
     echo file_get_contents('templates.html');
@@ -117,12 +120,11 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-route.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-animate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/store2/2.5.9/store2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/compiler.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dimensions.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/parse-options.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/aside.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/aside.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js"></script>
