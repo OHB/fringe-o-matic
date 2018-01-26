@@ -168,3 +168,7 @@ body.js .js-required {
             -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
         }
 }
+
+.nav.nav-pills.nav-pills-condensed > li > a {
+    padding: 7px 12px;
+}

@@ -80,7 +80,7 @@
 <div class=container style=padding-top:20px>
 <div class=row ng-if=venues>
 <div class=col-md-3>
-<div class="panel panel-primary" data-offset-top=-80 bs-affix>
+<div class="panel panel-primary" data-offset-top=-95 bs-affix>
 <div class=panel-heading>
 <h3 class=panel-title>Distance Calculator</h3>
 </div>
@@ -231,7 +231,7 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 <div class=container>
 <div class=row ng-if=loaded>
 <div class=col-md-2>
-<div data-offset-top=-80 bs-affix style=padding-top:3px>
+<div data-offset-top=-95 bs-affix style=padding-top:3px>
 <div ng-if=isSignedIn>
 <div class=btn-group ng-model=settings.scheduleMode bs-radio-group style=width:100%>
 <label class="btn btn-default" style=width:50% ng-class="settings.scheduleMode=='full' && 'btn-primary'" bs-tooltip="{title: 'Shows full schedule.'}">
@@ -244,7 +244,7 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 <br>
 <br>
 </div>
-<ul class="nav nav-pills nav-stacked">
+<ul class="nav nav-pills nav-pills-condensed nav-stacked">
 <li ng-repeat="(dayId, dayStart) in ::days" ng-class="{active:currentDay - 1 == dayId}">
 <a href ng-click=setDay(dayId+1)>{{moment(days[dayId], 'X').format('ddd, MMM Do')}}</a>
 </li>
@@ -264,7 +264,7 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 <p class="lead text-center">No shows to display for this day.</p>
 <p><button class="btn btn-sm" ng-click="settings.scheduleMode='full'">Switch to Full Schedule</button></p>
 </div>
-<div inner-height=innerHeight ng-style="{minHeight: (innerHeight-200) + 'px'}">
+<div inner-height=innerHeight ng-style="{minHeight: (innerHeight-368) + 'px'}">
 <table class="table table-striped">
 <thead>
 <tr>

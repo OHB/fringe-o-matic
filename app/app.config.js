@@ -53,8 +53,7 @@ angular.module('fringeApp')
         {route: 'shows', title: 'Shows'},
         {route: 'schedule', title: 'Schedule'},
         {route: 'venues', title: 'Venues'},
-        {route: 'map', title: 'Map'},
-        {route: 'about', title: 'About'}
+        {route: 'map', title: 'Map'}
     ])
     .value('MapConfig', {
         initialView: 0,
