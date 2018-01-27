@@ -48,6 +48,10 @@
                 <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
                     <a href="/test">Testing</a>
                 </li>
+                <li><a href ng-click="openHelp()">
+                        <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>
+                    </a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak>
                 <li ng-show="! signedIn && loaded"><a href ng-click="signIn()">Sign In</a></li>
@@ -57,9 +61,8 @@
                         <li><a href ng-click="signOut()">Sign Out</a></li>
                     </ul>
                 </li>
-                <li><a href ng-click="openHelp()">
-                        <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>
-                    </a>
+                <li ng-if="loaded" ng-controller="NotificationsCtrl">
+                    <a href ng-if="show" data-template-url="app/core/notifications/popover.html" data-auto-close="1" data-placement="bottom-right" bs-popover><i class="glyphicon glyphicon-bell"></i></a>
                 </li>
             </ul>
         </div>
@@ -229,14 +232,14 @@ These venues are at the same location...so a minute, maybe?
 <span class="label label-venue-default label-venue-{{venueId}}" style=font-size:.9em>{{venue.name}}</span>
 </td>
 <td class=text-right style=vertical-align:middle ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
-<a class="btn btn-default btn-sm" ng-href=/shows/venue/{{venueId}}>Shows</a>
-<a class="btn btn-default btn-sm" ng-href=/map/venue/{{venueId}}>Map</a>
+<a class="btn btn-default btn-sm" ng-href=/shows/venue/{{venue.slug}}>Shows</a>
+<a class="btn btn-default btn-sm" ng-href=/map/venue/{{venue.slug}}>Map</a>
 </td>
 </tr>
 </table>
 </div>
 <div class=col-md-4>
-<a href=/map/host/{{hostId}}>
+<a href=/map/host/{{host.slug}}>
 <static-map size="'336x252'" markers="host.mapPos && host.mapPos.join() || host.address.join(', ')" style=width:100%></static-map>
 </a>
 </div>
@@ -245,7 +248,112 @@ These venues are at the same location...so a minute, maybe?
 </div>
 </div>
 </script>
+<script type="text/ng-template" id="app/show/show.html">
+<div class=container>
+<div class=row style="margin:30px 0">
+<div class=col-md-7>
+<div class=h3 style=line-height:1em ng-if=$parent.$parent.signedIn>
+<interest show-id=showId></interest>
+</div>
+<h1>{{show.name}}</h1>
+<p ng-if=::show.artist>
+<strong ng-bind=show.artist></strong><span ng-if=show.artistLocation>, {{show.artistLocation}}</span>
+</p>
+<hr>
+<p class=lead>
+<span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
+</p>
+<br>
+<br>
+<p>
+<a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target=fringeshop class="btn btn-primary btn-lg" ng-if=show.storeId>Buy Tickets</a>
+</p>
+</div>
+<div class=col-md-5 style="height:450px;background:url(img/show/{{show.image}}) right no-repeat;background-size:contain"></div>
+</div>
+<hr>
+<div class=row>
+<div class="col-md-8 lead">
+<div style=margin-top:10px ng-bind-html=trustAsHtml(show.description)></div>
+<p ng-if=show.warnings><br><em class=small>Note: {{show.warnings.join(', ')}}</em></p>
+</div>
+<div class="col-md-3 col-md-offset-1">
+<h3 style=margin-top:10px>Notes</h3>
+<p>
+<strong>Length:</strong> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes<br>
+<strong>Rating:</strong> {{ratings[show.rating]}}<br>
+<strong>Tickets:</strong> {{show.price | price}}
+</p>
+<h3>Show Times</h3>
+<ul class=list-unstyled>
+<li ng-repeat="pId in show.performances" ng-class="{'text-muted': performances[pId].start < now}">
+{{moment(performances[pId].start, 'X').format('MMM D, h:mma')}}
+<i ng-if=isUserAttendingPerformance(pId) class="glyphicon glyphicon-check text-success" style=margin-left:5px></i>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</script>
 <script type="text/ng-template" id="app/shows/shows.html">
+<div class=jumbotron>
+<div class=container>
+<h1>Shows</h1>
+</div>
+</div>
+<div class=container>
+<div class=row>
+<div class=col-md-3>
+<div data-offset-top=-95 bs-affix>
+<div class="form-group has-feedback">
+<label>Filter by keyword</label>
+<input class=form-control placeholder=Search ng-model=search ng-change=searchTextEntered()>
+<span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show=searchText ng-click=clearSearch()></span>
+</div>
+<div class=form-group>
+<label>Venue</label>
+<select class=form-control ng-model=selectedVenue ng-options="o.value as o.label for o in venueOptions" ng-change=refresh()></select>
+</div>
+</div>
+</div>
+<div class=col-md-9>
+<div class=row ng-repeat="showId in allShows" ng-init="show=shows[showId]" style=background:#f9f9f9;margin-bottom:10px>
+<div class=col-md-9 style=padding:15px>
+<div class="pull-right lead" style=line-height:1em ng-if=$parent.$parent.signedIn>
+<interest show-id=showId></interest>
+</div>
+<div style=height:100px>
+<p class=lead style=line-height:1em;margin-bottom:10px><a href=/show/{{::show.slug}}>{{::show.name}}</a></p>
+<p class=small>
+<em ng-if=::show.artist>
+<strong ng-bind=::show.artist></strong><span ng-if=::show.artistLocation>, {{::show.artistLocation}}</span>
+</em>&nbsp;
+</p>
+</div>
+<p style=margin-bottom:35px>
+<span><a href=/show/{{::show.slug}} class="btn btn-primary">Learn More</a></span>
+<span ng-if=::show.storeId><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target=fringeshop class="btn btn-info" style=margin-left:5px>Buy Tickets</a></span>
+</p>
+<p style=margin:0 ng-init="firstPerformance = performances[show.performances[0]]">
+<span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
+<show-rating value=ratings[show.rating]></show-rating>
+<span class="label label-success">{{show.price|price}}</span>
+<span class="label label-default"><i class="glyphicon glyphicon-time"></i> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</span>
+<span class="small text-muted" style=margin-left:10px>
+<em>
+<ng-pluralize count=performanceCounts[showId] when="plurals[isFringeOngoing ? 'performanceMore' : 'performance']"></ng-pluralize>
+</em>
+</span>
+</p>
+</div>
+<div class=col-md-3 style="height:220px;background:url(img/show/{{show.image}}) top;background-size:cover"></div>
+</div>
+</div>
+</div>
+</div>
+
+</script>
+<script type="text/ng-template" id="app/showsOld/showsOld.html">
 <div class=jumbotron style=margin-bottom:10px>
 <div class=container>
 <h1>Shows</h1>
@@ -380,9 +488,9 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 {{::moment(entry.performance.start, 'X').format('h:mma')}} - {{::moment(entry.performance.stop, 'X').format('h:mma')}}
 </td>
 <td>
-<p class=h4 style="margin:0 0 12px"><a href=/shows/show/{{::entry.showId}}>{{::entry.show.name}}</a></p>
+<p class=h4 style="margin:0 0 12px"><a href=/show/{{::entry.show.slug}}>{{::entry.show.name}}</a></p>
 <p style=margin:0>
-<span><a href=/shows/show/{{::entry.showId}} class="btn btn-xs btn-primary">Learn More</a></span>
+<span><a href=/show/{{::entry.show.slug}} class="btn btn-xs btn-primary">Learn More</a></span>
 <span ng-if="! entry.inPast"><a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-xs btn-success" style=margin-left:10px>Buy Tickets</a></span>
 </p>
 </td>
@@ -566,7 +674,7 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 <tr ng-repeat="item in amazingScheduleDay" ng-class=item.as>
 <td ng-if="item.as=='performance'">{{moment(item.start, 'X').format('h:mm a')}}</td>
 <td ng-if="item.as=='performance'">{{moment(item.stop, 'X').format('h:mm a')}}</td>
-<td ng-if="item.as=='performance'"><a href=/shows/show/{{item.show}}>{{shows[item.show].name}}</a></td>
+<td ng-if="item.as=='performance'"><a href=/show/{{shows[item.show].slug}}>{{shows[item.show].name}}</a></td>
 <td ng-if="item.as=='performance'">
 <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
 {{venues[shows[item.show].venue].name}}
@@ -655,7 +763,7 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 <tbody>
 <tr ng-repeat="performanceId in slotPerformances" ng-init="performance = performances[performanceId]">
 <td nowrap>{{moment(performance.start, 'X').format('h:mm a')}} - {{moment(performance.stop, 'X').format('h:mm a')}}</td>
-<td><strong><a href=/shows/show/{{performance.show}}>{{shows[performance.show].name}}</a></strong></td>
+<td><strong><a href=/show/{{shows[performance.show].slug}}>{{shows[performance.show].name}}</a></strong></td>
 <td>
 <span class="label label-venue-default label-venue-{{shows[performance.show].venue}}">
 {{venues[shows[performance.show].venue].name}}
@@ -764,7 +872,7 @@ you can see!</h1>
 {{::moment(entry.performance.start, 'X').format('h:mm a')}} - {{::moment(entry.performance.stop, 'X').format('h:mm a')}}
 </td>
 <td>
-<p class=h4 style="margin:0 0 10px"><a href=/shows/show/{{::entry.showId}}>{{::entry.show.name}}</a></p>
+<p class=h4 style="margin:0 0 10px"><a href=/show/{{::entry.show.slug}}>{{::entry.show.name}}</a></p>
 <span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>
 <show-rating value=::entry.show.rating></show-rating>
 <span class="label label-success">{{entry.show.price|price}}</span>
@@ -781,7 +889,6 @@ you can see!</h1>
 <br>
 <div class="alert alert-warning">
 <i class="glyphicon glyphicon-exclamation-sign"></i>
-<strong>Beware!</strong>
 Don't use this until you have assigned an Interest to each show you're interested in.
 </div>
 <p>When you click <strong>Generate Schedule</strong>, I will:</p>
@@ -1118,6 +1225,8 @@ I wasn't able to fit all of the shows you want to see on the schedule.
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.tpl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.min.js"></script>

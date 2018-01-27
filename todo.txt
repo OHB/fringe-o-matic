@@ -1,4 +1,21 @@
-i don't like the show flash
+BUG
+Go to Schedule
+Click a link to another page
+doesn't work
+click another, it works.
+(first always fails)
+related to url update
+push state?
+
+new shows
+    checkboxes?
+        fringe ongoing:
+            hide shows without show times
+
+        logged in:
+            hide i'm not interested in
+            hide shows i'm not attending
+            hide shows i can't attend
 
 Fringe O'Matic on St. Patrick's Day?
 
@@ -6,14 +23,7 @@ make mobile friendly!
 
 store using token id instead of plain id
 
-store in anonymous session
-on sign-in
-    if new account, store
-    otherwise if there are preferences or a schedule in anonymous
-        Signing-in will remove current and restore saved. Continue?
-            if not, sign out
-            if so, restore
-
+custom reminder popover
 
 no ticket links for free shows
 

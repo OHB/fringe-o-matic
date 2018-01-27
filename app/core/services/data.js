@@ -1,11 +1,21 @@
 angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function($http, $q, Sorters) {
     var filename = 'api/getData.php',
-        data;
+        data,
+        fringeStart,
+        fringeStop,
+        showSlugs,
+        venueSlugs,
+        venueHostSlugs;
 
     this.load = function() {
         var deferred = $q.defer();
         $http.get(filename, {cache: true}).then(function(result) {
             data = result.data;
+
+            var days = Object.keys(data.availabilitySlots);
+            fringeStart = Math.min.apply(null, days);
+            fringeStop = Math.max.apply(null, days);
+
             console.log('Data loaded');
             deferred.resolve();
         }, function() {
@@ -52,6 +62,16 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
     this.getShow = function(showId) {
         return data.shows[showId];
     };
+    this.findShowIdBySlug = function(slug) {
+        if (showSlugs === undefined) {
+            showSlugs = {};
+            angular.forEach(data.shows, function(show, showId) {
+                showSlugs[show.slug] = showId;
+            });
+        }
+
+        return showSlugs[slug];
+    };
     this.getPerformance = function(performanceId) {
         return data.performances[performanceId];
     };
@@ -61,4 +81,40 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
             return Sorters.performance(data.performances[a], data.performances[b]);
         });
     };
+
+    this.findVenueIdBySlug = function(slug) {
+        if (venueSlugs === undefined) {
+            venueSlugs = {};
+            angular.forEach(data.venues, function(venue, venueId) {
+                venueSlugs[venue.slug] = venueId;
+            });
+        }
+
+        return venueSlugs[slug];
+    };
+
+    this.findVenueHostIdBySlug = function(slug) {
+        if (venueHostSlugs === undefined) {
+            venueHostSlugs = {};
+            angular.forEach(data.venueHosts, function(venueHost, hostId) {
+                venueHostSlugs[venueHost.slug] = hostId;
+            });
+        }
+
+        return venueHostSlugs[slug];
+    };
+
+    // this.getFringeStart = function() {
+    //     return fringeStart;
+    // };
+    //
+    // this.getFringeStop = function() {
+    //     return fringeStop;
+    // };
+    //
+    this.isFringeOngoing = function() {
+        var now = Date.now() / 1000;
+
+        return fringeStart < now && fringeStop > now;
+    }
 }]);

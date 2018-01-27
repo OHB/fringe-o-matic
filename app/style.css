@@ -4,6 +4,10 @@ body {
     font-size: 15px;
 }
 
+*:focus {
+    outline: none;
+}
+
 main {
     padding-top: 62px;
     padding-bottom: 50px;
@@ -66,7 +70,7 @@ body.js .js-required {
 }
 .navbar-primary .navbar-nav > .active > a, .navbar-primary .navbar-nav > .active > a:focus, .navbar-primary .navbar-nav > .active > a:hover,
 .navbar-primary .navbar-nav .open > a, .navbar-primary .navbar-nav .open > a:hover {
-    /*background-color: #428bca;*/
+    background-color: transparent;
     font-weight: 700;
     color: white;
 }
@@ -171,4 +175,14 @@ body.js .js-required {
 
 .nav.nav-pills.nav-pills-condensed > li > a {
     padding: 7px 12px;
+}
+
+.popover {
+    font-family: 'Quicksand', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+}
+
+.popover-title {
+    font-weight: 700;
 }

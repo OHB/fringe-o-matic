@@ -1,0 +1,28 @@
+<div class="popover" tabindex="-1">
+    <div class="arrow"></div>
+    <h3 class="popover-title">Reminders</h3>
+    <div class="popover-content">
+        <div ng-if="! remainingTodayPerformances.length && ! futurePerformances.length">
+            <p>You don't have more shows scheduled.</p>
+        </div>
+        <div ng-if="remainingTodayPerformances.length" ng-init="performance = performances[remainingTodayPerformances[0]]; show=shows[performance.show]">
+            <p>You have <ng-pluralize count="remainingTodayPerformances.length" when="plurals.showMore"></ng-pluralize> today.</p>
+            <p ng-if="remainingTodayPerformances.length > 1">Next show:</p>
+            <p>
+                <strong>{{show.name}}</strong><br />
+                {{moment(performance.start, 'X').calendar({sameElse: 'dddd, MMMM Do [at] h:mma'})}}<br />
+                <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
+            </p>
+        </div>
+        <div ng-if="! remainingTodayPerformances.length" ng-init="performance=performances[futurePerformances[0]]; show=shows[performance.show]">
+            <p>You don't have any more shows today.</p>
+            <hr />
+            <p>Next show:</p>
+            <p>
+                <strong>{{show.name}}</strong><br />
+                {{moment(performance.start, 'X').calendar({sameElse: 'dddd, MMMM Do [at] h:mma'})}}<br />
+                <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
+            </p>
+        </div>
+    </div>
+</div>

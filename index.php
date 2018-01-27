@@ -53,6 +53,10 @@ ob_start("ob_gzhandler");
                 <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
                     <a href="/test">Testing</a>
                 </li>
+                <li><a href ng-click="openHelp()">
+                        <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>
+                    </a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak>
                 <li ng-show="! signedIn && loaded"><a href ng-click="signIn()">Sign In</a></li>
@@ -62,9 +66,8 @@ ob_start("ob_gzhandler");
                         <li><a href ng-click="signOut()">Sign Out</a></li>
                     </ul>
                 </li>
-                <li><a href ng-click="openHelp()">
-                        <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>
-                    </a>
+                <li ng-if="loaded" ng-controller="NotificationsCtrl">
+                    <a href ng-if="show" data-template-url="app/core/notifications/popover.html" data-auto-close="1" data-placement="bottom-right" bs-popover><i class="glyphicon glyphicon-bell"></i></a>
                 </li>
             </ul>
         </div>
@@ -132,6 +135,8 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.tpl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.min.js"></script>

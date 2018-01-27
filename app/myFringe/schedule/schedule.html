@@ -30,7 +30,7 @@
     <tr ng-repeat="item in amazingScheduleDay" ng-class="item.as">
         <td ng-if="item.as=='performance'">{{moment(item.start, 'X').format('h:mm a')}}</td>
         <td ng-if="item.as=='performance'">{{moment(item.stop, 'X').format('h:mm a')}}</td>
-        <td ng-if="item.as=='performance'"><a href="/shows/show/{{item.show}}">{{shows[item.show].name}}</a></td>
+        <td ng-if="item.as=='performance'"><a href="/show/{{shows[item.show].slug}}">{{shows[item.show].name}}</a></td>
         <td ng-if="item.as=='performance'">
                 <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
                     {{venues[shows[item.show].venue].name}}

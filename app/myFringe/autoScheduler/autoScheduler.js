@@ -30,7 +30,8 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     venueDistances = Data.getVenueDistances(),
                     possiblePerformances = Schedule.getPossiblePerformances(),
                     showsAttending = Schedule.getShowsAttending(),
-                    desiredShowsNotOnSchedule = desiredShows.diff(showsAttending);
+                    desiredShowsNotOnSchedule = desiredShows.diff(showsAttending),
+                    now = Date.now() / 1000;
 
                 schedule.map(function(performanceId) {
                     $scope.progressByDesire[Schedule.getShowDesire(performances[performanceId].show)] ++;
@@ -38,7 +39,7 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
 
                 $scope.availablePerformanceCount = 0;
                 angular.forEach(performances, function(performance) {
-                    if (Availability.isUserAvailable(performance.start, performance.stop)) {
+                    if (performance.start > now && Availability.isUserAvailable(performance.start, performance.stop)) {
                         $scope.availablePerformanceCount ++;
                     }
                 });

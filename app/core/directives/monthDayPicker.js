@@ -1,7 +1,34 @@
 angular.module('fringeApp').directive('monthDayPicker', function() {
     return {
         restrict: 'E',
-        templateUrl: 'app/core/directives/monthDayPicker.html',
+        template: '<div class="month-day-picker">' +
+            '<div ng-repeat="month in ::months">' +
+            '<h4>{{::month.header}}</h4>' +
+            '<table class="table table-condensed table-bordered">' +
+            '<thead>' +
+            '<tr>' +
+            '<th>S</th>' +
+            '<th>M</th>' +
+            '<th>T</th>' +
+            '<th>W</th>' +
+            '<th>T</th>' +
+            '<th>F</th>' +
+            '<th>S</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '<tr ng-repeat="week in ::month.weeks">' +
+            '<td ' +
+            'ng-repeat="day in ::week.days track by $index" ' +
+            'ng-bind="::day.number" ' +
+            'ng-class="{allowed: day.allowed, active: model == day.time, today: day.today}" ' +
+            'ng-click="day.allowed ? click(day.time) : false"' +
+            '></td>' +
+            '</tr>' +
+            '</tbody>' +
+            '</table>' +
+            '</div>' +
+            '</div>',
         replace: true,
         scope: {
             days: '=',

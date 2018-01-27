@@ -180,7 +180,7 @@ angular.module('fringeApp').factory('generatorFactory', function() {
                 }
 
                 // extra points for time off
-                extraPoints += Math.floor((p1.start - p2.stop) / this.userData.timeOffThreshold) * this.userData.extraPointsForTimeOff;
+                extraPoints += Math.max(0, Math.floor((p1.start - p2.stop) / this.userData.timeOffThreshold) * this.userData.extraPointsForTimeOff);
             }
 
             fitness += extraPoints;

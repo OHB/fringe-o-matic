@@ -62,9 +62,9 @@
                             {{::moment(entry.performance.stop, 'X').format('h:mma')}}
                         </td>
                         <td>
-                            <p class="h4" style="margin:0 0 12px;"><a href="/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
+                            <p class="h4" style="margin:0 0 12px;"><a href="/show/{{::entry.show.slug}}">{{::entry.show.name}}</a></p>
                             <p style="margin:0">
-                                <span><a href="/shows/show/{{::entry.showId}}" class="btn btn-xs btn-primary">Learn More</a></span>
+                                <span><a href="/show/{{::entry.show.slug}}" class="btn btn-xs btn-primary">Learn More</a></span>
                                 <span ng-if="! entry.inPast"><a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-xs btn-success" style="margin-left: 10px">Buy Tickets</a></span>
                             </p>
                             <!--<span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>-->

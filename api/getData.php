@@ -2,7 +2,7 @@
 ob_start("ob_gzhandler");
 
 header('Content-type: application/json');
-if (file_exists('cache.json')) {
+if (! isset($_REQUEST['refresh']) && file_exists('cache.json')) {
     echo file_get_contents('cache.json');
     exit;
 }
@@ -25,6 +25,10 @@ $venueHosts = [
     9 => ['name' => 'The Pergande Home', 'address' => ['1314 Chichester St', 'Orlando, FL 32803'], 'driving' => 'recommended'],
     10 => ['name' => 'Loch Haven Park', 'address' => ['777 E Princeton St', 'Orlando, FL 32803'], 'mapPos' => [28.571989, -81.366292]]
 ];
+
+foreach ($venueHosts as &$host) {
+    $host['slug'] = makeSlug($host['name']);
+}
 
 $venueDetails = [
     1 => ['host' => '5', 'mapPos' => [28.564200, -81.371095], 'mapIcon' => 'black'], //black lawn
@@ -152,6 +156,16 @@ foreach ($extraData as $showId => $data) {
     }
 }
 
+function makeSlug($text) {
+    return preg_replace('/[\s-]+/', '-',
+        preg_replace('/[^a-z0-9- ]/', '',
+            str_replace('&', ' and ',
+                strtolower($text)
+            )
+        )
+    );
+}
+
 $json = json_decode(file_get_contents('shows.json'));
 
 $events = [];
@@ -173,7 +187,11 @@ foreach ($json as $showId => $show) {
 
     if (! isset($venueMap[$show->venue])) {
         $venueId = count($venues) + 1;
-        $venues[$venueId] = ['name' => $show->venue, 'byov' => in_array($venueId, $byov)];
+        $venues[$venueId] = [
+            'name' => $show->venue,
+            'slug' => makeSlug($show->venue),
+            'byov' => in_array($venueId, $byov)
+        ];
         if (isset($venueDetails[$venueId])) {
             $venues[$venueId] += $venueDetails[$venueId];
         }
@@ -192,6 +210,7 @@ foreach ($json as $showId => $show) {
 
     $event = [
         'name' => $name,
+        'slug' => makeSlug($name),
         'rating' => array_search($supplementalData[$name]['rating'], $ratings),
         'venue' => (string) $venueMap[$show->venue],
         'performances' => []

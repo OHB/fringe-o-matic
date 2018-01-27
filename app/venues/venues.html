@@ -55,14 +55,14 @@
                                 <span class="label label-venue-default label-venue-{{venueId}}" style="font-size: 0.9em">{{venue.name}}</span>
                             </td>
                             <td class="text-right" style="vertical-align: middle" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
-                                <a class="btn btn-default btn-sm" ng-href="/shows/venue/{{venueId}}">Shows</a>
-                                <a class="btn btn-default btn-sm" ng-href="/map/venue/{{venueId}}">Map</a>
+                                <a class="btn btn-default btn-sm" ng-href="/shows/venue/{{venue.slug}}">Shows</a>
+                                <a class="btn btn-default btn-sm" ng-href="/map/venue/{{venue.slug}}">Map</a>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="col-md-4">
-                    <a href="/map/host/{{hostId}}">
+                    <a href="/map/host/{{host.slug}}">
                         <static-map size="'336x252'" markers="host.mapPos && host.mapPos.join() || host.address.join(', ')" style="width:100%"></static-map>
                     </a>
                 </div>

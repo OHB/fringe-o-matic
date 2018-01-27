@@ -41,10 +41,12 @@ angular.module('fringeApp')
     })
     .value('Plurals', {
         show: {0: 'no shows', one: 'one show', other: '{} shows'},
+        showMore: {0: 'no more shows', one: 'one more show', other: '{} more shows'},
         showSome: {0: 'no shows', one: 'a show', other: 'some shows'},
         showSomeMore: {0: 'no more shows', one: 'another show', other: 'some more shows'},
         aShow: {0: 'no shows', one: 'a show', other: '{} shows'},
         performance: {0: 'no performances', one: 'one performance', other: '{} performances'},
+        performanceMore: {0: 'no more performances', one: 'one more performance', other: '{} more performances'},
         Performance: {0: 'No performances', one: '1 Performance', other: '{} Performances'}
     })
     .value('Menu', [
@@ -199,12 +201,24 @@ angular.module('fringeApp')
                     template: '<home></home>'
                 }).when('/my-fringe/:subpage?', {
                     template: '<my-fringe></my-fringe>'
+
+
+                }).when('/shows-old', {
+                    template: '<shows-old></shows-old>'
+                }).when('/shows-old/show/:show', {
+                    template: '<shows-old></shows-old>'
+                }).when('/shows-old/venue/:venue', {
+                    template: '<shows-old></shows-old>'
+
+
                 }).when('/shows', {
-                    template: '<shows></shows>'
-                }).when('/shows/show/:show', {
                     template: '<shows></shows>'
                 }).when('/shows/venue/:venue', {
                     template: '<shows></shows>'
+
+                }).when('/show/:show', {
+                    template: '<show></show>'
+
                 }).when('/schedule/:param1?/:param2?', {
                     template: '<schedule></schedule>'
                 }).when('/venues', {

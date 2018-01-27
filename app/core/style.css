@@ -66,3 +66,33 @@
 #google-sign-in-button > div {
     margin: auto;
 }
+
+.month-day-picker table {
+    cursor: pointer;
+}
+.month-day-picker th, .month-day-picker td {
+    text-align: center;
+}
+.month-day-picker th:first-child, .month-day-picker td:first-child,
+.month-day-picker th:last-child, .month-day-picker td:last-child
+{
+    background-color: #f9f9f9;
+}
+.month-day-picker td.allowed:not(.active) {
+    cursor: pointer;
+}
+.month-day-picker td:not(.allowed) {
+    color: #ddd;
+}
+.month-day-picker td.today {
+    background-color: #d9edf7 !important;
+}
+.month-day-picker td.active {
+    background-color: #337ab7 !important;
+    color: rgba(255, 255, 255, 0.7);
+    color: white;
+}
+.month-day-picker td.allowed:not(.active):hover {
+    background-color: #3397d4 !important;
+    color: rgba(255, 255, 255, 0.7);
+}

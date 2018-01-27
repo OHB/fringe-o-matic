@@ -16,7 +16,7 @@
         <tbody>
         <tr ng-repeat="performanceId in slotPerformances" ng-init="performance = performances[performanceId]">
             <td nowrap="nowrap">{{moment(performance.start, 'X').format('h:mm a')}} - {{moment(performance.stop, 'X').format('h:mm a')}}</td>
-            <td><strong><a href="/shows/show/{{performance.show}}">{{shows[performance.show].name}}</a></strong></td>
+            <td><strong><a href="/show/{{shows[performance.show].slug}}">{{shows[performance.show].name}}</a></strong></td>
             <td>
                 <span class="label label-venue-default label-venue-{{shows[performance.show].venue}}">
                     {{venues[shows[performance.show].venue].name}}
