@@ -201,7 +201,9 @@ angular.module('fringeApp')
                     template: '<my-fringe></my-fringe>'
                 }).when('/shows', {
                     template: '<shows></shows>'
-                }).when('/shows/venue/:venue?', {
+                }).when('/shows/show/:show', {
+                    template: '<shows></shows>'
+                }).when('/shows/venue/:venue', {
                     template: '<shows></shows>'
                 }).when('/schedule/:param1?/:param2?', {
                     template: '<schedule></schedule>'

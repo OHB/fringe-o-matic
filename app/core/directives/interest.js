@@ -1,6 +1,7 @@
 angular.module('fringeApp').directive('interest', function() {
     return {
         restrict: 'E',
+        replace: true,
         scope: {
             showId: '=',
             desire: '='

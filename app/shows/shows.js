@@ -45,12 +45,6 @@ angular.module('fringeApp').component('shows', {
             });
             $scope.priceOptions.unshift({value: '*', label: 'All Prices'});
 
-            if ($routeParams.venue !== undefined) {
-                $scope.selectedVenue = $routeParams.venue;
-            } else if ($routeParams.show !== undefined) {
-                $scope.search = $scope.shows[$routeParams.show].name;
-            }
-
             $scope.showAllPerformances = function(showId) {
                 $scope.allShowPerformances[showId] = true;
             };
@@ -124,6 +118,13 @@ angular.module('fringeApp').component('shows', {
             $scope.$watch('userData.preferences', $scope.buildData, true);
 
             $scope.resetFilters();
+
+            if ($routeParams.venue !== undefined) {
+                $scope.selectedVenue = $routeParams.venue;
+            } else if ($routeParams.show !== undefined) {
+                $scope.search = $scope.shows[$routeParams.show].name;
+            }
+
             $scope.buildData();
         }
     ]

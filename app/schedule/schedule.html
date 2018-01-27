@@ -5,9 +5,9 @@
 </div>
 <div class="container">
     <div class="row" ng-if="loaded">
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div data-offset-top="-95" bs-affix style="padding-top: 3px">
-                <div ng-if="isSignedIn">
+                <div ng-if="signedIn">
                     <div class="btn-group" ng-model="settings.scheduleMode" bs-radio-group style="width:100%">
                         <label class="btn btn-default" style="width:50%"
                                ng-class="settings.scheduleMode=='full' && 'btn-primary'"
@@ -25,51 +25,69 @@
                     <br />
                     <br />
                 </div>
-                <ul class="nav nav-pills nav-pills-condensed nav-stacked">
-                    <li ng-repeat="(dayId, dayStart) in ::days" ng-class="{active:currentDay - 1 == dayId}">
-                        <a href ng-click="setDay(dayId+1)">{{moment(days[dayId], 'X').format('ddd, MMM Do')}}</a>
-                    </li>
-                </ul>
+                <month-day-picker days="days" model="filter.currentDay"></month-day-picker>
+                <ul uib-pager items-per-page="1" total-items="days.length" ng-model="filter.dayId" previous-text="&larr; Previous" next-text="Next &rarr;" ng-change="filter.currentDay = days[filter.dayId - 1]" style="margin-bottom: 10px;"></ul>
             </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-9">
             <div>
                 <div class="page-header" style="margin:0">
                     <h1 style="margin:0 0 20px">
-                        {{moment(days[currentDay-1], 'X').format('dddd, MMMM D')}}
-                        <small><ng-pluralize count="schedule.length" when="plurals.show"></ng-pluralize></small>
+                        {{moment(filter.currentDay, 'X').format('dddd, MMMM D')}}
+                        <small ng-show="dataLoaded"><ng-pluralize count="schedule.length" when="plurals.show"></ng-pluralize></small>
                     </h1>
-                    <!--<ul uib-pager items-per-page="1" total-items="days.length" ng-model="currentDay" previous-text="&larr; Previous Day" next-text="Next Day &rarr;" ng-change="setDay(currentDay)" style="margin-bottom: 10px;"></ul>-->
                 </div>
             </div>
             <div class="row text-center" style="margin:100px 0" ng-if="!schedule.length">
                 <p class="lead text-center">No shows to display for this day.</p>
                 <p><button class="btn btn-sm" ng-click="settings.scheduleMode='full'">Switch to Full Schedule</button></p>
             </div>
+            <div class="row text-center" style="margin:100px 0" ng-if="!dataLoaded">
+                <p class="lead text-center">Loading...</p>
+            </div>
             <div inner-height="innerHeight" ng-style="{minHeight: (innerHeight-368) + 'px'}">
-                <table class="table table-striped">
+                <table class="table table-striped" ng-show="schedule.length && dataLoaded">
                     <thead>
                     <tr>
                         <th>Time</th>
                         <th>Show</th>
-                        <th ng-if="isSignedIn">Interest</th>
-                        <th ng-if="isSignedIn" width="195">Going?</th>
+                        <th ng-if="signedIn">Interest</th>
+                        <th ng-if="signedIn" width="135">Going?</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="entry in schedule">
                         <td nowrap>
-                            {{::moment(entry.performance.start, 'X').format('h:mm a')}} -
-                            {{::moment(entry.performance.stop, 'X').format('h:mm a')}}
+                            {{::moment(entry.performance.start, 'X').format('h:mma')}} -
+                            {{::moment(entry.performance.stop, 'X').format('h:mma')}}
                         </td>
                         <td>
-                            <p class="h4" style="margin:0 0 10px;"><a href="/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
-                            <span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>
-                            <show-rating value="::entry.rating"></show-rating>
-                            <span class="label label-success">{{entry.show.price|price}}</span>
+                            <p class="h4" style="margin:0 0 12px;"><a href="/shows/show/{{::entry.showId}}">{{::entry.show.name}}</a></p>
+                            <p style="margin:0">
+                                <span><a href="/shows/show/{{::entry.showId}}" class="btn btn-xs btn-primary">Learn More</a></span>
+                                <span ng-if="! entry.inPast"><a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-xs btn-success" style="margin-left: 10px">Buy Tickets</a></span>
+                            </p>
+                            <!--<span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>-->
+                            <!--<show-rating value="::entry.rating"></show-rating>-->
+                            <!--<span class="label label-success">{{entry.show.price|price}}</span>-->
                         </td>
-                        <td nowrap class="align-middle" ng-if="isSignedIn"><interest show-id="entry.showId"></interest></td>
-                        <td nowrap class="align-middle" ng-if="isSignedIn">
+                        <td nowrap class="align-middle" ng-if="signedIn">
+                            <interest show-id="entry.showId"></interest>
+                        </td>
+                        <td nowrap class="align-middle" ng-if="signedIn && entry.inPast">
+                            <div class="btn-group" bs-radio-group ng-model="entry.attendState">
+                                <label class="btn disabled btn-default" ng-class="entry.attendState == 'no' && 'btn-danger'">
+                                    <input type="radio" value="no" disabled><span class="glyphicon glyphicon-thumbs-down"></span>
+                                </label>
+                                <label class="btn disabled btn-default" ng-class="entry.attendState == 'maybe' && 'btn-warning'">
+                                    <input type="radio" value="maybe" disabled><span class="glyphicon glyphicon-question-sign"></span>
+                                </label>
+                                <label class="btn disabled btn-default" ng-class="entry.attendState == 'yes' && 'btn-success'">
+                                    <input type="radio" value="yes" disabled><span class="glyphicon glyphicon-thumbs-up"></span>
+                                </label>
+                            </div>
+                        </td>
+                        <td nowrap class="align-middle" ng-if="signedIn && ! entry.inPast">
                             <div ng-if="entry.attendState=='no'" class="btn-group" bs-radio-group ng-model="entry.attendState">
                                 <label class="btn btn-danger">
                                     <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
@@ -103,12 +121,10 @@
                                     <input type="radio" value="yes"><span class="glyphicon glyphicon-thumbs-up"></span>
                                 </label>
                             </div>
-                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px"><img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}"></a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <ul uib-pager items-per-page="1" total-items="days.length" ng-model="currentDay" previous-text="&larr; Previous Day" next-text="Next Day &rarr;" ng-change="setDay(currentDay)"></ul>
             </div>
         </div>
     </div>

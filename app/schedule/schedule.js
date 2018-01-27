@@ -1,8 +1,8 @@
 angular.module('fringeApp').component('schedule', {
     templateUrl: 'app/schedule/schedule.html',
-    controller: ['$scope', '$timeout', '$route', '$routeParams', 'UserData', 'Data', 'Schedule', 'Availability', 'Plurals',
-        function($scope, $timeout, $route, $routeParams, UserData, Data, Schedule, Availability, Plurals) {
-            $scope.isSignedIn = UserData.isSignedIn();
+    controller: ['$scope', '$timeout', '$location', '$routeParams', 'UserData', 'Data', 'Schedule', 'Availability', 'Plurals',
+        function($scope, $timeout, $location, $routeParams, UserData, Data, Schedule, Availability, Plurals) {
+            $scope.signedIn = UserData.isSignedIn();
             $scope.moment = moment;
             $scope.plurals = Plurals;
 
@@ -19,6 +19,10 @@ angular.module('fringeApp').component('schedule', {
                 } else {
                     desiredDay = $routeParams.param1;
                 }
+            }
+
+            if (! $scope.signedIn) {
+                $scope.settings.scheduleMode = 'full';
             }
 
             var sortedPerformances = Data.getSortedPerformances(),
@@ -54,42 +58,43 @@ angular.module('fringeApp').component('schedule', {
                     return;
                 }
 
-                var possiblePerformances = Schedule.getPossiblePerformances(),
-                    showsAttending = Schedule.getShowsAttending(),
-                    performancesAttending = Schedule.getSchedule();
+                $scope.dataLoaded = false;
 
-                $scope.schedule = baseSchedule.filter(function(entry) {
-                    var dayStart = $scope.days[$scope.currentDay - 1];
+                $timeout(function() {
+                    var possiblePerformances = Schedule.getPossiblePerformances(),
+                        showsAttending = Schedule.getShowsAttending(),
+                        performancesAttending = Schedule.getSchedule(),
+                        now = Date.now() / 1000;
 
-                    if ($scope.settings.scheduleMode === 'smart' && Schedule.getShowDesire(entry.showId) < 1) {
-                        return false;
-                    }
+                    $scope.schedule = baseSchedule.filter(function(entry) {
+                        return (! (entry.performance.start < $scope.filter.currentDay || entry.performance.start > $scope.filter.currentDay + 86400));
+                    }).map(function(entry) {
+                        entry.isAttending = performancesAttending.indexOf(entry.id) > -1;
+                        entry.canAttend = Availability.isUserAvailable(entry.performance.start, entry.performance.stop);
+                        entry.canBeScheduled = possiblePerformances.indexOf(entry.id) > -1;
+                        entry.attendState = Schedule.getPerformanceScheduleState(entry.id);
+                        entry.inPast = entry.performance.start < now;
 
-                    return (! (entry.performance.start < dayStart || entry.performance.start > dayStart + 86400));
-                }).map(function(entry) {
-                    entry.isAttending = performancesAttending.indexOf(entry.id) > -1;
-                    entry.canAttend = Availability.isUserAvailable(entry.performance.start, entry.performance.stop);
-                    entry.canBeScheduled = possiblePerformances.indexOf(entry.id) > -1;
-                    entry.attendState = Schedule.getPerformanceScheduleState(entry.id);
+                        return entry;
+                    }).filter(function(entry) {
+                        if ($scope.settings.scheduleMode === 'full' || entry.attendState === 'yes') {
+                            return true;
+                        }
 
-                    return entry;
-                }).filter(function(entry) {
-                    if ($scope.settings.scheduleMode === 'full' || entry.attendState === 'yes') {
-                        return true;
-                    }
-
-                    return entry.canBeScheduled && showsAttending.indexOf(entry.showId) === -1;
+                        return ! entry.inPast && entry.canBeScheduled && showsAttending.indexOf(entry.showId) === -1;
+                    });
+                    $timeout(function() {
+                        $scope.dataLoaded = true;
+                    });
                 });
             };
 
             var updatePath = function() {
-                if ($scope.days === undefined) {
+                if ($scope.days === undefined || $scope.days.indexOf($scope.filter.currentDay) === -1) {
                     return;
                 }
-                $route.updateParams({
-                    param1: $scope.settings.scheduleMode,
-                    param2: moment($scope.days[$scope.currentDay - 1], 'X').format('Y-MM-DD')
-                });
+
+                $location.path('/schedule/' + $scope.settings.scheduleMode + '/' + moment($scope.filter.currentDay, 'X').format('Y-MM-DD'), false);
             };
 
             $scope.$watch('settings', function() {
@@ -101,17 +106,24 @@ angular.module('fringeApp').component('schedule', {
             }, true);
             $scope.$watch('userData.preferences', refresh, true);
 
-            $scope.setDay = function(dayId) {
-                $scope.currentDay = dayId;
+            $scope.filter = {currentDay: 0, dayId: 0};
+            if (days.indexOf(moment(desiredDay).unix()) > -1) {
+                $scope.filter.currentDay = moment(desiredDay).unix();
+            } else if (days.indexOf(moment().startOf('day').unix()) > -1) {
+                $scope.filter.currentDay = moment().startOf('day').unix();
+            } else {
+                $scope.filter.currentDay = days[0];
+            }
+
+            $scope.$watch('filter.currentDay', function() {
+                $scope.filter.dayId = $scope.days.indexOf($scope.filter.currentDay) + 1;
                 updatePath();
                 refresh();
                 setTimeout(function() {
                     window.scroll(0, 196);
                 });
-            };
+            });
 
-            $scope.setDay((days.indexOf(moment(desiredDay).unix()) + 1) || (days.indexOf(moment().startOf('day').unix()) + 1) || 1);
-            
             $scope.addToSchedule = function(performanceId) {
                 Schedule.add(performanceId);
                 refresh();

@@ -1,4 +1,4 @@
-<div class="jumbotron" ng-class="{'has-tabs': isSignedIn}">
+<div class="jumbotron" ng-class="{'has-tabs': $parent.signedIn}">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
@@ -15,7 +15,7 @@
                 </small>
             </div>
         </div>
-        <div bs-active-pane="tabs.activeTab" bs-tabs ng-if="isSignedIn">
+        <div bs-active-pane="tabs.activeTab" bs-tabs ng-if="$parent.signedIn">
             <div data-title="Schedule" name="My Schedule" bs-pane></div>
             <div data-title="Availability" name="My Availability" bs-pane></div>
             <div data-title="Auto-Scheduler" name="Auto-Scheduler" bs-pane></div>
@@ -30,7 +30,7 @@
 <div class="container" ng-if="! $parent.signedIn">
     <h1>You need to sign in to use My Fringe.</h1>
     <br />
-    <p class="lead">My Fringe allows you to create or generate a schedule.</p>
+    <p class="lead">My Fringe can automatically generate a personalized schedule.</p>
     <br />
-    <p><a class="btn btn-primary btn-lg" href role="button" ng-click="$parent.$parent.signIn()">Sign In</a></p>
+    <p><a class="btn btn-primary btn-lg" href role="button" ng-click="$parent.$parent.signIn()">Sounds awesome!</a></p>
 </div>

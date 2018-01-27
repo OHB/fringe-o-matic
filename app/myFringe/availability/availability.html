@@ -4,7 +4,7 @@
             <p>Select the time slots you are available by clicking them. Each slot is an hour.</p>
             <p class="hidden-xs">You can click and drag to select multiple slots at once.</p>
         </div>
-        <div class="col-md-6 availability-legend">
+        <div class="col-md-6 availability-legend text-right">
             <strong>Legend:</strong>
             &nbsp;
             <span class="availability-block bg-info" bs-tooltip="{title:'You have a show scheduled during this slot.'}">Scheduled</span>
@@ -12,7 +12,7 @@
             <span class="availability-block unavailable">Unavailable</span>
         </div>
     </div>
-    <div style="overflow-x: scroll; max-width: 100vw">
+    <div style="overflow-x: auto; max-width: 100vw">
         <table class="availability-buffer" style="overflow-x: scroll">
             <tr>
                 <td colspan="3" ng-mouseover="dragStop()"></td>

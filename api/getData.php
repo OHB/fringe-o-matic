@@ -7,6 +7,8 @@ if (file_exists('cache.json')) {
     exit;
 }
 
+$dateModifier = 60 * 60 * 24 * 7 * 35;
+
 $showsToSuppress = range(164, 185);
 $colorVenues = [11, 2, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 23];
 $byov = [3, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
@@ -213,6 +215,8 @@ foreach ($json as $showId => $show) {
     }
 
     foreach ($show->shows as $start) {
+        $start += $dateModifier;
+
         $performanceCount ++;
         $performanceId = $performanceCount;
         $end = $start + ($show->duration * 60);

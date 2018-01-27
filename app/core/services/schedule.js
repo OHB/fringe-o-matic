@@ -92,62 +92,6 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
         return shows;
     };
 
-    // this.isUserAttendingShow = function(showId) {
-    //     var performances = Data.getShow(showId).performances;
-    //
-    //     for (var i = 0; i < performances.length; i ++) {
-    //         if (self.isUserAttendingPerformance(performances[i])) {
-    //             return true;
-    //         }
-    //     }
-    //
-    //     return false;
-    // };
-    //
-    // this.canUserAttendPerformance = function(performanceId) {
-    //     return Data.getPerformance(performanceId).then(function(performance) {
-    //         return Availability.isUserAvailable(performance.start, performance.stop);
-    //     });
-    // };
-    //
-    // this.canPerformanceBeAddedToSchedule = function(performanceId) {
-    //     return $q.all({
-    //         performances: Data.getPerformances(),
-    //         shows: Data.getShows(),
-    //         venueDistances: Data.getVenueDistances()
-    //     }).then(function(results) {
-    //         var performances = results.performances,
-    //             shows = results.shows,
-    //             venueDistances = results.venueDistances,
-    //             performance1 = performances[performanceId],
-    //             start = performance1.start,
-    //             stop = performance1.stop,
-    //             userSchedule = UserData.getSchedule(),
-    //             i = userSchedule.length;
-    //
-    //         while (i --) {
-    //             var performance2 = performances[userSchedule[i]],
-    //                 offset = venueDistances[shows[performance1.show].venue][shows[performance2.show].venue];
-    //
-    //             if (! (stop < performance2.start - offset || start > performance2.stop + offset)) {
-    //                 return false;
-    //             }
-    //         }
-    //
-    //         return true;
-    //     });
-    // };
-    //
-    // this.canUserAttendShow = function(showId) {
-    //     return Data.getShow(showId).then(function(show) {
-    //         return $q.all(show.performances.map(function(performanceId) {
-    //             return self.canUserAttendPerformance(performanceId);
-    //         }));
-    //     }).then(function(results) {
-    //         return results.indexOf(true) > -1;
-    //     });
-    // };
-
     // performances that can be added to the schedule, unless user is already seeing the show, includes undesired
     this.getPossiblePerformances = function() {
         var performances = Data.getPerformances(),
@@ -155,10 +99,15 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
             venueDistances = Data.getVenueDistances(),
             possiblePerformances = [],
             userSchedule = UserData.getSchedule(),
-            i = 0;
+            i = 0,
+            now = Date.now() / 1000;
 
         angular.forEach(performances, function(performance1, performanceId) {
             if (userSchedule.indexOf(performanceId) > -1 || ! Availability.isUserAvailable(performance1.start, performance1.stop)) {
+                return true;
+            }
+
+            if (performance1.start <= now) {
                 return true;
             }
 
