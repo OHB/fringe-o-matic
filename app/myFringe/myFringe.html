@@ -16,15 +16,15 @@
             </div>
         </div>
         <div bs-active-pane="tabs.activeTab" bs-tabs ng-if="$parent.signedIn">
-            <div data-title="Schedule" name="My Schedule" bs-pane></div>
-            <div data-title="Availability" name="My Availability" bs-pane></div>
+            <div data-title="Schedule" name="Schedule" bs-pane></div>
+            <div data-title="Availability" name="Availability" bs-pane></div>
             <div data-title="Auto-Scheduler" name="Auto-Scheduler" bs-pane></div>
         </div>
     </div>
 </div>
 <div class="container" ng-if="$parent.signedIn">
-    <my-fringe-schedule ng-if="tabs.activeTab == 'My Schedule'"></my-fringe-schedule>
-    <my-fringe-availability ng-if="tabs.activeTab == 'My Availability'"></my-fringe-availability>
+    <my-fringe-schedule ng-if="tabs.activeTab == 'Schedule'"></my-fringe-schedule>
+    <my-fringe-availability ng-if="tabs.activeTab == 'Availability'"></my-fringe-availability>
     <my-fringe-auto-scheduler ng-if="tabs.activeTab == 'Auto-Scheduler'"></my-fringe-auto-scheduler>
 </div>
 <div class="container" ng-if="! $parent.signedIn">

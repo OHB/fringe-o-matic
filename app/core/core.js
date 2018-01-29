@@ -44,8 +44,15 @@ angular.module('fringeApp').controller('CoreCtrl', [
         };
 
         var signInCheck = $q.defer();
-        gapi.load('auth2', function() {
-            gapi.auth2.init({client_id: Configuration.googleAuthClientId}).then(function () {
+
+        gapi.load('client:auth2:signin2', function() {
+            gapi.client.init({
+                apiKey: 'AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys',
+                clientId: '728570220201-1qnk6fh4nkdl3vqnpq8gphbk9t51i29m.apps.googleusercontent.com',
+                scope: 'profile',
+                prompt: 'select_account',
+                discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
+            }).then(function () {
                 var googleAuth = gapi.auth2.getAuthInstance();
 
                 if (googleAuth.isSignedIn.get()) {

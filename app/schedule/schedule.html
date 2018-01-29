@@ -26,7 +26,6 @@
                     <br />
                 </div>
                 <month-day-picker days="days" model="filter.currentDay"></month-day-picker>
-                <ul uib-pager items-per-page="1" total-items="days.length" ng-model="filter.dayId" previous-text="&larr; Previous" next-text="Next &rarr;" ng-change="filter.currentDay = days[filter.dayId - 1]" style="margin-bottom: 10px;"></ul>
             </div>
         </div>
         <div class="col-md-9">

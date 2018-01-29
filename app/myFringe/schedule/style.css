@@ -11,3 +11,11 @@
     margin: 40px 0 0 0;
     padding: 8px;
 }
+
+.amazing-schedule > tbody.ng-hide + tbody {
+    border-top: 0;
+}
+
+.amazing-schedule > tbody:first-child > .header > th > h3 {
+    margin-top: 0;
+}

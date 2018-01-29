@@ -1,12 +1,17 @@
 angular.module('fringeApp').component('myFringeSchedule', {
     templateUrl: 'app/myFringe/schedule/schedule.html',
-    controller: ['$scope', 'Schedule', 'Data', function($scope, Schedule, Data) {
+    controller: ['$scope', '$uibModal', '$timeout', 'Schedule', 'Data', 'GoogleCalendarSync', 'Configuration', function($scope, $uibModal, $timeout, Schedule, Data, GoogleCalendarSync, Configuration) {
         var shows, performances, venues, venueDistances;
 
         $scope.moment = moment;
+        $scope.interestText = Configuration.interestText;
+
+        $scope.filter = {currentDay: 0};
 
         $scope.refresh = function() {
             $scope.amazingSchedule = {};
+            $scope.calendarSyncEnabled = GoogleCalendarSync.isSetup();
+
             var previousOfDay;
 
             $scope.hasPreferences = Schedule.getDesiredShows().length > 0;
@@ -16,18 +21,18 @@ angular.module('fringeApp').component('myFringeSchedule', {
 
             angular.forEach(sortedSchedule, function(performanceId) {
                 var performance = performances[performanceId],
-                    day = moment(performance.start, 'X').startOf('day').format('X');
+                    day = moment(performance.start, 'X').startOf('day').unix();
 
                 if ($scope.amazingSchedule[day] === undefined) {
                     previousOfDay = undefined;
                     $scope.amazingSchedule[day] = [];
                 }
 
-                if (previousOfDay) {
+                if (false && previousOfDay) {
                     var venue1 = shows[previousOfDay.show].venue,
                         venue2 = shows[performance.show].venue,
                         minutes = venueDistances[venue1][venue2] / 60,
-                        type = minutes < 15 ? 'Walk' : 'Travel';
+                        type = minutes < 25 ? 'Walk' : 'Travel';
 
                     if (performance.start - previousOfDay.stop > 3600) {
                         var hour = moment(previousOfDay.stop, 'X').hour(),
@@ -66,6 +71,14 @@ angular.module('fringeApp').component('myFringeSchedule', {
 
                 previousOfDay = performance;
             });
+
+            $scope.days = Object.keys($scope.amazingSchedule).map(function(i) {
+                return +i;
+            });
+
+            $timeout(function() {
+                $scope.loaded = true;
+            });
         };
 
         $scope.removeFromSchedule = function(performanceId) {
@@ -79,5 +92,23 @@ angular.module('fringeApp').component('myFringeSchedule', {
         venueDistances = Data.getVenueDistances();
 
         $scope.refresh();
+
+        if ($scope.days.indexOf(moment().startOf('day').unix()) > -1) {
+            $scope.filter.currentDay = moment().startOf('day').unix();
+        } else {
+            $scope.filter.currentDay = $scope.days[0];
+        }
+
+        $scope.openGoogleCalendarSyncSetup = function() {
+            $uibModal.open({
+                templateUrl: 'app/myFringe/schedule/googleCalendarSyncSetupModal/googleCalendarSyncSetupModal.html',
+                controller: 'GoogleCalendarSyncSetupModalCtrl',
+                size: 'md'
+            }).result.then(function() {
+                $scope.refresh();
+            }, function() {
+                $scope.refresh();
+            });
+        };
     }]
 });

@@ -7,7 +7,7 @@ if (! isset($_REQUEST['refresh']) && file_exists('cache.json')) {
     exit;
 }
 
-$dateModifier = 60 * 60 * 24 * 7 * 35;
+$dateModifier = (60 * 60 * 24 * 7 * 35) + (60 * 60);
 
 $showsToSuppress = range(164, 185);
 $colorVenues = [11, 2, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 23];

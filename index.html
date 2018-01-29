@@ -151,7 +151,7 @@
 <div class="col-md-6 col-md-pull-5">
 <h1 style=font-size:63px;font-weight:700;color:#428bca;margin-bottom:15px>Fringe-o-Matic</h1>
 <p class=lead style=font-weight:500>Automatically create your perfect Fringe schedule.</p>
-<p class=lead style=font-weight:400>Fringe-o-Matic is a free tool to help you get the most out of Fringe. Learn about shows and generate a schedule automatically based on your preferences and availability.</p>
+<p class=lead style=font-weight:400>Fringe-o-Matic is a free tool to help you get the most out of Fringe. Learn about shows, generate a schedule automatically based on your preferences and availability, and more.</p>
 <p class=lead>Registration is not required.</p>
 <br>
 <p><a class="btn btn-primary btn-lg" href role=button ng-click=getStarted()>Get Started</a></p>
@@ -308,16 +308,48 @@ These venues are at the same location...so a minute, maybe?
 <div class="form-group has-feedback">
 <label>Filter by keyword</label>
 <input class=form-control placeholder=Search ng-model=search ng-change=searchTextEntered()>
-<span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show=searchText ng-click=clearSearch()></span>
+<span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show=search.length ng-click=clearSearch()></span>
 </div>
 <div class=form-group>
 <label>Venue</label>
 <select class=form-control ng-model=selectedVenue ng-options="o.value as o.label for o in venueOptions" ng-change=refresh()></select>
 </div>
+<hr>
+<div class=checkbox ng-show=isFringeOngoing>
+<label>
+<input type=checkbox ng-change=refresh() ng-model=hideWithoutShowtimes>
+Hide shows with no performances
+</label>
+</div>
+<div class=checkbox ng-show=$parent.$parent.signedIn>
+<label>
+<input type=checkbox ng-change=refresh() ng-model=hideNotInterested>
+Hide shows I'm not interested in
+</label>
+</div>
+<div class=checkbox ng-show=$parent.$parent.signedIn>
+<label>
+<input type=checkbox ng-change=refresh() ng-model=hideNotAttending>
+Hide shows I'm not attending
+</label>
+</div>
+<div class=checkbox ng-show=$parent.$parent.signedIn>
+<label>
+<input type=checkbox ng-change=refresh() ng-model=hideCantAttend>
+Hide shows I can't see
+</label>
+</div>
 </div>
 </div>
 <div class=col-md-9>
-<div class=row ng-repeat="showId in allShows" ng-init="show=shows[showId]" style=background:#f9f9f9;margin-bottom:10px>
+<div class="row text-center" style="margin:100px 0" ng-if="! dataLoaded">
+<p class="lead text-center">Loading...</p>
+</div>
+<div class="row text-center" style="margin:100px 0" ng-if="dataLoaded && !allShows.length">
+<p class="lead text-center">No matching shows.</p>
+<p><button class="btn btn-sm" ng-click=resetFilters();refresh()>Clear filters</button></p>
+</div>
+<div class=row ng-repeat="showId in allShows" ng-init="show=shows[showId]" style=background:#f9f9f9;margin-bottom:10px ng-show=dataLoaded>
 <div class=col-md-9 style=padding:15px>
 <div class="pull-right lead" style=line-height:1em ng-if=$parent.$parent.signedIn>
 <interest show-id=showId></interest>
@@ -336,9 +368,6 @@ These venues are at the same location...so a minute, maybe?
 </p>
 <p style=margin:0 ng-init="firstPerformance = performances[show.performances[0]]">
 <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
-<show-rating value=ratings[show.rating]></show-rating>
-<span class="label label-success">{{show.price|price}}</span>
-<span class="label label-default"><i class="glyphicon glyphicon-time"></i> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</span>
 <span class="small text-muted" style=margin-left:10px>
 <em>
 <ng-pluralize count=performanceCounts[showId] when="plurals[isFringeOngoing ? 'performanceMore' : 'performance']"></ng-pluralize>
@@ -453,7 +482,6 @@ by <strong ng-bind-html=show.artist|highlight:searchText></strong><span ng-if=sh
 <br>
 </div>
 <month-day-picker days=days model=filter.currentDay></month-day-picker>
-<ul uib-pager items-per-page=1 total-items=days.length ng-model=filter.dayId previous-text="&larr; Previous" next-text="Next &rarr;" ng-change="filter.currentDay = days[filter.dayId - 1]" style=margin-bottom:10px></ul>
 </div>
 </div>
 <div class=col-md-9>
@@ -626,15 +654,15 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </div>
 </div>
 <div bs-active-pane=tabs.activeTab bs-tabs ng-if=$parent.signedIn>
-<div data-title=Schedule name="My Schedule" bs-pane></div>
-<div data-title=Availability name="My Availability" bs-pane></div>
+<div data-title=Schedule name=Schedule bs-pane></div>
+<div data-title=Availability name=Availability bs-pane></div>
 <div data-title=Auto-Scheduler name=Auto-Scheduler bs-pane></div>
 </div>
 </div>
 </div>
 <div class=container ng-if=$parent.signedIn>
-<my-fringe-schedule ng-if="tabs.activeTab == 'My Schedule'"></my-fringe-schedule>
-<my-fringe-availability ng-if="tabs.activeTab == 'My Availability'"></my-fringe-availability>
+<my-fringe-schedule ng-if="tabs.activeTab == 'Schedule'"></my-fringe-schedule>
+<my-fringe-availability ng-if="tabs.activeTab == 'Availability'"></my-fringe-availability>
 <my-fringe-auto-scheduler ng-if="tabs.activeTab == 'Auto-Scheduler'"></my-fringe-auto-scheduler>
 </div>
 <div class=container ng-if="! $parent.signedIn">
@@ -648,32 +676,61 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 <script type="text/ng-template" id="app/myFringe/schedule/schedule.html">
 <div ng-if="! hasSchedule">
 <div ng-if="! hasPreferences">
-<h1>Welcome!</h1>
+<h1>Not so fast!</h1>
+<p class=lead>Before you can use this page, you need to select shows that you're interested in.</p>
+<p>On the <a href=/shows>Shows</a> and <a href=/schedule>Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
+<br>
+<div class=row>
+<div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-md-2 text-center" ng-class="$first && 'col-md-offset-1'">
+<interest desire=i class=lead></interest><br>
+{{interestText[i]}}
+</div>
+</div>
+<br>
+<p>Once you've done that, come back to this screen.</p>
 </div>
 <div ng-if=hasPreferences>
 <h1>Your schedule is empty :(</h1>
+<p class=lead>Now that you've selected some shows that you're interested in, it's time to build your schedule.</p>
+<p>The best way to do that is to head over to the Auto-Scheduler.</p>
+<br>
+<p><a href=/my-fringe/auto-scheduler class="btn btn-primary btn-lg">Go to the Auto-Scheduler</a></p>
+<br>
+<p>Or, you can do this manually on the <a href=/schedule>Schedule</a> screen.</p>
 </div>
 </div>
-<div class="alert alert-success" ng-if=hasSchedule>
+<div class=row ng-if="hasSchedule && loaded">
+<div class=col-md-3>
+<div data-offset-top=-95 bs-affix>
+<p class=text-center>
+<button ng-click=openGoogleCalendarSyncSetup() class="btn btn-primary" ng-class="calendarSyncEnabled ? 'btn-primary' : 'btn-success'">{{calendarSyncEnabled ? 'Google Calendar Sync: On' : 'Turn On Google Calendar Sync'}}</button>
+</p>
+<br>
+<month-day-picker days=days model=filter.currentDay></month-day-picker>
+<p class=text-center>
+<button class="btn btn-default btn-sm" ng-disabled="! filter.currentDay" ng-click="filter.currentDay = 0">Show Full Schedule</button>
+</p>
+<br>
+<div class="alert alert-success">
 <i class="glyphicon glyphicon-hand-right"></i> Don't forget to buy tickets!
 </div>
-<table class="table table-striped amazing-schedule" ng-if=hasSchedule>
-<tbody ng-repeat="(day, amazingScheduleDay) in amazingSchedule">
+</div>
+</div>
+<div class=col-md-9>
+<table class="table table-striped amazing-schedule">
+<tbody ng-repeat="(day, amazingScheduleDay) in amazingSchedule" ng-if="! filter.currentDay || filter.currentDay == day">
 <tr class=header>
 <th colspan=5>
 <h3 class=bg-info>{{moment(day, 'X').format('dddd, MMM D')}}</h3>
 </th>
 </tr>
 <tr>
-<th>Start</th>
-<th>Stop</th>
+<th>Time</th>
 <th>Show</th>
 <th>Venue</th>
-<th></th>
 </tr>
 <tr ng-repeat="item in amazingScheduleDay" ng-class=item.as>
-<td ng-if="item.as=='performance'">{{moment(item.start, 'X').format('h:mm a')}}</td>
-<td ng-if="item.as=='performance'">{{moment(item.stop, 'X').format('h:mm a')}}</td>
+<td ng-if="item.as=='performance'" nowrap>{{moment(item.start, 'X').format('h:mm a')}}</td>
 <td ng-if="item.as=='performance'"><a href=/show/{{shows[item.show].slug}}>{{shows[item.show].name}}</a></td>
 <td ng-if="item.as=='performance'">
 <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
@@ -681,15 +738,118 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </span>
 
 </td>
-<td ng-if="item.as=='performance'">
-<button class="btn btn-xs btn-danger" ng-click=removeFromSchedule(item.id) bs-tooltip="{title:'Remove'}">
-<span class="glyphicon glyphicon-remove"></span>
-</button>
-</td>
 <td ng-if="item.as!=='performance'" colspan=5 ng-class=item.as>{{item.text}}</td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+
+</script>
+<script type="text/ng-template" id="app/myFringe/schedule/googleCalendarSyncSetupModal/googleCalendarSyncSetupModal.html">
+<div class=modal-header>
+<h3 class=modal-title>Google Calendar Sync</h3>
+</div>
+<div ng-show="! hasPermission">
+<div class=modal-body>
+<p>We can copy your schedule to your Google calendar and keep it updated automatically. You can use this to view your Fringe schedule on your phone and get reminders.</p>
+<p>All you need to do to get started is give us access to your calendar.</p>
+</div>
+<div class=modal-footer>
+<button class="btn btn-default" type=button ng-click=close()>Close</button>
+<button class="btn btn-primary" type=button ng-click=requestPermission()>Continue</button>
+</div>
+</div>
+<div ng-show="hasPermission && ! isSetup">
+<div class=modal-body>
+<p class=lead>Which calendar should we copy your schedule to?</p>
+<div class=radio>
+<label>
+<input type=radio ng-model=setupConfig.target name=setupTarget value=primary>
+Primary calendar (recommended)
+</label>
+</div>
+<div class=radio>
+<label>
+<input type=radio ng-model=setupConfig.target name=setupTarget value=secondary>
+Another calendar
+</label>
+</div>
+<blockquote style=font-size:100% ng-show="setupConfig.target == 'secondary'">
+<div class=radio>
+<label style=width:100%>
+<input type=radio ng-model=setupConfig.secondary name=secondaryCalendar value=NEW>
+Create a new calendar:
+<input ng-model=setupConfig.secondaryName class=form-control style="margin:5px 0" placeholder="New calendar name">
+</label>
+</div>
+<div ng-show=secondaryCalendars.length>
+<p>or select an existing calendar:</p>
+<div class=radio ng-repeat="calendar in secondaryCalendars">
+<label>
+<input type=radio ng-model=setupConfig.secondary name=secondaryCalendar value={{calendar.id}}>
+{{calendar.name}}
+</label>
+</div>
+</div>
+</blockquote>
+</div>
+<div class=modal-footer>
+<button class="btn btn-default" type=button ng-click=close() ng-disabled=working>Close</button>
+<button class="btn btn-primary" type=button ng-click=setup() ng-disabled="setupConfig.secondary=='NEW' && ! setupConfig.secondaryName.length">Continue</button>
+</div>
+</div>
+<div ng-show="isSetup && isSyncing">
+<div class=modal-body ng-show="! max">
+<p class=lead>Setting up calendar...</p>
+<div class=progress>
+<div class="progress-bar progress-bar-striped active" style=width:100%></div>
+</div>
+</div>
+<div class=modal-body ng-show=max>
+<p class=lead>Copying schedule for the first time...</p>
+<uib-progressbar max=max value=progress animate=true type=primary></uib-progressbar>
+</div>
+</div>
+<div ng-show="isSetup && ! isSyncing && turnOffScreen">
+<div class=modal-body>
+<p class=lead>Turn Google Calendar Sync off?</p>
+<p>If you turn Google Calendar Sync off:</p>
+<ul>
+<li>your Google calendar will not be updated automatically</li>
+<li>shows previously synced to your calendar will not be removed</li>
+<li>you can turn it back on again later</li>
+</ul>
+<br>
+<p class=text-center>
+<button ng-click="turnOffScreen = false" class="btn btn-success btn-lg">Keep it on</button><br>
+<button ng-click="turnOff(); turnOffScreen = false" class="btn btn-danger" style=margin-top:10px>Turn it off</button>
+</p>
+</div>
+</div>
+<div ng-show="isSetup && ! isSyncing && ! turnOffScreen">
+<div class=modal-body>
+<p class=lead>Google Calendar Sync is turned on.</p>
+<p>Any time you add or remove a show from your schedule, your Google calendar will be updated automatically.</p>
+<br>
+<p class=text-center>
+<a href={{calendarUrl}} target=_blank class="btn btn-primary btn-lg">Open Google Calendar</a>
+</p>
+<br>
+<p>If you have an Android device, you can see your calendar in the Google Calendar app. It may take a few moments for changes to appear.</p>
+<br>
+<p><strong>Useful links:</strong></p>
+<ul>
+<li><a href="https://support.google.com/calendar/answer/151674?co=GENIE.Platform%3DAndroid&hl=en&oco=0" target=_blank>Sync Calendar with iPhone or iPad</a></li>
+<li><a href=https://support.google.com/calendar/answer/99358 target=_blank>See Google Calendar events on Apple Calendar</a></li>
+<li><a href="https://support.google.com/calendar/answer/37648?hl=en&ref_topic=3417927" target=_blank>Sync your calendar with computer programs</a></li>
+</ul>
+</div>
+<div class=modal-footer>
+<button class="btn btn-default pull-left" type=button ng-click="turnOffScreen = true">Turn Off</button>
+<button class="btn btn-primary" type=button ng-click=close()>Close</button>
+</div>
+</div>
 </script>
 <script type="text/ng-template" id="app/myFringe/availability/availability.html">
 <div ng-if=availabilitySlots>
@@ -794,8 +954,8 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 <div ng-if="screen == 'intro'">
 <h1>Introduction</h1>
 <p class=lead>The Auto-Scheduler helps build your schedule automatically. It needs to know two things:</p>
-<br>
-<h3>1. What shows do you want to see?</h3>
+<blockquote>
+<h3 style=margin-top:0>1. What shows do you want to see?</h3>
 <p>On the <a href=/shows>Shows</a> and <a href=/schedule>Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
 <br>
 <div class=row>
@@ -806,18 +966,19 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </div>
 <br>
 <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
-<hr>
+<br>
 <h3>2. When are you available?</h3>
 <p>On the <a href=/my-fringe/availability>My Availability</a> tab, you can select which times you are available to see shows.</p>
 <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
-<hr>
+</blockquote>
+<br>
 <div class=text-center>
 <button class="btn btn-lg btn-primary" ng-click=completeIntro()>Got it!</button>
 </div>
 </div>
 <div ng-if="screen == 'no-interests'">
 <h1>Not so fast!</h1>
-<p>Before you can use the Auto-Schedule you must select which shows you're interested in.</p>
+<p class=lead>Before you can use this page, you need to select shows that you're interested in.</p>
 <p>On the <a href=/shows>Shows</a> and <a href=/schedule>Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
 <br>
 <div class=row>
@@ -1208,11 +1369,10 @@ I wasn't able to fit all of the shows you want to see on the schedule.
 <script type="text/javascript">
     document.body.className += ' js';
 </script>
-<script src="https://apis.google.com/js/platform.js" data-cfasync="false"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-route.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-animate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/compiler.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dimensions.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js"></script>
@@ -1233,7 +1393,8 @@ I wasn't able to fit all of the shows you want to see on the schedule.
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDdE91DU1mNa65N7Utpolt787MKFpFo0z4"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys"></script>
+<script src="https://apis.google.com/js/api.js"></script>
 <script src="compiled.js"></script>
 </body>
 </html>

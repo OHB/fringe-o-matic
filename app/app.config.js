@@ -6,6 +6,7 @@ angular.module('fringeApp')
     })
     .value('Configuration', {
         googleAuthClientId: '728570220201-2tkhj9m3stsqgprscc77o256r0f441au.apps.googleusercontent.com',
+        googleApiKey: 'AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys',
         slotSize: 3600,
         minimumArriveBeforeShowTime: 600,
         adminUsers: [
@@ -14,7 +15,7 @@ angular.module('fringeApp')
         interestText: [
             'Not Interested',
             'Eh...maybe.',
-            "I wouldn't mind seeing this.",
+            'This looks good.',
             "I'd love to see this!",
             'I HAVE to see this!'
         ],

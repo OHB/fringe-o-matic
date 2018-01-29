@@ -67,7 +67,8 @@ angular.module('fringeApp', [
     'mgcrea.ngStrap.select',
     'mgcrea.ngStrap.tab',
     'mgcrea.ngStrap.tooltip',
-    'ngMap'
+    'ngMap',
+    'qImproved'
 ]);
 
 angular.module('fringeApp').run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {

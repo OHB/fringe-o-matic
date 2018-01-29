@@ -10,16 +10,48 @@
                 <div class="form-group has-feedback">
                     <label>Filter by keyword</label>
                     <input type="text" class="form-control" placeholder="Search" ng-model="search" ng-change="searchTextEntered()">
-                    <span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show="searchText" ng-click="clearSearch()"></span>
+                    <span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show="search.length" ng-click="clearSearch()"></span>
                 </div>
                 <div class="form-group">
                     <label>Venue</label>
                     <select class="form-control" ng-model="selectedVenue" ng-options="o.value as o.label for o in venueOptions" ng-change="refresh()"></select>
                 </div>
+                <hr />
+                <div class="checkbox" ng-show="isFringeOngoing">
+                    <label>
+                        <input type="checkbox" ng-change="refresh()" ng-model="hideWithoutShowtimes">
+                        Hide shows with no performances
+                    </label>
+                </div>
+                <div class="checkbox" ng-show="$parent.$parent.signedIn">
+                    <label>
+                        <input type="checkbox" ng-change="refresh()" ng-model="hideNotInterested">
+                        Hide shows I'm not interested in
+                    </label>
+                </div>
+                <div class="checkbox" ng-show="$parent.$parent.signedIn">
+                    <label>
+                        <input type="checkbox" ng-change="refresh()" ng-model="hideNotAttending">
+                        Hide shows I'm not attending
+                    </label>
+                </div>
+                <div class="checkbox" ng-show="$parent.$parent.signedIn">
+                    <label>
+                        <input type="checkbox" ng-change="refresh()" ng-model="hideCantAttend">
+                        Hide shows I can't see
+                    </label>
+                </div>
             </div>
         </div>
         <div class="col-md-9">
-            <div class="row" ng-repeat="showId in allShows" ng-init="show=shows[showId]" style="background:#f9f9f9; margin-bottom: 10px">
+            <div class="row text-center" style="margin:100px 0" ng-if="! dataLoaded">
+                <p class="lead text-center">Loading...</p>
+            </div>
+            <div class="row text-center" style="margin:100px 0" ng-if="dataLoaded && !allShows.length">
+                <p class="lead text-center">No matching shows.</p>
+                <p><button class="btn btn-sm" ng-click="resetFilters();refresh()">Clear filters</button></p>
+            </div>
+            <div class="row" ng-repeat="showId in allShows" ng-init="show=shows[showId]" style="background:#f9f9f9; margin-bottom: 10px" ng-show="dataLoaded">
                 <div class="col-md-9" style="padding:15px">
                     <div class="pull-right lead" style="line-height: 1em" ng-if="$parent.$parent.signedIn">
                         <interest show-id="showId"></interest>
@@ -38,9 +70,9 @@
                     </p>
                     <p style="margin: 0" ng-init="firstPerformance = performances[show.performances[0]]">
                         <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
-                        <show-rating value="ratings[show.rating]"></show-rating>
-                        <span class="label label-success">{{show.price|price}}</span>
-                        <span class="label label-default"><i class="glyphicon glyphicon-time"></i> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</span>
+                        <!--<show-rating value="ratings[show.rating]"></show-rating>-->
+                        <!--<span class="label label-success">{{show.price|price}}</span>-->
+                        <!--<span class="label label-default"><i class="glyphicon glyphicon-time"></i> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</span>-->
                         <span class="small text-muted" style="margin-left:10px">
                             <em>
                                 <ng-pluralize count="performanceCounts[showId]" when="plurals[isFringeOngoing ? 'performanceMore' : 'performance']"></ng-pluralize>

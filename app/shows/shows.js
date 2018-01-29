@@ -13,12 +13,6 @@ angular.module('fringeApp').component('shows', {
                 preferences: UserData.getPreferences()
             };
 
-            $scope.otherOptions = [
-                {value: '*', label: 'All Shows'},
-                {value: 'interested', label: 'Interested Only'},
-                {value: 'attending', label: 'Attending Only'}
-            ];
-
             $scope.shows = Data.getShows();
             $scope.venues = Data.getVenues();
             $scope.ratings = Data.getRatings();
@@ -27,11 +21,28 @@ angular.module('fringeApp').component('shows', {
             $scope.performances = Data.getPerformances();
 
             $scope.performanceCounts = {};
+            $scope.canAttendShow = {};
+
+            var possiblePerformances = Schedule.getPossiblePerformances();
 
             angular.forEach($scope.shows, function(show, showId) {
-                $scope.performanceCounts[showId] = show.performances.filter(function(performanceId) {
+                var availablePerformances = show.performances.filter(function(performanceId) {
                     return $scope.performances[performanceId].start > Date.now() / 1000;
-                }).length;
+                });
+
+                $scope.performanceCounts[showId] = availablePerformances.length;
+
+                if (UserData.isSignedIn()) {
+                    $scope.canAttendShow[showId] = false;
+
+                    angular.forEach(show.performances, function(performanceId) {
+                        if (possiblePerformances.indexOf(performanceId) > -1) {
+                            $scope.canAttendShow[showId] = true;
+
+                            return false;
+                        }
+                    });
+                }
             });
 
             $scope.venueOptions = Object.keys($scope.venues).map(function(id) {
@@ -47,10 +58,12 @@ angular.module('fringeApp').component('shows', {
             $scope.ratingOptions.unshift({value: '*', label: 'All Ratings'});
 
             $scope.resetFilters = function() {
-                $scope.selectedVenue = '*';
-                $scope.selectedRating = '*';
-                $scope.selectedOther = '*';
                 $scope.search = '';
+                $scope.selectedVenue = '*';
+                $scope.hideWithoutShowtimes = false;
+                $scope.hideNotInterested = false;
+                $scope.hideNotAttending = false;
+                $scope.hideCantAttend = false;
             };
 
             $scope.refresh = function() {
@@ -64,19 +77,26 @@ angular.module('fringeApp').component('shows', {
                     if ($scope.selectedVenue !== '*' && show.venue !== $scope.selectedVenue) {
                         return false;
                     }
-                    if ($scope.selectedRating !== '*' && show.rating !== $scope.selectedRating) {
+
+                    if ($scope.hideWithoutShowtimes && $scope.performanceCounts[showId] === 0) {
                         return false;
                     }
-                    if ($scope.selectedOther === 'interested' && Schedule.getShowDesire(showId) === 0) {
+
+                    if ($scope.hideNotInterested && Schedule.getShowDesire(showId) === 0) {
                         return false;
                     }
-                    if ($scope.selectedOther === 'attending' && showsAttending.indexOf(showId) === -1) {
+
+                    if ($scope.hideNotAttending && showsAttending.indexOf(showId) === -1) {
+                        return false;
+                    }
+
+                    if ($scope.hideCantAttend && ! $scope.canAttendShow[showId] && showsAttending.indexOf(showId) === -1) {
                         return false;
                     }
 
                     var target = [
                         show.name,
-                        show.description,
+                        show.description | '',
                         show.artist || '',
                         show.artistLocation || '',
                         $scope.venues[show.venue].name
@@ -88,6 +108,10 @@ angular.module('fringeApp').component('shows', {
 
                     return true;
                 });
+
+                $timeout(function() {
+                    $scope.dataLoaded = true;
+                }, 100);
             };
 
             $scope.searchTextEntered = debounce(function() {
@@ -99,15 +123,15 @@ angular.module('fringeApp').component('shows', {
                 $scope.refresh();
             };
 
-            $scope.$watch('userData.preferences', $scope.refresh, true);
-
             $scope.resetFilters();
 
             if ($routeParams.venue !== undefined) {
                 $scope.selectedVenue = Data.findVenueIdBySlug($routeParams.venue) || '*';
             }
 
-            $scope.refresh();
+            $timeout(function() {
+                $scope.$watch('userData.preferences', $scope.refresh, true);
+            });
         }
     ]
 });

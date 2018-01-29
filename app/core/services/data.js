@@ -82,6 +82,14 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
         });
     };
 
+    this.getVenue = function(venueId) {
+        return data.venues[venueId];
+    };
+
+    this.getVenueHost = function(venueHostId) {
+        return data.venueHosts[venueHostId];
+    };
+
     this.findVenueIdBySlug = function(slug) {
         if (venueSlugs === undefined) {
             venueSlugs = {};

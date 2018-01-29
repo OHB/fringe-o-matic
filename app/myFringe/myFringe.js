@@ -3,10 +3,10 @@ angular.module('fringeApp').component('myFringe', {
     controller: ['$scope', '$route', '$routeParams', 'Schedule', 'UserData', 'Configuration', 'Plurals', function($scope, $route, $routeParams, Schedule, UserData, Configuration, Plurals) {
         $scope.plurals = Plurals;
         $scope.tabs = {
-            activeTab: 'My Schedule'
+            activeTab: 'Schedule'
         };
         if ($routeParams.subpage === 'availability') {
-            $scope.tabs.activeTab = 'My Availability';
+            $scope.tabs.activeTab = 'Availability';
         } else if ($routeParams.subpage === 'auto-scheduler') {
             $scope.tabs.activeTab = 'Auto-Scheduler';
         }
@@ -38,12 +38,14 @@ angular.module('fringeApp').component('myFringe', {
         $scope.$watch('userData.schedule', update);
 
         $scope.$watch('tabs.activeTab', function() {
-            if ($scope.tabs.activeTab === 'My Schedule' && $route.subpage) {
-                $route.updateParams({subpage: ''});
-            } else if ($scope.tabs.activeTab === 'My Availability' && $route.subpage !== 'availability') {
+            if ($scope.tabs.activeTab === 'Schedule' && $route.subpage) {
+                $route.updateParams({subpage: null});
+            } else if ($scope.tabs.activeTab === 'Availability' && $route.subpage !== 'availability') {
                 $route.updateParams({subpage: 'availability'});
             } else if ($scope.tabs.activeTab === 'Auto-Scheduler' && $route.subpage !== 'auto-scheduler') {
                 $route.updateParams({subpage: 'auto-scheduler'});
+            } else {
+                $route.updateParams({subpage: null});
             }
         });
     }]

@@ -118,11 +118,10 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script type="text/javascript">
     document.body.className += ' js';
 </script>
-<script src="https://apis.google.com/js/platform.js" data-cfasync="false"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-route.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-animate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/compiler.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dimensions.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js"></script>
@@ -143,7 +142,8 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDdE91DU1mNa65N7Utpolt787MKFpFo0z4"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys"></script>
+<script src="https://apis.google.com/js/api.js"></script>
 <?php foreach (isset($_REQUEST['compiled']) ? ['compiled.js'] : $build->js as $script) { ?>
 <script src="<?php echo $script; ?>"></script>
 <?php } ?>
