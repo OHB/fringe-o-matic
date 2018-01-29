@@ -62,7 +62,7 @@ angular.module('fringeApp', [
     'mgcrea.ngStrap.aside',
     'mgcrea.ngStrap.modal',
     'mgcrea.ngStrap.button',
-    'mgcrea.ngStrap.dropdown',
+    // 'mgcrea.ngStrap.dropdown',
     'mgcrea.ngStrap.popover',
     'mgcrea.ngStrap.select',
     'mgcrea.ngStrap.tab',

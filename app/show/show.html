@@ -1,7 +1,10 @@
-<div class="container">
-    <div class="row" style="margin: 30px 0">
-        <div class="col-md-7">
-            <div class="h3" style="line-height: 1em" ng-if="$parent.$parent.signedIn">
+<div class="container" ng-if="! loaded">
+    <p class="text-center lead" style="margin-top: 100px">Loading...</p>
+</div>
+<div class="container" ng-if="loaded">
+    <div class="row" style="margin: 30px 0; color: white" ng-style="{backgroundColor: backgroundColor, color: textColor}">
+        <div class="col-md-7" style="padding-left: 20px">
+            <div class="h3" style="line-height: 1em" ng-if="$parent.$parent.signedIn" ng-style="{color: titleColor}">
                 <interest show-id="showId"></interest>
             </div>
             <h1>{{show.name}}</h1>
@@ -9,18 +12,15 @@
                 <strong ng-bind="show.artist"></strong><span ng-if="show.artistLocation">, {{show.artistLocation}}</span>
             </p>
             <hr />
-            <p class="lead">
-                <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
-            </p>
+            <p>{{venues[show.venue].name}}</p>
             <br />
             <br />
             <p>
-                <a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-primary btn-lg" ng-if="show.storeId">Buy Tickets</a>
+                <a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeId" >Buy Tickets</a>
             </p>
         </div>
-        <div class="col-md-5" style="height: 450px; background: url('img/show/{{show.image}}') right no-repeat; background-size: contain"></div>
+        <div class="col-md-5" style="height: 450px; background: url('img/show/{{show.image}}') center no-repeat; background-size: cover" ng-style="{boxShadow: 'inset 20px 0 20px -6px ' + backgroundColor}"></div>
     </div>
-    <hr />
     <div class="row">
         <div class="col-md-8 lead">
             <div style="margin-top: 10px" ng-bind-html="trustAsHtml(show.description)"></div>

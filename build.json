@@ -5,7 +5,6 @@
     "app/venues/venues.html",
     "app/show/show.html",
     "app/shows/shows.html",
-    "app/showsOld/showsOld.html",
     "app/schedule/schedule.html",
     "app/map/map.html",
     "app/myFringe/myFringe.html",
@@ -65,7 +64,6 @@
     "app/schedule/schedule.js",
     "app/show/show.js",
     "app/shows/shows.js",
-    "app/showsOld/showsOld.js",
     "app/venues/venues.js",
     "app/test/test.js"
   ]

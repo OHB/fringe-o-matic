@@ -11,5 +11,18 @@ angular.module('fringeApp').component('show', {
         $scope.ratings = Data.getRatings();
         $scope.isUserAttendingPerformance = Schedule.isUserAttendingPerformance;
         $scope.trustAsHtml = $sce.trustAsHtml;
+
+        var img = document.createElement('img');
+        img.setAttribute('src', 'img/show/' + $scope.show.image);
+        img.addEventListener('load', function() {
+            var swatches = new Vibrant(img).swatches();
+
+            $scope.$apply(function() {
+                $scope.backgroundColor = swatches.DarkVibrant.getHex();
+                $scope.titleColor = swatches.DarkVibrant.getTitleTextColor();
+                $scope.textColor = swatches.DarkVibrant.getBodyTextColor();
+                $scope.loaded = true;
+            });
+        });
     }]
 });
