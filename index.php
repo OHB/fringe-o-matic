@@ -62,7 +62,7 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
             </button>
             <a href="/" class="navbar-brand">Fringe-o-Matic</a>
         </div>
-        <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}">
+        <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}" ng-if="! error">
             <ul class="nav navbar-nav" ng-cloak>
                 <li ng-repeat="item in ::menu" ng-class="{active:currentRoute == '/' + item.route}">
                     <a href="/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
@@ -140,6 +140,8 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/aside.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/aside.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.min.js"></script>

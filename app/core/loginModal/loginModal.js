@@ -1,6 +1,6 @@
 angular.module('fringeApp').controller('LoginModalCtrl', [
-    '$uibModalInstance', '$scope', '$timeout', 'UserData', 'Error',
-    function($uibModalInstance, $scope, $timeout, UserData, Error) {
+    '$uibModalInstance', '$scope', '$timeout', 'User', 'Error',
+    function($uibModalInstance, $scope, $timeout, User, Error) {
         $scope.signingIn = false;
 
         $timeout(function() {
@@ -11,15 +11,14 @@ angular.module('fringeApp').controller('LoginModalCtrl', [
                 'longtitle': true,
                 'theme': 'dark',
                 'onsuccess': function(googleUser) {
-                    var profile = googleUser.getBasicProfile(),
-                        userId = 'g' + profile.getId();
+                    var profile = googleUser.getBasicProfile();
 
                     $scope.$apply(function() {
                         $scope.signingIn = true;
                     });
 
-                    UserData.load(userId).then(function() {
-                        $uibModalInstance.close({id: userId, name: profile.getName()});
+                    User.signIn(googleUser.getAuthResponse().id_token).then(function() {
+                        $uibModalInstance.close(profile.getName());
                     }, function() {
                         $uibModalInstance.dismiss();
                         Error.error('Unable to retrieve data from server', 'Please wait a moment and try again.');

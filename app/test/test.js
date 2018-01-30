@@ -1,7 +1,7 @@
 angular.module('fringeApp').component('test', {
     templateUrl: 'app/test/test.html',
-    controller: ['$scope', 'UserData', function($scope, UserData) {
-        $scope.userData = UserData.export();
+    controller: ['$scope', 'User', function($scope, User) {
+        $scope.userData = User.export();
 
         $scope.import = function(data) {
             var base = {
@@ -13,8 +13,8 @@ angular.module('fringeApp').component('test', {
             };
 
             data = angular.extend({}, base, data);
-            UserData.import(JSON.stringify(data));
-            $scope.userData = UserData.export();
+            User.import(JSON.stringify(data));
+            $scope.userData = User.export();
         };
 
         $scope.testData = {

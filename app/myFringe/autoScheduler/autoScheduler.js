@@ -1,8 +1,8 @@
 angular.module('fringeApp').component('myFringeAutoScheduler', {
     templateUrl: 'app/myFringe/autoScheduler/autoScheduler.html',
     controller: [
-        '$scope', '$q', '$timeout', '$uibModal', '$location', 'Data', 'Schedule', 'UserData', 'Availability', 'Configuration', 'Plurals',
-        function($scope, $q, $timeout, $uibModal, $location, Data, Schedule, UserData, Availability, Configuration, Plurals) {
+        '$scope', '$q', '$timeout', '$uibModal', '$location', 'Data', 'Schedule', 'User', 'Availability', 'Configuration', 'Plurals',
+        function($scope, $q, $timeout, $uibModal, $location, Data, Schedule, User, Availability, Configuration, Plurals) {
             $scope.plurals = Plurals;
             $scope.moment = moment;
             $scope.interestText = Configuration.interestText;
@@ -175,13 +175,13 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                 }, 500);
             };
 
-            if (! UserData.getSettings().autoScheduleIntroComplete) {
+            if (! User.getSettings().autoScheduleIntroComplete) {
                 $scope.screen = 'intro';
 
                 $scope.completeIntro = function() {
-                    var settings = UserData.getSettings();
+                    var settings = User.getSettings();
                     settings.autoScheduleIntroComplete = true;
-                    UserData.setSettings(settings);
+                    User.setSettings(settings);
 
                     analyze();
                 };

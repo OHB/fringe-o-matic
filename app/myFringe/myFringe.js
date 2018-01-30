@@ -1,6 +1,6 @@
 angular.module('fringeApp').component('myFringe', {
     templateUrl: 'app/myFringe/myFringe.html',
-    controller: ['$scope', '$route', '$routeParams', 'Schedule', 'UserData', 'Configuration', 'Plurals', function($scope, $route, $routeParams, Schedule, UserData, Configuration, Plurals) {
+    controller: ['$scope', '$route', '$routeParams', 'Schedule', 'User', 'Configuration', 'Plurals', function($scope, $route, $routeParams, Schedule, User, Configuration, Plurals) {
         $scope.plurals = Plurals;
         $scope.tabs = {
             activeTab: 'Schedule'
@@ -33,7 +33,7 @@ angular.module('fringeApp').component('myFringe', {
             }
         };
 
-        $scope.userData = {schedule: UserData.getSchedule()};
+        $scope.userData = {schedule: User.getSchedule()};
 
         $scope.$watch('userData.schedule', update);
 

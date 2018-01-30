@@ -1,14 +1,14 @@
-angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserData', 'Data', 'Availability', 'Sorters', function($q, Configuration, UserData, Data, Availability, Sorters) {
+angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'User', 'Data', 'Availability', 'Sorters', function($q, Configuration, User, Data, Availability, Sorters) {
     var self = this;
 
     this.getSchedule = function() {
-        return UserData.getSchedule();
+        return User.getSchedule();
     };
     this.getShowDesire = function(showId) {
-        return UserData.getPreferences()[showId] || 0;
+        return User.getPreferences()[showId] || 0;
     };
     this.setShowDesire = function(showId, desire) {
-        var preferences = UserData.getPreferences();
+        var preferences = User.getPreferences();
 
         if (desire === 0) {
             delete preferences[showId];
@@ -16,19 +16,19 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
             preferences[showId] = desire;
         }
 
-        UserData.setPreferences(preferences);
+        User.setPreferences(preferences);
     };
     this.getDesiredShows = function() {
-        return Object.keys(UserData.getPreferences()).filter(function(showId) {
+        return Object.keys(User.getPreferences()).filter(function(showId) {
             return self.getShowDesire(showId) > 0;
         });
     };
 
     this.add = function(performanceId) {
-        var schedule = UserData.getSchedule();
+        var schedule = User.getSchedule();
         if (schedule.indexOf(performanceId) === -1) {
             schedule.push(performanceId);
-            UserData.setSchedule(schedule);
+            User.setSchedule(schedule);
         }
 
         this.removeMaybe(performanceId);
@@ -36,40 +36,40 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
     this.remove = function(performanceId) {
         this.removeMaybe(performanceId);
 
-        var schedule = UserData.getSchedule();
+        var schedule = User.getSchedule();
         schedule.remove(performanceId);
-        UserData.setSchedule(schedule);
+        User.setSchedule(schedule);
     };
 
     this.addMaybe = function(performanceId) {
         this.remove(performanceId);
 
-        var maybes = UserData.getMaybes();
+        var maybes = User.getMaybes();
         if (maybes.indexOf(performanceId) === -1) {
             maybes.push(performanceId);
-            UserData.setMaybes(maybes);
+            User.setMaybes(maybes);
         }
     };
     this.removeMaybe = function(performanceId) {
-        var maybes = UserData.getMaybes();
+        var maybes = User.getMaybes();
         maybes.remove(performanceId);
-        UserData.setMaybes(maybes);
+        User.setMaybes(maybes);
     };
 
     this.getSortedSchedule = function() {
         var performances = Data.getPerformances();
 
-        return UserData.getSchedule().sort(function(a, b) {
+        return User.getSchedule().sort(function(a, b) {
             return Sorters.performance(performances[a], performances[b]);
         });
     };
 
     this.isUserAttendingPerformance = function(performanceId) {
-        return UserData.getSchedule().indexOf(performanceId) > -1;
+        return User.getSchedule().indexOf(performanceId) > -1;
     };
 
     this.isUserMaybeAttendingPerformance = function(performanceId) {
-        return UserData.getMaybes().indexOf(performanceId) > -1;
+        return User.getMaybes().indexOf(performanceId) > -1;
     };
 
     this.getPerformanceScheduleState = function(performanceId) {
@@ -77,7 +77,7 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
     };
 
     this.getPerformancesAttending = function() {
-        return UserData.getSchedule();
+        return User.getSchedule();
     };
 
     this.getShowsAttending = function() {
@@ -98,7 +98,7 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'UserDat
             shows = Data.getShows(),
             venueDistances = Data.getVenueDistances(),
             possiblePerformances = [],
-            userSchedule = UserData.getSchedule(),
+            userSchedule = User.getSchedule(),
             i = 0,
             now = Date.now() / 1000;
 

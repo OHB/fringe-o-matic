@@ -1,8 +1,8 @@
 angular.module('fringeApp').component('shows', {
     templateUrl: 'app/shows/shows.html',
     controller: [
-        '$scope', '$window', '$timeout', '$filter', '$routeParams', 'debounce', 'Data', 'UserData', 'Plurals', 'Schedule',
-        function($scope, $window, $timeout, $filter, $routeParams, debounce, Data, UserData, Plurals, Schedule) {
+        '$scope', '$window', '$timeout', '$filter', '$routeParams', 'debounce', 'Data', 'User', 'Plurals', 'Schedule',
+        function($scope, $window, $timeout, $filter, $routeParams, debounce, Data, User, Plurals, Schedule) {
             $scope.moment = moment;
             $scope.plurals = Plurals;
             $scope.allShowPerformances = {};
@@ -10,7 +10,7 @@ angular.module('fringeApp').component('shows', {
             $scope.isFringeOngoing = Data.isFringeOngoing();
 
             $scope.userData = {
-                preferences: UserData.getPreferences()
+                preferences: User.getPreferences()
             };
 
             $scope.shows = Data.getShows();
@@ -32,7 +32,7 @@ angular.module('fringeApp').component('shows', {
 
                 $scope.performanceCounts[showId] = availablePerformances.length;
 
-                if (UserData.isSignedIn()) {
+                if (User.isSignedIn()) {
                     $scope.canAttendShow[showId] = false;
 
                     angular.forEach(show.performances, function(performanceId) {

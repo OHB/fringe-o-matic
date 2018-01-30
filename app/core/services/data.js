@@ -1,6 +1,5 @@
 angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function($http, $q, Sorters) {
-    var filename = 'api/getData.php',
-        data,
+    var data,
         fringeStart,
         fringeStop,
         showSlugs,
@@ -9,14 +8,13 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
 
     this.load = function() {
         var deferred = $q.defer();
-        $http.get(filename, {cache: true}).then(function(result) {
+        $http.get('api/data.json').then(function(result) {
             data = result.data;
 
             var days = Object.keys(data.availabilitySlots);
             fringeStart = Math.min.apply(null, days);
             fringeStop = Math.max.apply(null, days);
 
-            console.log('Data loaded');
             deferred.resolve();
         }, function() {
             deferred.reject();

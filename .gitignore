@@ -1,3 +1,4 @@
 .idea
-userData/*
-deploy/
+deploy
+composer.phar
+vendor

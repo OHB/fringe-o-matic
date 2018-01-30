@@ -1,8 +1,8 @@
 angular.module('fringeApp').controller('CoreCtrl', [
     '$rootScope', '$scope', '$route', '$location', '$timeout', '$window', '$q', '$aside', '$uibModal',
-    'Data', 'Menu', 'UserData', 'Error', 'Configuration',
-    function($rootScope, $scope, $route, $location, $timeout, $window, $q, $aside, $uibModal, Data, Menu, UserData, Error, Configuration) {
-        UserData.onSave(function(promise) {
+    'Data', 'Menu', 'User', 'Error', 'Configuration',
+    function($rootScope, $scope, $route, $location, $timeout, $window, $q, $aside, $uibModal, Data, Menu, User, Error, Configuration) {
+        User.onSave(function(promise) {
             promise.then(function() {}, function() {
                 Error.error('Unable to save data to the server.', 'Have you lost your internet connection?');
             });
@@ -30,10 +30,10 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 controller: 'LoginModalCtrl',
                 size: 'md'
             });
-            modalInstance.result.then(function(user) {
+            modalInstance.result.then(function(name) {
                 $scope.signedIn = true;
-                $scope.signedInName = user.name;
-                $scope.isUserAdmin = Configuration.adminUsers.indexOf(user.id) > -1;
+                $scope.signedInName = name;
+                $scope.isUserAdmin = User.getAccount().isAdmin;
 
                 if ($location.path() === '/') {
                     $location.path('/my-fringe');
@@ -56,13 +56,14 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 var googleAuth = gapi.auth2.getAuthInstance();
 
                 if (googleAuth.isSignedIn.get()) {
-                    var profile = googleAuth.currentUser.get().getBasicProfile(),
-                        userId = 'g' + profile.getId();
+                    var profile = googleAuth.currentUser.get().getBasicProfile();
 
-                    $scope.signedIn = true;
-                    $scope.signedInName = profile.getName();
-                    $scope.isUserAdmin = Configuration.adminUsers.indexOf(userId) > -1;
-                    UserData.load(userId).then(signInCheck.resolve);
+                    return User.signIn(googleAuth.currentUser.get().getAuthResponse().id_token).then(function() {
+                        $scope.signedIn = true;
+                        $scope.signedInName = profile.getName();
+                        $scope.isUserAdmin = User.getAccount().isAdmin;
+                        signInCheck.resolve();
+                    }, signInCheck.reject);
                 } else {
                     $scope.signedIn = false;
                     signInCheck.resolve();
@@ -83,7 +84,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
         $scope.signOut = function() {
             gapi.auth2.getAuthInstance().signOut().then(function () {
                 $scope.$apply(function() {
-                    UserData.reset();
+                    User.signOut();
                     $scope.isUserAdmin = false;
                     $scope.signedIn = false;
 

@@ -1,5 +1,5 @@
 angular.module('fringeApp')
-    .service('GoogleCalendarSync', ['Data', 'Schedule', 'UserData', '$q', 'debounce', function(Data, Schedule, UserData, $q, debounce) {
+    .service('GoogleCalendarSync', ['Data', 'Schedule', 'User', '$q', 'debounce', function(Data, Schedule, User, $q, debounce) {
         var self = this,
             calendarScope = 'https://www.googleapis.com/auth/calendar',
             onSyncStartFn = function() {},
@@ -8,7 +8,7 @@ angular.module('fringeApp')
             };
 
         var getSyncCalendarId = function() {
-            var settings = UserData.getSettings();
+            var settings = User.getSettings();
 
             return settings.googleCalendarSyncId || null;
         };
@@ -165,16 +165,16 @@ angular.module('fringeApp')
         };
 
         this.setupInExisting = function(calendarId) {
-            var settings = UserData.getSettings();
+            var settings = User.getSettings();
             settings.googleCalendarSyncId = calendarId;
-            UserData.setSettings(settings);
+            User.setSettings(settings);
 
             return sync();
         };
 
         this.disconnect = function() {
-            var settings = UserData.getSettings();
+            var settings = User.getSettings();
             delete settings.googleCalendarSyncId;
-            UserData.setSettings(settings);
+            User.setSettings(settings);
         };
     }]);

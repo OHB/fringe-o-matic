@@ -1,24 +1,24 @@
-angular.module('fringeApp').service('Availability', ['UserData', function(UserData) {
+angular.module('fringeApp').service('Availability', ['User', function(User) {
     this.isSlotAvailable = function(slot) {
-        return UserData.getUnavailability().indexOf(slot) === -1;
+        return User.getUnavailability().indexOf(slot) === -1;
     };
 
     this.setSlotAvaialble = function(slot) {
-        var unavailability = UserData.getUnavailability();
+        var unavailability = User.getUnavailability();
         unavailability.remove(slot);
-        UserData.setUnavailability(unavailability);
+        User.setUnavailability(unavailability);
     };
 
     this.setSlotUnavailable = function(slot) {
         if (this.isSlotAvailable(slot)) {
-            var unavailability = UserData.getUnavailability();
+            var unavailability = User.getUnavailability();
             unavailability.push(slot);
-            UserData.setUnavailability(unavailability);
+            User.setUnavailability(unavailability);
         }
     };
 
     this.isUserAvailable = function(startTime, stopTime) {
-        var unavailability = UserData.getUnavailability(),
+        var unavailability = User.getUnavailability(),
             i = unavailability.length;
 
         while (i--) {

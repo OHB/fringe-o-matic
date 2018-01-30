@@ -1,6 +1,6 @@
 angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
-    '$uibModalInstance', '$scope', '$timeout', 'Configuration', 'Data', 'Schedule', 'UserData', 'generatorFactory', 'Plurals',
-    function($uibModalInstance, $scope, $timeout, Configuration, Data, Schedule, UserData, generatorFactory, Plurals) {
+    '$uibModalInstance', '$scope', '$timeout', 'Configuration', 'Data', 'Schedule', 'User', 'generatorFactory', 'Plurals',
+    function($uibModalInstance, $scope, $timeout, Configuration, Data, Schedule, User, generatorFactory, Plurals) {
         var config, data, sortedShows;
 
         $scope.moment = moment;
@@ -8,9 +8,9 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
         $scope.infoMessages = Configuration.generatorMessages;
         $scope.isUserAttendingPerformance = Schedule.isUserAttendingPerformance;
 
-        $scope.userData = {settings: UserData.getSettings(), preferences: UserData.getPreferences()};
+        $scope.userData = {settings: User.getSettings(), preferences: User.getPreferences()};
         $scope.$watch('userData.settings', function() {
-            UserData.setSettings($scope.userData.settings);
+            User.setSettings($scope.userData.settings);
         });
 
         var processGeneratedSchedule = function(schedule, conflicts) {

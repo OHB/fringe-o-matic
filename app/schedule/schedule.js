@@ -1,13 +1,13 @@
 angular.module('fringeApp').component('schedule', {
     templateUrl: 'app/schedule/schedule.html',
-    controller: ['$scope', '$timeout', '$location', '$routeParams', 'UserData', 'Data', 'Schedule', 'Availability', 'Plurals',
-        function($scope, $timeout, $location, $routeParams, UserData, Data, Schedule, Availability, Plurals) {
-            $scope.signedIn = UserData.isSignedIn();
+    controller: ['$scope', '$timeout', '$location', '$routeParams', 'User', 'Data', 'Schedule', 'Availability', 'Plurals',
+        function($scope, $timeout, $location, $routeParams, User, Data, Schedule, Availability, Plurals) {
+            $scope.signedIn = User.isSignedIn();
             $scope.moment = moment;
             $scope.plurals = Plurals;
 
-            $scope.settings = {scheduleMode: UserData.getSettings().scheduleMode};
-            $scope.preferences = UserData.getPreferences();
+            $scope.settings = {scheduleMode: User.getSettings().scheduleMode};
+            $scope.preferences = User.getPreferences();
 
             var desiredDay;
             if ($routeParams.param1) {
@@ -98,9 +98,9 @@ angular.module('fringeApp').component('schedule', {
             };
 
             $scope.$watch('settings', function() {
-                var settings = UserData.getSettings();
+                var settings = User.getSettings();
                 settings.scheduleMode = $scope.settings.scheduleMode;
-                UserData.setSettings(settings);
+                User.setSettings(settings);
                 updatePath();
                 refresh();
             }, true);

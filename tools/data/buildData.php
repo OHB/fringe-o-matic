@@ -1,13 +1,7 @@
 <?php
 ob_start("ob_gzhandler");
 
-header('Content-type: application/json');
-if (! isset($_REQUEST['refresh']) && file_exists('cache.json')) {
-    echo file_get_contents('cache.json');
-    exit;
-}
-
-$dateModifier = (60 * 60 * 24 * 7 * 37) + (60 * 60);
+$dateModifier = (60 * 60 * 24 * 7 * 38) + (60 * 60);
 
 $showsToSuppress = range(164, 185);
 $colorVenues = [11, 2, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 23];
@@ -223,12 +217,12 @@ foreach ($json as $showId => $show) {
         $event[$key] = $value;
     }
 
-    if (isset($event['image']) && (! file_exists('../img/show/' . $event['image']) || ! filesize('../img/show/' . $event['image']))) {
+    if (isset($event['image']) && (! file_exists('../../img/show/' . $event['image']) || ! filesize('../../img/show/' . $event['image']))) {
         $file = file_get_contents('https://orlandofringe.showare.com/uplimage/' . str_replace(' ', '%20', $event['image']));
         if (! $file) {
             print_r($event);exit;
         }
-        if (! file_put_contents('../img/show/' . $event['image'], $file)) {
+        if (! file_put_contents('../../img/show/' . $event['image'], $file)) {
             print_r($event);exit;
         }
     }
@@ -306,10 +300,7 @@ $json = json_encode([
     'availabilitySlotsAll' => $availabilitySlotsAll,
 ], JSON_UNESCAPED_UNICODE + JSON_UNESCAPED_SLASHES);
 
-file_put_contents('cache.json', $json);
-
-echo $json;
-
+file_put_contents(__DIR__ . '/../../api/data.json', $json);
 
 
 function parse_csv ($csv_string, $delimiter = ",", $skip_empty_lines = true, $trim_fields = true)
