@@ -7,6 +7,8 @@ click another, it works.
 related to url update
 push state?
 
+remove help? (affix, bs modal)
+
 move to an actual database
 generate user hash
 generate user id (short, easy to relate for support)

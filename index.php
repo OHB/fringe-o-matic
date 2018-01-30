@@ -1,6 +1,23 @@
 <?php
-$build = json_decode(file_get_contents('build.json'));
-ob_start("ob_gzhandler");
+if (isset($_REQUEST['compile']) || isset($COMPILE)) {
+    $css = ['compiled.css'];
+    $js = ['compiled.js'];
+    $templates = function() {
+        echo file_get_contents(__DIR__ . '/tools/templates.html');
+    };
+} else {
+    $build = json_decode(file_get_contents('tools/build.json'));
+    $css = $build->css;
+    $js = $build->js;
+
+    $templates = function() use ($build) {
+        foreach ($build->templates as $filename) {
+            echo '<script type="text/ng-template" id="' . $filename . '">'
+                . file_get_contents(__DIR__ . '/' . $filename)
+                . '</script>';
+        }
+    };
+}
 ?><!DOCTYPE html>
 <html ng-app="fringeApp">
 <head>
@@ -10,8 +27,8 @@ ob_start("ob_gzhandler");
     <base href="/">
     <title>Fringe-o-Matic</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <?php foreach (isset($_REQUEST['compiled']) ? ['compiled.css'] : $build->css as $script) { ?>
-        <link rel="stylesheet" type="text/css" href="<?php echo $script; ?>" />
+    <?php foreach ($css as $filename) { ?>
+        <link rel="stylesheet" type="text/css" href="<?php echo $filename; ?>" />
     <?php } ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-motion/0.4.4/angular-motion.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
@@ -53,9 +70,9 @@ ob_start("ob_gzhandler");
                 <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
                     <a href="/test">Testing</a>
                 </li>
-                <li><a href ng-click="openHelp()">
-                        <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>
-                    </a>
+                <!--                <li><a href ng-click="openHelp()">-->
+                <!--                        <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>-->
+                <!--                    </a>-->
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak>
@@ -106,15 +123,7 @@ ob_start("ob_gzhandler");
             <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>
     </div>
 </footer>
-<?php
-if (isset($_REQUEST['compiled'])) {
-    echo file_get_contents('templates.html');
-}
-foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?>
-    <script type="text/ng-template" id="<?php echo $filename; ?>">
-    <?php echo file_get_contents($filename); ?>
-    </script>
-<?php } ?>
+<?php $templates(); ?>
 <script type="text/javascript">
     document.body.className += ' js';
 </script>
@@ -143,9 +152,8 @@ foreach (isset($_REQUEST['compiled']) ? [] : $build->templates as $filename) { ?
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys"></script>
 <script src="https://apis.google.com/js/api.js"></script>
-<?php foreach (isset($_REQUEST['compiled']) ? ['compiled.js'] : $build->js as $script) { ?>
-<script src="<?php echo $script; ?>"></script>
+<?php foreach ($js as $script) { ?>
+    <script src="<?php echo $script; ?>"></script>
 <?php } ?>
 </body>
 </html>
-<?php file_put_contents('index.html', ob_get_contents());

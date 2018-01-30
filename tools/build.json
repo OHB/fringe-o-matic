@@ -66,5 +66,14 @@
     "app/shows/shows.js",
     "app/venues/venues.js",
     "app/test/test.js"
+  ],
+  "copyFolders": [
+    "api",
+    "img",
+    "pages"
+  ],
+  "rootIgnoreFiles": [
+    ".gitignore",
+    "index.php"
   ]
 }
