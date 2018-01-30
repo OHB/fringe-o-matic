@@ -3,7 +3,13 @@ $build = json_decode(file_get_contents(__DIR__ . '/build.json'));
 
 header('Content-type: text/plain');
 
+echo "Clearing target...\n";
 rrmdir(__DIR__ . '/../deploy');
+
+if (is_dir(__DIR__ . '/../vendor/google/apiclient-services')) {
+    echo "Cleaning vendor...\n";
+    rrmdir(__DIR__ . '/../vendor/google/apiclient-services');
+}
 
 foreach ($build->copyFolders as $folder) {
     echo "Copying folder {$folder}...\n";
