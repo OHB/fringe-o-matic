@@ -227,7 +227,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
             size: $scope.populationSize,
             crossover: $scope.crossoverRate,
             mutation: $scope.mutationRate,
-            skip: Math.ceil((($scope.generationCount * $scope.populationSize) - (500*500)) / 920000) + 2,
+            skip: Math.ceil((($scope.generationCount * $scope.populationSize) - (500*500)) / 460000) + 2,
             maxResults: 1
         };
         data = {

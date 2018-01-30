@@ -174,7 +174,7 @@ angular.module('fringeApp')
 
         this.disconnect = function() {
             var settings = User.getSettings();
-            delete settings.googleCalendarSyncId;
+            settings.googleCalendarSyncId = null;
             User.setSettings(settings);
         };
     }]);

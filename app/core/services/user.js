@@ -73,15 +73,15 @@ angular.module('fringeApp').service('User', ['$q', '$http', 'debounce', function
         return data.account.privateHash !== undefined;
     };
 
-    // this.export = function() {
-    //     return JSON.stringify(data);
-    // };
-    //
-    // this.import = function(input) {
-    //     data = JSON.parse(input);
-    //     this.save();
-    // };
-    //
+    this.export = function() {
+        return JSON.stringify(data);
+    };
+
+    this.import = function(input) {
+        data = JSON.parse(input);
+        this.save();
+    };
+
     this.onSave = function(fn) {
         onSave = fn;
     };

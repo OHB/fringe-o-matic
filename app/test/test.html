@@ -7,7 +7,7 @@
     <h3>Current User Data</h3>
     <pre class="well" style="word-wrap: break-word; overflow-wrap: break-word; white-space: initial;">{{userData}}</pre>
     <h3>Set User Data</h3>
-    <p>
-        <button class="btn btn-primary" ng-repeat="(name, data) in testData" ng-click="import(data)" style="margin-right:5px">{{name}}</button>
+    <p ng-repeat="group in testData">
+        <button class="btn btn-primary" ng-repeat="(name, data) in group" ng-click="import(data)" style="margin-right:5px">{{name}}</button>
     </p>
 </div>

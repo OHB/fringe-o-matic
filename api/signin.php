@@ -139,6 +139,6 @@ echo json_encode([
     'settings' => $settings,
     'schedule' => $schedule,
     'maybe' => $maybe,
-    'preferences' => $interests,
+    'preferences' => (object) $interests,
     'unavailability' => $unavailability
 ]);

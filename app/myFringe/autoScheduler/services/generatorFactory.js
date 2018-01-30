@@ -15,14 +15,13 @@ angular.module('fringeApp').factory('generatorFactory', function() {
         };
 
         genetic.mutate = function mutate(schedule) {
-            var toMake = 2;
+            var toMake = Math.random() * 5 > 4 ? 2 : 1;
 
             while (toMake --) {
                 var idx = Math.floor(Math.random() * schedule.length),
                     performances = this.userData.shows[this.userData.performances[schedule[idx]].show].performances;
 
                 schedule[idx] = performances[Math.floor(Math.random() * performances.length)];
-                toMake --;
             }
 
             return schedule;
