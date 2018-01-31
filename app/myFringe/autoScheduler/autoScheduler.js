@@ -1,8 +1,8 @@
 angular.module('fringeApp').component('myFringeAutoScheduler', {
     templateUrl: 'app/myFringe/autoScheduler/autoScheduler.html',
     controller: [
-        '$scope', '$q', '$timeout', '$uibModal', '$location', 'Data', 'Schedule', 'User', 'Availability', 'Configuration', 'Plurals',
-        function($scope, $q, $timeout, $uibModal, $location, Data, Schedule, User, Availability, Configuration, Plurals) {
+        '$scope', '$q', '$timeout', '$uibModal', '$location', 'Data', 'Schedule', 'User', 'Availability', 'Configuration', 'Plurals', '$analytics',
+        function($scope, $q, $timeout, $uibModal, $location, Data, Schedule, User, Availability, Configuration, Plurals, $analytics) {
             $scope.plurals = Plurals;
             $scope.moment = moment;
             $scope.interestText = Configuration.interestText;
@@ -15,6 +15,7 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     schedule = Schedule.getSchedule();
 
                 if (! desiredShows.length) {
+                    $analytics.eventTrack('Show Screen', {category: 'Auto-Scheduler', label: 'No Interests'});
                     return 'no-interests';
                 }
 
@@ -52,6 +53,8 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                         $location.path('/my-fringe');
                     }
 
+                    $analytics.eventTrack('Show Screen', {category: 'Auto-Scheduler', label: 'Schedule Full'});
+
                     return 'schedule-full';
                 }
 
@@ -60,6 +63,8 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     if (generateRun) {
                         $location.path('/my-fringe');
                     }
+
+                    $analytics.eventTrack('Show Screen', {category: 'Auto-Scheduler', label: 'Schedule Full'});
 
                     return 'schedule-complete';
                 }
@@ -73,6 +78,8 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     if (generateRun) {
                         $location.path('/my-fringe');
                     }
+
+                    $analytics.eventTrack('Show Screen', {category: 'Auto-Scheduler', label: 'No Possible Desired'});
 
                     return 'no-possible-desired';
                 }
@@ -125,6 +132,8 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
 
                 if (possibleInstantAddPerformances.length) {
                     $scope.instantAddPerformances = possibleInstantAddPerformances;
+                    $analytics.eventTrack('Show Screen', {category: 'Auto-Scheduler', label: 'Instant Add'});
+
                     return 'instant-add';
                 }
 
@@ -133,6 +142,8 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                 if (generateRun) {
                     return 'done';
                 }
+
+                $analytics.eventTrack('Show Screen', {category: 'Auto-Scheduler', label: 'Generator'});
 
                 return 'generator';
             };

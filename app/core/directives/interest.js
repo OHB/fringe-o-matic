@@ -6,7 +6,7 @@ angular.module('fringeApp').directive('interest', function() {
             desire: '='
         },
         template: function(elem, attr) {
-            var clickable = attr.showId !== undefined && !navigator.onLine,
+            var clickable = attr.showId !== undefined && navigator.onLine,
                 html = '<span';
 
             if (! clickable) {
@@ -30,7 +30,7 @@ angular.module('fringeApp').directive('interest', function() {
 
             return html;
         },
-        controller: ['$scope', 'Schedule', 'Configuration', function($scope, Schedule, Configuration) {
+        controller: ['$scope', 'Schedule', 'Configuration', '$analytics', function($scope, Schedule, Configuration, $analytics) {
             var hoveredOver;
 
             $scope.interestText = Configuration.interestText;
@@ -44,6 +44,7 @@ angular.module('fringeApp').directive('interest', function() {
             };
 
             $scope.click = function(i) {
+                $analytics.eventTrack('Click', {category: 'Interest'});
                 Schedule.setShowDesire($scope.showId, i === $scope.get() ? 0 : i);
             };
 

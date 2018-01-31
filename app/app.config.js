@@ -240,4 +240,10 @@ angular.module('fringeApp')
                     template: '<test></test>'
                 }).otherwise({redirectTo: '/'});
         }
-    ]);
+    ])
+    .config(['$analyticsProvider', function($analyticsProvider) {
+        $analyticsProvider.trackExceptions(true);
+        if (ENVIRONMENT === 'dev') {
+            $analyticsProvider.developerMode(true);
+        }
+    }]);

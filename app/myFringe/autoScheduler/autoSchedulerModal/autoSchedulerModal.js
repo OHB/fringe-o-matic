@@ -1,6 +1,6 @@
 angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
-    '$uibModalInstance', '$scope', '$timeout', 'Configuration', 'Data', 'Schedule', 'User', 'generatorFactory', 'Plurals',
-    function($uibModalInstance, $scope, $timeout, Configuration, Data, Schedule, User, generatorFactory, Plurals) {
+    '$uibModalInstance', '$scope', '$timeout', 'Configuration', 'Data', 'Schedule', 'User', 'generatorFactory', 'Plurals', '$analytics',
+    function($uibModalInstance, $scope, $timeout, Configuration, Data, Schedule, User, generatorFactory, Plurals, $analytics) {
         var config, data, sortedShows;
 
         $scope.moment = moment;
@@ -11,6 +11,10 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
         $scope.userData = {settings: User.getSettings(), preferences: User.getPreferences()};
         $scope.$watch('userData.settings', function() {
             User.setSettings($scope.userData.settings);
+            $analytics.eventTrack({
+                category: 'Auto-Scheduler',
+                label: ($scope.userData.settings.displaySchedulerStats ? 'Show' : 'Hide') + ' Stats'
+            });
         });
 
         var processGeneratedSchedule = function(schedule, conflicts) {
@@ -87,6 +91,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
                         processGeneratedSchedule(best.entity, bestDetails.conflicts);
                     }, 750);
                     disableMessageRotation();
+                    $analytics.eventTrack('Complete', {category: 'Auto-Scheduler'});
                 } else {
                     $scope.progress = (best.fitness - bestDetails.extraPoints) / $scope.idealFitness * 90;
                     $scope.progress += (generation / $scope.generationCount) * 10;
@@ -139,6 +144,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
             $scope.done = false;
             $scope.currentMessage = 0;
             $timeout(run, 500);
+            $analytics.eventTrack('Start', {category: 'Auto-Scheduler'});
         };
 
         $scope.stop = function() {
@@ -148,15 +154,18 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
             $timeout(function() {
                 processGeneratedSchedule($scope.bestSchedule, $scope.bestConflicts);
             }, 1000);
+            $analytics.eventTrack('Stop', {category: 'Auto-Scheduler'});
         };
 
         $scope.restart = function() {
             disableMessageRotation();
             generator.stop();
+            $analytics.eventTrack('Restart', {category: 'Auto-Scheduler'});
             $scope.start();
         };
 
         $scope.save = function() {
+            $analytics.eventTrack('Save', {category: 'Auto-Scheduler'});
             angular.forEach($scope.accept, function(value, key) {
                 if (value === true) {
                     Schedule.add(key);
@@ -315,6 +324,8 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
         $scope.idealFitness = data.idealFitness;
 
         console.log("Generator Config: ", data);
+
+        $analytics.eventTrack('Open', {category: 'Auto-Scheduler'});
 
         $scope.start();
     }

@@ -54,7 +54,7 @@ String.prototype.localeCompareSmart = function(other) {
     });
 };
 
-angular.module('fringeApp', [
+var modules = [
     'ngAnimate',
     'ngRoute',
     'ui.bootstrap',
@@ -68,8 +68,15 @@ angular.module('fringeApp', [
     'mgcrea.ngStrap.tab',
     'mgcrea.ngStrap.tooltip',
     'ngMap',
-    'qImproved'
-]);
+    'qImproved',
+    'angulartics',
+    'angulartics.google.analytics'
+];
+
+if (ENVIRONMENT === 'dev') {
+    modules.push('angulartics.debug');
+}
+angular.module('fringeApp', modules);
 
 angular.module('fringeApp').run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {
     var original = $location.path;

@@ -1,8 +1,8 @@
 angular.module('fringeApp').component('myFringeAvailability', {
     templateUrl: 'app/myFringe/availability/availability.html',
     controller: [
-        '$scope', '$uibModal', '$timeout', 'Data', 'Schedule', 'Availability', 'Configuration',
-        function($scope, $uibModal, $timeout, Data, Schedule, Availability, Configuration) {
+        '$scope', '$uibModal', '$timeout', 'Data', 'Schedule', 'Availability', 'Configuration', '$analytics',
+        function($scope, $uibModal, $timeout, Data, Schedule, Availability, Configuration, $analytics) {
             var performances;
 
             $scope.moment = moment;
@@ -31,6 +31,7 @@ angular.module('fringeApp').component('myFringeAvailability', {
             };
 
             $scope.toggleAvailability = function(slot) {
+                $analytics.eventTrack('Change', {category: 'Availability'});
                 $scope.availability[slot] ? Availability.setSlotUnavailable(slot) : Availability.setSlotAvaialble(slot);
                 $scope.availability[slot] = ! $scope.availability[slot];
             };

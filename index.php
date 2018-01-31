@@ -1,5 +1,6 @@
 <?php
-if (isset($_REQUEST['compile']) || isset($COMPILE)) {
+$COMPILING = isset($_REQUEST['compile']) || isset($COMPILE);
+if ($COMPILING) {
     $css = ['compiled.css'];
     $js = ['compiled.js'];
     $templates = function() {
@@ -26,6 +27,14 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base href="/">
     <title>Fringe-o-Matic</title>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-113297473-1', '<?php echo $COMPILING ? 'auto' : 'none'; ?>');
+    </script>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <?php foreach ($css as $filename) { ?>
         <link rel="stylesheet" type="text/css" href="<?php echo $filename; ?>" />
@@ -83,7 +92,7 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
                     </ul>
                 </li>
                 <li ng-if="loaded" ng-controller="NotificationsCtrl">
-                    <a href ng-if="show" data-template-url="app/core/notifications/popover.html" data-auto-close="1" data-placement="bottom-right" bs-popover><i class="glyphicon glyphicon-bell"></i></a>
+                    <a href ng-if="show" data-template-url="app/core/notifications/popover.html" data-auto-close="1" data-placement="bottom-right" bs-popover analytics-on analytics-event="Open" analytics-category="Notifications"><i class="glyphicon glyphicon-bell"></i></a>
                 </li>
             </ul>
         </div>
@@ -127,6 +136,7 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
 <?php $templates(); ?>
 <script type="text/javascript">
     document.body.className += ' js';
+    ENVIRONMENT = '<?php echo $COMPILING ? 'prod' : 'dev'; ?>';
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vibrant.js/1.0.0/Vibrant.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
@@ -153,6 +163,11 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/1.5.0/angulartics.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics-google-analytics/0.4.0/angulartics-ga.min.js"></script>
+<?php if (! $COMPILING) { ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/1.5.0/angulartics-debug.min.js"></script>
+<?php } ?>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys"></script>
 <script src="https://apis.google.com/js/api.js"></script>
 <?php foreach ($js as $script) { ?>

@@ -1,6 +1,6 @@
 angular.module('fringeApp').component('venues', {
     templateUrl: 'app/venues/venues.html',
-    controller: ['$scope', 'Data', function($scope, Data) {
+    controller: ['$scope', 'Data', '$analytics', function($scope, Data, $analytics) {
         $scope.distanceCalc = {from: 0, to: undefined, driving: ''};
 
         $scope.getHostVenues = function(hostId) {
@@ -11,10 +11,18 @@ angular.module('fringeApp').component('venues', {
             });
         };
 
+        var first = 2;
         var updateDrivingCalc = function() {
             if (! $scope.distanceCalc.from || ! $scope.distanceCalc.to) {
                 return;
             }
+
+            if (! first) {
+                $analytics.eventTrack('Calculate Distance', {
+                    category: 'Venues',
+                    label: $scope.venues[$scope.distanceCalc.from.value].name + ' to ' + $scope.venues[$scope.distanceCalc.to.value].name});
+            }
+            first --;
 
             var list = [
                     $scope.venueHosts[$scope.venues[$scope.distanceCalc.from.value].host].driving,

@@ -1,5 +1,7 @@
 angular.module('fringeApp').controller('GoogleCalendarSyncSetupModalCtrl', [
-    '$uibModalInstance', '$scope', '$timeout', 'GoogleCalendarSync', function($uibModalInstance, $scope, $timeout, GoogleCalendarSync) {
+    '$uibModalInstance', '$scope', '$timeout', 'GoogleCalendarSync', '$analytics', function($uibModalInstance, $scope, $timeout, GoogleCalendarSync, $analytics) {
+
+        $analytics.eventTrack('Open', {category: 'Google Calendar Sync Modal'});
 
         var timeoutApply = function() {
             $timeout(function() {
@@ -21,7 +23,6 @@ angular.module('fringeApp').controller('GoogleCalendarSyncSetupModalCtrl', [
                     $scope.primaryCalendar = calendars.shift();
                     $scope.secondaryCalendars = calendars;
                 });
-
 
                 $scope.setupConfig = {
                     target: 'primary',
@@ -55,8 +56,10 @@ angular.module('fringeApp').controller('GoogleCalendarSyncSetupModalCtrl', [
                 promise = GoogleCalendarSync.setupInExisting($scope.primaryCalendar.id);
             } else if ($scope.setupConfig.secondary === 'NEW') {
                 promise = GoogleCalendarSync.setupInNew($scope.setupConfig.secondaryName);
+                $analytics.eventTrack('Setup New', {category: 'Google Calendar Sync Modal'});
             } else {
                 promise = GoogleCalendarSync.setupInExisting($scope.setupConfig.secondary);
+                $analytics.eventTrack('Setup Existing', {category: 'Google Calendar Sync Modal'});
             }
 
             promise.then(function() {
@@ -67,6 +70,7 @@ angular.module('fringeApp').controller('GoogleCalendarSyncSetupModalCtrl', [
                     });
                 });
             }, function() {
+                $analytics.eventTrack('Setup Failure', {category: 'Google Calendar Sync Modal'});
                 refresh();
             }, function(notification) {
                 $scope.progress = notification.progress;
@@ -76,6 +80,7 @@ angular.module('fringeApp').controller('GoogleCalendarSyncSetupModalCtrl', [
         };
 
         $scope.turnOff = function() {
+            $analytics.eventTrack('Disconnect', {category: 'Google Calendar Sync Modal'});
             GoogleCalendarSync.disconnect();
             $scope.close();
         };

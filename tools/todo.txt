@@ -10,6 +10,7 @@ push state?
 BUG
 can't click back after going to My Fringe
 
+get rid of show-rating directive
 
 css instead of innerHeight
 

@@ -1,6 +1,6 @@
 angular.module('fringeApp').controller('CoreCtrl', [
-    '$rootScope', '$scope', '$route', '$location', '$window', '$q', '$uibModal', '$alert', 'Data', 'Menu', 'User', 'Error',
-    function($rootScope, $scope, $route, $location, $window, $q, $uibModal, $alert, Data, Menu, User, Error) {
+    '$rootScope', '$scope', '$route', '$location', '$window', '$q', '$uibModal', '$alert', 'Data', 'Menu', 'User', 'Error', '$analytics',
+    function($rootScope, $scope, $route, $location, $window, $q, $uibModal, $alert, Data, Menu, User, Error, $analytics) {
         User.onSave(function(promise) {
             promise.then(function() {}, function() {
                 Error.error('Unable to save data to the server.', 'Have you lost your internet connection?');
@@ -24,6 +24,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
         });
 
         $scope.signIn = function() {
+            $analytics.eventTrack('Open', {category: 'User', label: 'Sign In Modal'});
             var modalInstance = $uibModal.open({
                 templateUrl: 'app/core/loginModal/loginModal.html',
                 controller: 'LoginModalCtrl',
@@ -33,6 +34,8 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 $scope.signedIn = true;
                 $scope.signedInName = name;
                 $scope.isUserAdmin = User.getAccount().isAdmin;
+                $analytics.eventTrack('Sign In', {category: 'User'});
+                $analytics.setUsername(User.getAccount().privateHash);
 
                 if ($location.path() === '/') {
                     $location.path('/my-fringe');
@@ -61,6 +64,8 @@ angular.module('fringeApp').controller('CoreCtrl', [
                         $scope.signedIn = true;
                         $scope.signedInName = profile.getName();
                         $scope.isUserAdmin = User.getAccount().isAdmin;
+                        $analytics.setUsername(User.getAccount().privateHash);
+                        $analytics.eventTrack('Sign In Auto', {category: 'User'});
                         signInCheck.resolve();
                     }, signInCheck.reject);
                 } else {
@@ -84,6 +89,8 @@ angular.module('fringeApp').controller('CoreCtrl', [
             gapi.auth2.getAuthInstance().signOut().then(function () {
                 $scope.$apply(function() {
                     User.signOut();
+                    $analytics.eventTrack('Sign Out', {category: 'User'});
+                    $analytics.setUsername(undefined);
                     $scope.isUserAdmin = false;
                     $scope.signedIn = false;
 

@@ -1,8 +1,8 @@
 angular.module('fringeApp').component('shows', {
     templateUrl: 'app/shows/shows.html',
     controller: [
-        '$scope', '$window', '$timeout', '$filter', '$routeParams', 'debounce', 'Data', 'User', 'Plurals', 'Schedule',
-        function($scope, $window, $timeout, $filter, $routeParams, debounce, Data, User, Plurals, Schedule) {
+        '$scope', '$window', '$timeout', '$filter', '$routeParams', 'debounce', 'Data', 'User', 'Plurals', 'Schedule', '$analytics',
+        function($scope, $window, $timeout, $filter, $routeParams, debounce, Data, User, Plurals, Schedule, $analytics) {
             $scope.moment = moment;
             $scope.plurals = Plurals;
             $scope.allShowPerformances = {};
@@ -119,9 +119,58 @@ angular.module('fringeApp').component('shows', {
                 }, 100);
             };
 
+            var trackKeywordFilter = debounce(function() {
+                $analytics.eventTrack('Filter by Keyword', {category: 'Shows', label: $scope.search});
+            }, 2000);
             $scope.searchTextEntered = debounce(function() {
+                trackKeywordFilter();
                 $scope.$apply($scope.refresh)
             }, 50);
+
+            $scope.venueSelected = function() {
+                if ($scope.selectedVenue !== '*') {
+                    $analytics.eventTrack('Filter by Venue', {category: 'Shows', label: $scope.venues[$scope.selectedVenue].name});
+                }
+                $scope.refresh();
+            };
+
+            $scope.ratingSelected = function() {
+                if ($scope.selectedRating !== '*') {
+                    $analytics.eventTrack('Filter by Rating', {
+                        category: 'Shows',
+                        label: $scope.ratings[$scope.selectedRating]
+                    });
+                }
+                $scope.refresh();
+            };
+
+            $scope.hideWithoutShowtimesSelected = function() {
+                if ($scope.hideWithoutShowtimes) {
+                    $analytics.eventTrack('Filter', {category: 'Shows', label: 'Hide shows with no performances'});
+                }
+                $scope.refresh();
+            };
+
+            $scope.hideNotInterestedSelected = function() {
+                if ($scope.hideNotInterested) {
+                    $analytics.eventTrack('Filter', {category: 'Shows', label: "Hide shows I'm not interested in"});
+                }
+                $scope.refresh();
+            };
+
+            $scope.hideNotAttendingSelected = function() {
+                if ($scope.hideNotAttending) {
+                    $analytics.eventTrack('Filter', {category: 'Shows', label: "Hide shows I'm not attending"});
+                }
+                $scope.refresh();
+            };
+
+            $scope.hideCantAttendSelected = function() {
+                if ($scope.hideCantAttend) {
+                    $analytics.eventTrack('Filter', {category: 'Shows', label: "Hide shows I can't see"});
+                }
+                $scope.refresh();
+            };
 
             $scope.clearSearch = function() {
                 $scope.search = '';

@@ -52,7 +52,7 @@
 <p class=lead>Your schedule can even be synced to Google Calendar or shared with friends.</p>
 <p class=lead>Registration is not required.</p>
 <br>
-<p><a class="btn btn-primary btn-lg" href role=button ng-click=getStarted()>Get Started</a></p>
+<p><button class="btn btn-primary btn-lg" role=button ng-click=getStarted() ng-disabled=getStartedDisabled analytics-on analytics-event=Click analytics-category=Home analytics-label="Get Started">Get Started</button></p>
 </div>
 </div>
 </div>
@@ -112,7 +112,7 @@ These venues are at the same location...so a minute, maybe?
 <span ng-show="distanceCalc.driving==''">Walk</span>
 </p>
 <p ng-show="distanceCalc.driving!=''">
-<a class="btn btn-default btn-sm pull-right" style=margin-right:6px href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalc.from.value].host].name}}, {{venueHosts[venues[distanceCalc.from.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalc.to.value].host].name}}, {{venueHosts[venues[distanceCalc.to.value].host].address.join(', ')}}&travelmode={{(distanceCalc.driving=='possible') ? 'walking' : 'driving'}}" target=_blank>Get Directions</a>
+<a class="btn btn-default btn-sm pull-right" style=margin-right:6px href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalc.from.value].host].name}}, {{venueHosts[venues[distanceCalc.from.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalc.to.value].host].name}}, {{venueHosts[venues[distanceCalc.to.value].host].address.join(', ')}}&travelmode={{(distanceCalc.driving=='possible') ? 'walking' : 'driving'}}" target=_blank analytics-on analytics-event=Click analytics-category=Venues analytics-label="Get Directions">Get Directions</a>
 </p>
 </div>
 </div>
@@ -121,7 +121,7 @@ These venues are at the same location...so a minute, maybe?
 <div class=row ng-repeat="(hostId, host) in venueHosts">
 <hr ng-if="! $first">
 <div class=col-md-8>
-<a class="btn btn-default btn-sm pull-right" style="margin:0 6px 0 10px" href="https://www.google.com/maps/dir/?api=1&destination={{host.name}}, {{host.address.join(', ')}}" target=_blank>Directions</a>
+<a class="btn btn-default btn-sm pull-right" style="margin:0 6px 0 10px" href="https://www.google.com/maps/dir/?api=1&destination={{host.name}}, {{host.address.join(', ')}}" target=_blank analytics-on analytics-event=Click analytics-category=Venues analytics-label="Host Directions">Directions</a>
 <h3 style=margin-top:0>{{host.name}}</h3>
 <p>{{host.address.join(', ')}}</p>
 <table class="table table-condensed">
@@ -130,14 +130,14 @@ These venues are at the same location...so a minute, maybe?
 <span class="label label-venue-default label-venue-{{venueId}}" style=font-size:.9em>{{venue.name}}</span>
 </td>
 <td class="text-right hidden-print" style=vertical-align:middle ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
-<a class="btn btn-default btn-sm" ng-href=/shows/venue/{{venue.slug}}>Shows</a>
-<a class="btn btn-default btn-sm" ng-href=/map/venue/{{venue.slug}}>Map</a>
+<a class="btn btn-default btn-sm" ng-href=/shows/venue/{{venue.slug}} analytics-on analytics-event=Click analytics-category=Venues analytics-label=Shows>Shows</a>
+<a class="btn btn-default btn-sm" ng-href=/map/venue/{{venue.slug}} analytics-on analytics-event=Click analytics-category=Venues analytics-label=Map>Map</a>
 </td>
 </tr>
 </table>
 </div>
 <div class=col-md-4>
-<a href=/map/host/{{host.slug}}>
+<a href=/map/host/{{host.slug}} analytics-on analytics-event=Click analytics-category=Venues analytics-label="Map Image">
 <static-map size="'336x252'" markers="host.mapPos && host.mapPos.join() || host.address.join(', ')" style=width:100%></static-map>
 </a>
 </div>
@@ -165,7 +165,7 @@ These venues are at the same location...so a minute, maybe?
 <br>
 <br>
 <p>
-<a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target=fringeshop class="btn btn-lg btn-default" ng-if=show.storeId>Buy Tickets</a>
+<a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target=fringeshop class="btn btn-lg btn-default" ng-if=show.storeId analytics-on analytics-event=Click analytics-category=Show analytics-label="Buy Tickets">Buy Tickets</a>
 </p>
 </div>
 <div class=col-md-5 style="height:450px;background:url(img/show/{{show.image}}) center no-repeat;background-size:cover" ng-style="{boxShadow: 'inset 20px 0 20px -6px ' + backgroundColor}"></div>
@@ -223,34 +223,34 @@ These venues are at the same location...so a minute, maybe?
 </div>
 <div class=form-group>
 <label>Venue</label>
-<select class=form-control ng-model=selectedVenue ng-options="o.value as o.label for o in venueOptions" ng-change=refresh()></select>
+<select class=form-control ng-model=selectedVenue ng-options="o.value as o.label for o in venueOptions" ng-change=venueSelected()></select>
 </div>
 <div class=form-group>
 <label>Rating</label>
-<select class=form-control ng-model=selectedRating ng-options="o.value as o.label for o in ratingOptions" ng-change=refresh()></select>
+<select class=form-control ng-model=selectedRating ng-options="o.value as o.label for o in ratingOptions" ng-change=ratingSelected()></select>
 </div>
 <hr>
 <div class=checkbox ng-show=isFringeOngoing>
 <label>
-<input type=checkbox ng-change=refresh() ng-model=hideWithoutShowtimes>
+<input type=checkbox ng-change=hideWithoutShowtimesSelected() ng-model=hideWithoutShowtimes>
 Hide shows with no performances
 </label>
 </div>
 <div class=checkbox ng-show=$parent.$parent.signedIn>
 <label>
-<input type=checkbox ng-change=refresh() ng-model=hideNotInterested>
+<input type=checkbox ng-change=hideNotInterestedSelected() ng-model=hideNotInterested>
 Hide shows I'm not interested in
 </label>
 </div>
 <div class=checkbox ng-show=$parent.$parent.signedIn>
 <label>
-<input type=checkbox ng-change=refresh() ng-model=hideNotAttending>
+<input type=checkbox ng-change=hideNotAttendingSelected() ng-model=hideNotAttending>
 Hide shows I'm not attending
 </label>
 </div>
 <div class=checkbox ng-show=$parent.$parent.signedIn>
 <label>
-<input type=checkbox ng-change=refresh() ng-model=hideCantAttend>
+<input type=checkbox ng-change=hideCantAttendSelected() ng-model=hideCantAttend>
 Hide shows I can't see
 </label>
 </div>
@@ -282,10 +282,11 @@ Hide shows I can't see
 </div>
 <p style=margin-bottom:35px class=hidden-print>
 <span><a href=/show/{{::show.slug}} class="btn btn-primary">Learn More</a></span>
-<span ng-if=::show.storeId><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target=fringeshop class="btn btn-info" style=margin-left:5px>Buy Tickets</a></span>
+<span ng-if=::show.storeId><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target=fringeshop class="btn btn-info" style=margin-left:5px analytics-on analytics-event=Click analytics-category=Shows analytics-label="Buy Tickets">Buy Tickets</a></span>
 </p>
 <p style=margin:0 ng-init="firstPerformance = performances[show.performances[0]]">
 <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
+<show-rating value=ratings[show.rating]></show-rating>
 <span class="small text-muted" style=margin-left:10px>
 <em>
 <ng-pluralize count=performanceCounts[showId] when="plurals[isFringeOngoing ? 'performanceMore' : 'performance']"></ng-pluralize>
@@ -367,7 +368,7 @@ Hide shows I can't see
 <td nowrap class=align-middle ng-if=signedIn>
 <interest show-id=entry.showId></interest>
 </td>
-<td nowrap class=align-middle ng-if="signedIn && entry.inPast">
+<td nowrap class=align-middle ng-if="signedIn && (! online || entry.inPast)">
 <div class=btn-group bs-radio-group ng-model=entry.attendState>
 <label class="btn disabled btn-default" ng-class="entry.attendState == 'no' && 'btn-danger'">
 <input type=radio value=no disabled><span class="glyphicon glyphicon-thumbs-down"></span>
@@ -380,7 +381,7 @@ Hide shows I can't see
 </label>
 </div>
 </td>
-<td nowrap class=align-middle ng-if="signedIn && ! entry.inPast">
+<td nowrap class=align-middle ng-if="signedIn && online && ! entry.inPast">
 <div ng-if="entry.attendState=='no'" class=btn-group bs-radio-group ng-model=entry.attendState>
 <label class="btn btn-danger">
 <input type=radio value=no><span class="glyphicon glyphicon-thumbs-down"></span>
@@ -414,12 +415,12 @@ Hide shows I can't see
 <input type=radio value=yes><span class="glyphicon glyphicon-thumbs-up"></span>
 </label>
 </div>
-<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px;margin-left:10px">
+<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px;margin-left:10px" analytics-on analytics-event=Click analytics-category=Schedule analytics-label="Buy Tickets">
 <img src=img/ticket.svg style=width:1.5em bs-tooltip="{title:'Buy Tickets'}">
 </a>
 </td>
 <td ng-if="! signedIn" class=align-middle>
-<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px">
+<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px;margin-left:10px" analytics-on analytics-event=Click analytics-category=Schedule analytics-label="Buy Tickets">
 <img src=img/ticket.svg style=width:1.5em bs-tooltip="{title:'Buy Tickets'}">
 </a>
 </td>
@@ -438,6 +439,7 @@ Hide shows I can't see
 </div>
 </div>
 <div class=container>
+<require-online>
 <p class="lead text-center" ng-if="! mapLoaded">Loading map...</p>
 <div class=row ng-if=markerGroups ng-style="{visibility: !mapLoaded ? 'hidden' : 'visible'}">
 <div class="col-md-3 hidden-print">
@@ -449,7 +451,7 @@ Hide shows I can't see
 <h3 style=margin-bottom:15px>Layers</h3>
 <ul class="nav nav-default nav-pills nav-stacked">
 <li ng-repeat="group in ::markerGroups" ng-class={active:isGroupVisible[group.id]}>
-<a href ng-click=toggleGroup(group.id)>{{group.name}}</a>
+<a href ng-click=toggleGroup(group)>{{group.name}}</a>
 </li>
 </ul>
 </div>
@@ -483,7 +485,9 @@ Hide shows I can't see
 </div>
 </div>
 </div>
+</require-online>
 </div>
+
 </script>
 <script type="text/ng-template" id="app/public/public.html">
 <div class=container ng-if="! schedule">
@@ -491,7 +495,7 @@ Hide shows I can't see
 </div>
 <div class=container ng-if=schedule>
 <div class=page-header>
-<a href=/ class="btn btn-primary pull-right">Automatically create your own Fringe schedule for free!</a>
+<a href=/ class="btn btn-primary pull-right" analytics-on analytics-event=Click analytics-category="Public Schedule" analytics-label="Top Advertisement">Automatically create your own Fringe schedule for free!</a>
 <h1>{{title}}</h1>
 </div>
 <table class="table table-striped">
@@ -515,7 +519,7 @@ Hide shows I can't see
 <br>
 <br>
 <p class=text-center>
-<a href=/ class="btn btn-primary btn-lg">Automatically create your own Fringe schedule for free!</a>
+<a href=/ class="btn btn-primary btn-lg" analytics-on analytics-event=Click analytics-category="Public Schedule" analytics-label="Bottom Advertisement">Automatically create your own Fringe schedule for free!</a>
 </p>
 </div>
 </script>
@@ -555,7 +559,7 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 <br>
 <p class=lead>My Fringe can automatically generate a personalized schedule.</p>
 <br>
-<p><a class="btn btn-primary btn-lg" href role=button ng-click=$parent.$parent.signIn()>Sounds awesome!</a></p>
+<p><a class="btn btn-primary btn-lg hidden-offline" href role=button ng-click=$parent.$parent.signIn() analytics-on analytics-event=Click analytics-category="My Fringe" analytics-label="Sign In">Sounds awesome!</a></p>
 </div>
 </script>
 <script type="text/ng-template" id="app/myFringe/schedule/schedule.html">
@@ -598,10 +602,10 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </div>
 </div>
 <div class=col-md-9>
-<div class=hidden-print>
+<div class="hidden-print hidden-offline">
 <p class=pull-right>
 <button ng-click=openShareModal() class="btn btn-default"><i class="glyphicon glyphicon-share"></i> Share</button>
-<button onclick=window.print() class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Print</button>
+<button onclick=window.print() class="btn btn-default" analytics-on analytics-event=Click analytics-category="My Schedule" analytics-label=Print><i class="glyphicon glyphicon-print"></i> Print</button>
 </p>
 <p>
 <button ng-click=openGoogleCalendarSyncSetup() class="btn btn-primary" ng-class="calendarSyncEnabled ? 'btn-primary' : 'btn-success'">{{calendarSyncEnabled ? 'Google Calendar Sync: On' : 'Turn On Google Calendar Sync'}}</button>
@@ -633,7 +637,7 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </span>
 </td>
 <td class="text-right align-middle hidden-print">
-<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{item.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px">
+<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{item.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px" analytics-on analytics-event=Click analytics-category="My Schedule" analytics-label="Buy Tickets">
 <img src=img/ticket.svg style=width:1.5em bs-tooltip="{title:'Buy Tickets'}">
 </a>
 </td>
@@ -732,7 +736,7 @@ Create a new calendar:
 <p>Any time you add or remove a show from your schedule, your Google calendar will be updated automatically.</p>
 <br>
 <p class=text-center>
-<a href={{calendarUrl}} target=_blank class="btn btn-primary btn-lg">Open Google Calendar</a>
+<a href={{calendarUrl}} target=_blank class="btn btn-primary btn-lg" analytics-on analytics-event=Click analytics-category="Google Calendar Sync Modal" analytics-label="Open Google Calendar">Open Google Calendar</a>
 </p>
 <br>
 <p>If you have an Android device, you can see your calendar in the Google Calendar app. It may take a few moments for changes to appear.</p>
@@ -776,7 +780,7 @@ Create a new calendar:
 <p class=well>https://fringeomatic.com/public/{{publicHash}}</p>
 <br>
 <p class=text-center>
-<a href=/public/{{publicHash}} target=_blank class="btn btn-primary btn-lg">Preview</a>
+<a href=/public/{{publicHash}} target=_blank class="btn btn-primary btn-lg" analytics-on analytics-event=Click analytics-category=Venues analytics-label=Preview>Preview</a>
 </p>
 <br>
 <p class=small>Note: Your public schedule will be updated with changes to your schedule.</p>
@@ -788,6 +792,7 @@ Create a new calendar:
 
 </script>
 <script type="text/ng-template" id="app/myFringe/availability/availability.html">
+<require-online>
 <div ng-if=availabilitySlots>
 <div class=row>
 <div class=col-md-6>
@@ -839,6 +844,7 @@ Create a new calendar:
 </table>
 </div>
 </div>
+</require-online>
 </script>
 <script type="text/ng-template" id="app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.html">
 <div class=modal-header>
@@ -879,6 +885,7 @@ Create a new calendar:
 </div>
 </script>
 <script type="text/ng-template" id="app/myFringe/autoScheduler/autoScheduler.html">
+<require-online>
 <div ng-if=!screen>
 <h1>Analyzing...</h1>
 <div class=progress>
@@ -1034,6 +1041,7 @@ not touch the <ng-pluralize count=showsOnScheduleCount when=plurals.show></ng-pl
 </div>
 </div>
 </div>
+</require-online>
 </script>
 <script type="text/ng-template" id="app/myFringe/autoScheduler/autoSchedulerModal/autoSchedulerModal.html">
 <div ng-if="! proposed">

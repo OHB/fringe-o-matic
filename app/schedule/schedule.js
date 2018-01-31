@@ -1,7 +1,7 @@
 angular.module('fringeApp').component('schedule', {
     templateUrl: 'app/schedule/schedule.html',
-    controller: ['$scope', '$timeout', '$location', '$routeParams', 'User', 'Data', 'Schedule', 'Availability', 'Plurals',
-        function($scope, $timeout, $location, $routeParams, User, Data, Schedule, Availability, Plurals) {
+    controller: ['$scope', '$timeout', '$location', '$routeParams', 'User', 'Data', 'Schedule', 'Availability', 'Plurals', '$analytics',
+        function($scope, $timeout, $location, $routeParams, User, Data, Schedule, Availability, Plurals, $analytics) {
             $scope.signedIn = User.isSignedIn();
             $scope.moment = moment;
             $scope.plurals = Plurals;
@@ -104,6 +104,11 @@ angular.module('fringeApp').component('schedule', {
                     var settings = User.getSettings();
                     settings.scheduleMode = $scope.settings.scheduleMode;
                     User.setSettings(settings);
+
+                    $analytics.eventTrack('Click', {
+                        category: 'Schedule',
+                        label: 'Schedule Mode: ' + ($scope.settings.scheduleMode === 'full' ? 'Full' : 'Smart')
+                    });
                 }
                 updatePath();
                 refresh();
@@ -129,14 +134,17 @@ angular.module('fringeApp').component('schedule', {
             });
 
             $scope.addToSchedule = function(performanceId) {
+                $analytics.eventTrack('Click', {category: 'Schedule', label: 'Add to Schedule'});
                 Schedule.add(performanceId);
                 refresh();
             };
             $scope.removeFromSchedule = function(performanceId) {
+                $analytics.eventTrack('Click', {category: 'Schedule', label: 'Remove to Schedule'});
                 Schedule.remove(performanceId);
                 refresh();
             };
             $scope.addMaybe = function(performanceId) {
+                $analytics.eventTrack('Click', {category: 'Schedule', label: 'Add to Maybe'});
                 Schedule.addMaybe(performanceId);
                 refresh();
             };

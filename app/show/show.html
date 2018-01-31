@@ -16,7 +16,7 @@
             <br />
             <br />
             <p>
-                <a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeId" >Buy Tickets</a>
+                <a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeId" analytics-on analytics-event="Click" analytics-category="Show" analytics-label="Buy Tickets">Buy Tickets</a>
             </p>
         </div>
         <div class="col-md-5" style="height: 450px; background: url('img/show/{{show.image}}') center no-repeat; background-size: cover" ng-style="{boxShadow: 'inset 20px 0 20px -6px ' + backgroundColor}"></div>

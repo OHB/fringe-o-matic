@@ -37,7 +37,7 @@
                         <span ng-show="distanceCalc.driving==''">Walk</span>
                     </p>
                     <p ng-show="distanceCalc.driving!=''">
-                        <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalc.from.value].host].name}}, {{venueHosts[venues[distanceCalc.from.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalc.to.value].host].name}}, {{venueHosts[venues[distanceCalc.to.value].host].address.join(', ')}}&travelmode={{(distanceCalc.driving=='possible') ? 'walking' : 'driving'}}" target="_blank">Get Directions</a>
+                        <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalc.from.value].host].name}}, {{venueHosts[venues[distanceCalc.from.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalc.to.value].host].name}}, {{venueHosts[venues[distanceCalc.to.value].host].address.join(', ')}}&travelmode={{(distanceCalc.driving=='possible') ? 'walking' : 'driving'}}" target="_blank" analytics-on analytics-event="Click" analytics-category="Venues" analytics-label="Get Directions">Get Directions</a>
                     </p>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="row" ng-repeat="(hostId, host) in venueHosts">
                 <hr ng-if="! $first" />
                 <div class="col-md-8">
-                    <a class="btn btn-default btn-sm pull-right" style="margin: 0 6px 0 10px" href="https://www.google.com/maps/dir/?api=1&destination={{host.name}}, {{host.address.join(', ')}}" target="_blank">Directions</a>
+                    <a class="btn btn-default btn-sm pull-right" style="margin: 0 6px 0 10px" href="https://www.google.com/maps/dir/?api=1&destination={{host.name}}, {{host.address.join(', ')}}" target="_blank" analytics-on analytics-event="Click" analytics-category="Venues" analytics-label="Host Directions">Directions</a>
                     <h3 style="margin-top:0">{{host.name}}</h3>
                     <p>{{host.address.join(', ')}}</p>
                     <table class="table table-condensed">
@@ -55,14 +55,14 @@
                                 <span class="label label-venue-default label-venue-{{venueId}}" style="font-size: 0.9em">{{venue.name}}</span>
                             </td>
                             <td class="text-right hidden-print" style="vertical-align: middle" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
-                                <a class="btn btn-default btn-sm" ng-href="/shows/venue/{{venue.slug}}">Shows</a>
-                                <a class="btn btn-default btn-sm" ng-href="/map/venue/{{venue.slug}}">Map</a>
+                                <a class="btn btn-default btn-sm" ng-href="/shows/venue/{{venue.slug}}" analytics-on analytics-event="Click" analytics-category="Venues" analytics-label="Shows">Shows</a>
+                                <a class="btn btn-default btn-sm" ng-href="/map/venue/{{venue.slug}}" analytics-on analytics-event="Click" analytics-category="Venues" analytics-label="Map">Map</a>
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="col-md-4">
-                    <a href="/map/host/{{host.slug}}">
+                    <a href="/map/host/{{host.slug}}" analytics-on analytics-event="Click" analytics-category="Venues" analytics-label="Map Image">
                         <static-map size="'336x252'" markers="host.mapPos && host.mapPos.join() || host.address.join(', ')" style="width:100%"></static-map>
                     </a>
                 </div>

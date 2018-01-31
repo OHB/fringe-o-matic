@@ -1,8 +1,8 @@
 angular.module('fringeApp').component('fringeMap', {
     templateUrl: 'app/map/map.html',
     controller: [
-        '$scope', '$routeParams', 'NgMap', '$window', '$timeout', '$q', 'debounce', 'Data', 'MapConfig',
-        function($scope, $routeParams, NgMap, $window, $timeout, $q, debounce, Data, MapConfig) {
+        '$scope', '$routeParams', 'NgMap', '$window', '$timeout', '$q', 'debounce', 'Data', 'MapConfig', '$analytics',
+        function($scope, $routeParams, NgMap, $window, $timeout, $q, debounce, Data, MapConfig, $analytics) {
             $scope.lawnPolygon = MapConfig.lawnPolygon;
             $scope.isGroupVisible = {};
 
@@ -35,8 +35,9 @@ angular.module('fringeApp').component('fringeMap', {
                 return ! venue.byov;
             });
 
-            $scope.toggleGroup = function(groupId) {
-                $scope.isGroupVisible[groupId] = !$scope.isGroupVisible[groupId];
+            $scope.toggleGroup = function(group) {
+                $analytics.eventTrack('Toggle Group', {category: 'Map', label: group.name});
+                $scope.isGroupVisible[group.id] = !$scope.isGroupVisible[group.id];
             };
 
             var zoomToBoundedRegion = function(boundList, maxZoom) {
@@ -55,6 +56,8 @@ angular.module('fringeApp').component('fringeMap', {
             };
 
             $scope.gotoView = function(view) {
+                $analytics.eventTrack('Display', {category: 'Map', label: view.name});
+
                 var boundList = [];
 
                 angular.forEach($scope.markerGroups, function(group) {
@@ -110,6 +113,7 @@ angular.module('fringeApp').component('fringeMap', {
 
             $scope.markerClick = function(e, marker, groupId, markerId) {
                 closeMarkerWindow();
+                $analytics.eventTrack('Click', {category: 'Map', label: marker.title});
                 NgMap.getMap().then(function(map) {
                     $scope.markerWindow = {
                         title: marker.title,
