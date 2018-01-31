@@ -2,27 +2,28 @@
 $build = json_decode(file_get_contents(__DIR__ . '/build.json'));
 
 header('Content-type: text/plain');
-
-echo "Clearing target...\n";
-rrmdir(__DIR__ . '/../deploy');
-
-if (is_dir(__DIR__ . '/../vendor/google/apiclient-services')) {
-    echo "Cleaning vendor...\n";
-    rrmdir(__DIR__ . '/../vendor/google/apiclient-services');
-}
-
-foreach ($build->copyFolders as $folder) {
-    echo "Copying folder {$folder}...\n";
-    rcopy(__DIR__ . '/../' . $folder, __DIR__ . '/../deploy/' . $folder);
-}
-
-echo "Copying root files...\n";
-foreach (scandir(__DIR__ . '/../') as $file) {
-    if (! in_array($file, $build->rootIgnoreFiles) && is_file(__DIR__ . '/../' . $file)) {
-        copy(__DIR__ . '/../' . $file, __DIR__ . '/../deploy/' . $file);
-    }
-}
-
+//
+//echo "Clearing target...\n";
+//rrmdir(__DIR__ . '/../deploy');
+//
+//echo "Cleaning vendor...\n";
+//rrmdir(__DIR__ . '/../vendor/google/apiclient-services');
+//rrmdir(__DIR__ . '/../vendor/google/auth/tests');
+//rrmdir(__DIR__ . '/../vendor/monolog/monolog/docs');
+//rrmdir(__DIR__ . '/../vendor/monolog/monolog/tests');
+//
+//foreach ($build->copyFolders as $folder) {
+//    echo "Copying folder {$folder}...\n";
+//    rcopy(__DIR__ . '/../' . $folder, __DIR__ . '/../deploy/' . $folder);
+//}
+//
+//echo "Copying root files...\n";
+//foreach (scandir(__DIR__ . '/../') as $file) {
+//    if (! in_array($file, $build->rootIgnoreFiles) && is_file(__DIR__ . '/../' . $file)) {
+//        copy(__DIR__ . '/../' . $file, __DIR__ . '/../deploy/' . $file);
+//    }
+//}
+//
 echo "Minifying templates...\n";
 $templates = "angular.module('fringeApp').run(['\$templateCache',function(\$templateCache){"
     . getFiles($build->templates, function($filename, $file) {
@@ -30,29 +31,23 @@ $templates = "angular.module('fringeApp').run(['\$templateCache',function(\$temp
         return "\$templateCache.put('{$filename}', {$html});\n";
     })
     . '}]);';
-
-//put('tools/templates.html', getFiles($build->templates, function($filename, $file) {
-//    return "<script type=\"text/ng-template\" id=\"{$filename}\">\n" .
-//        post('http://html-minifier.com/raw?', ['input' => $file]) .
-//        "\n</script>\n";
-//}));
-
-echo "Minifying CSS...\n";
-put('deploy/compiled.css', getFiles($build->css));
-
-echo "Minifying JavaScript...\n";
-minify('deploy/compiled.js', 'https://closure-compiler.appspot.com/compile', [
-    'js_code' => getFiles($build->js) . $templates,
-    'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
-    'output_format' => 'text',
-    'output_info' => 'compiled_code'
-]);
+//
+//echo "Minifying CSS...\n";
+//put('deploy/compiled.css', getFiles($build->css));
+//
+//echo "Minifying JavaScript...\n";
+//minify('deploy/compiled.js', 'https://closure-compiler.appspot.com/compile', [
+//    'js_code' => getFiles($build->js) . $templates,
+//    'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
+//    'output_format' => 'text',
+//    'output_info' => 'compiled_code'
+//]);
 
 echo "Minifying index.html...\n";
 ob_start();
 $COMPILE = true;
 include_once (__DIR__ . '/../index.php');
-minify('deploy/index.html', 'http://html-minifier.com/raw', ['input' => ob_get_clean()]);
+minify('deploy/index.html', 'http://html-minifier.com/raw?', ['input' => ob_get_clean()]);
 
 echo "\nDone!\n\n";
 

@@ -1,5 +1,12 @@
 {
-    "name": "",
+    "name": "Fringe-o-Matic",
+    "short_name": "Fringe-o-Matic",
+    "description": "Automatically create your perfect Fringe schedule.",
+    "dir": "ltr",
+    "lang": "en",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "start_url": "/",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

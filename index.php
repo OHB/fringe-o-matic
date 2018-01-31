@@ -15,15 +15,11 @@ if ($COMPILING) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base href="/">
-    <title>Fringe-o-Matic</title>
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    <meta name="description" content="Automatically create your perfect Fringe schedule.">
+    <meta name="keyords" content="Orlando Fringe Festival, Fringeomatic">
+    <meta name="author" content="Lewis Johnston">
+    <title>Fringe-o-Matic · Automatically create your perfect Fringe schedule.</title>
 
-        ga('create', 'UA-113297473-1', '<?php echo $COMPILING ? 'auto' : 'none'; ?>');
-    </script>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <?php foreach ($css as $filename) { ?>
         <link rel="stylesheet" type="text/css" href="<?php echo $filename; ?>" />
@@ -47,6 +43,23 @@ if ($COMPILING) {
     <meta name="msapplication-TileColor" content="#ffc40d">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
+
+    <meta name="twitter:title" content="Fringe-o-Matic">
+    <meta name="twitter:description" content="Automatically create your perfect Fringe schedule.">
+
+    <meta property="og:url" content="https://fringeomatic.com">
+    <meta property="og:title" content="Fringe-o-Matic">
+    <meta property="og:description" content="Automatically create your perfect Fringe schedule.">
+    <meta property="og:type" content="website">
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-113297473-1', '<?php echo $COMPILING ? 'auto' : 'none'; ?>');
+    </script>
 </head>
 <body ng-controller="CoreCtrl" ng-class="{'online': isOnline, 'offline': !isOnline}">
 <header class="navbar-primary navbar navbar-fixed-top">
@@ -136,38 +149,44 @@ if (! $COMPILING) {
     document.body.className += ' js';
     ENVIRONMENT = '<?php echo $COMPILING ? 'prod' : 'dev'; ?>';
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vibrant.js/1.0.0/Vibrant.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-route.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-animate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/compiler.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dimensions.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/parse-options.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/alert.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/alert.tpl.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.tpl.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.tpl.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.tpl.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.tpl.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/1.5.0/angulartics.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics-google-analytics/0.4.0/angulartics-ga.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vibrant.js/1.0.0/Vibrant.min.js" integrity="sha256-qAQzBOPFUA4u8LLFha4hHBcGZoKk4Q8NtWqYa4K2b7g=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js" integrity="sha256-zBy1l2WBAh2vPF8rnjFMUXujsfkKjya0Jy5j6yKj0+Q=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-animate.min.js" integrity="sha256-1XBp/KwjxhvrtZiQ+ecAScAyLPe4OStn2lMX0vxTq9U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.min.js" integrity="sha256-E6XubcgT4a601977ZZP4Yw/0UCB2/Ex+Bazst+JRw1U=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/compiler.min.js" integrity="sha256-92KF7d4tvPPCKvTRnV+OorcMRxrmaXJQxv6i5Vd1kEM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dimensions.min.js" integrity="sha256-gW6ZXGiEQAE0lqfWfso2xfjzA5jqkEeM2hcMl0+32cQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js" integrity="sha256-rsLOkGBtBb7taPde9REPBC9H4YaAphSsNF8EpZdix/g=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/parse-options.min.js" integrity="sha256-tHOOow8ICj4DjOuMlo46xNRummEu75AV7pRgg1qFk5Q=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js" integrity="sha256-MAd1EYJG15HLN1OiQleYoJq4ROK+R4Fi0EVJtziJXm0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/alert.min.js" integrity="sha256-q2EdjdwUJgoBLZ2xPHnxjwTf1uP9mzUPQ5ZKGUABdJA=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/alert.tpl.min.js" integrity="sha256-gYlmV53tPJ13BVNe8MbotY9qp6vc7PQJS61ys+TtmBc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.js" integrity="sha256-BPKtSLXAqv0eQEPlrrkICpknj2+Xkvfn2x1k+VOw4Fk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.min.js" integrity="sha256-lxvk+40PsmX0ZF7xr8GKtTZR4wmuarMNCdH2Ngxls0s=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js" integrity="sha256-GS9Jkqgr5jCKq8oe7jrGYsZwuq3xvfNOStdPHuL3n4Q=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.min.js" integrity="sha256-gshpom8oJG7Vsk1pnEc0hyHzVkrQxypbumMekjN/V7w=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.tpl.min.js" integrity="sha256-4Ww5t6Np4qvHdp63dSxHdZoBshaMHYH0CzfXS/iKm8A=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.min.js" integrity="sha256-yJPwDjZhFf+DnJDyOHGFxksVL8hHBWIe6udGVB+eMLc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/popover.tpl.min.js" integrity="sha256-P9Ha300ygh8sqxJEikoyHT27UkUg1o2C+u+qRWAl2QM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.min.js" integrity="sha256-5VtqMT2D/JTsJ2QV/iauUf6KPE433sktBbra/Sq4SjA=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/select.tpl.min.js" integrity="sha256-Ys3ZiC61bdJGs5zsy0go6ULzX52QO/O9UgKBVr6hmzo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.min.js" integrity="sha256-daNxn3f09twg4+GlxaS7jYZsB7G7Zn4Pl1Y91SYKbec=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tab.tpl.min.js" integrity="sha256-yAaIhk1sHc/pBOfufFWBpNO1RtBQ3wblevqGdNiZIsg=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.min.js" integrity="sha256-y1n1NczNyRGWUUp2UlpFGCoUxklwauzxaorlabScIAo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js" integrity="sha256-w52zTXyT3KOBiDaC3PJ1+7NdiIPCJd8yugyEovunS40=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/1.5.0/angulartics.min.js" integrity="sha256-ySl5/+EcmYgxuebBmVID1Gcl554CUuWNQKYeN4RvNMw=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics-google-analytics/0.4.0/angulartics-ga.min.js" integrity="sha256-oibUTmLtPCt1kIEnhit4mvjv0msZqEFE1C7decTsmfA=" crossorigin="anonymous"></script>
 <?php if (! $COMPILING) { ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/1.5.0/angulartics-debug.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/1.5.0/angulartics-debug.min.js" integrity="sha256-VjruztIujgMOl/RgcUpb2HpOKbCjmo5Q7p6WT4EKRDs=" crossorigin="anonymous"></script>
 <?php } ?>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys"></script>
 <script src="https://apis.google.com/js/api.js"></script>
+
 <?php foreach ($js as $script) { ?>
     <script src="<?php echo $script; ?>"></script>
 <?php } ?>
