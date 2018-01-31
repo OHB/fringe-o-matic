@@ -99,7 +99,9 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
     </noscript>
     <div ng-if="error" ng-cloak>
         <div class="container" style="padding-top: 8rem">
-            <h1>Error</h1>
+            <div class="page-header">
+                <h1>Error</h1>
+            </div>
             <p class="lead">{{error.title}}</p>
             <p ng-bind="error.more"></p>
         </div>
