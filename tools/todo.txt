@@ -7,6 +7,10 @@ click another, it works.
 related to url update
 push state?
 
+BUG
+can't click back after going to My Fringe
+
+
 css instead of innerHeight
 
 sitemap

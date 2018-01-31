@@ -1,7 +1,7 @@
 angular.module('fringeApp').controller('CoreCtrl', [
-    '$rootScope', '$scope', '$route', '$location', '$timeout', '$window', '$q', '$aside', '$uibModal',
+    '$rootScope', '$scope', '$route', '$location', '$timeout', '$window', '$q', '$uibModal',
     'Data', 'Menu', 'User', 'Error', 'Configuration',
-    function($rootScope, $scope, $route, $location, $timeout, $window, $q, $aside, $uibModal, Data, Menu, User, Error, Configuration) {
+    function($rootScope, $scope, $route, $location, $timeout, $window, $q, $uibModal, Data, Menu, User, Error, Configuration) {
         User.onSave(function(promise) {
             promise.then(function() {}, function() {
                 Error.error('Unable to save data to the server.', 'Have you lost your internet connection?');
@@ -96,14 +96,6 @@ angular.module('fringeApp').controller('CoreCtrl', [
 
                     $route.reload();
                 });
-            });
-        };
-
-        $scope.openHelp = function() {
-            $aside({
-                templateUrl: 'app/core/help/help.html',
-                placement: 'right',
-                controller: 'HelpCtrl'
             });
         };
     }]

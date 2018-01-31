@@ -225,6 +225,10 @@ These venues are at the same location...so a minute, maybe?
 <label>Venue</label>
 <select class=form-control ng-model=selectedVenue ng-options="o.value as o.label for o in venueOptions" ng-change=refresh()></select>
 </div>
+<div class=form-group>
+<label>Rating</label>
+<select class=form-control ng-model=selectedRating ng-options="o.value as o.label for o in ratingOptions" ng-change=refresh()></select>
+</div>
 <hr>
 <div class=checkbox ng-show=isFringeOngoing>
 <label>
@@ -266,7 +270,10 @@ Hide shows I can't see
 <interest show-id=showId></interest>
 </div>
 <div style=height:100px>
-<p class=lead style=line-height:1em;margin-bottom:10px><a href=/show/{{::show.slug}}>{{::show.name}}</a></p>
+<p class=lead style=line-height:1em;margin-bottom:10px>
+<a class=hidden-print href=/show/{{::show.slug}}>{{::show.name}}</a>
+<span class=visible-print-inline>{{::show.name}}</span>
+</p>
 <p class=small>
 <em ng-if=::show.artist>
 <strong ng-bind=::show.artist></strong><span ng-if=::show.artistLocation>, {{::show.artistLocation}}</span>
@@ -286,7 +293,8 @@ Hide shows I can't see
 </span>
 </p>
 </div>
-<div class=col-md-3 style="height:220px;background:url(img/show/{{show.image}}) top;background-size:cover"></div>
+<div class="col-md-3 hidden-print" style="height:220px;background:url(img/show/{{show.image}}) top;background-size:cover"></div>
+<hr class=visible-print-block>
 </div>
 </div>
 </div>
@@ -341,19 +349,19 @@ Hide shows I can't see
 <th>Time</th>
 <th>Show</th>
 <th ng-if=signedIn>Interest</th>
-<th ng-if=signedIn width=135>Going?</th>
+<th ng-if=signedIn width=195>Going?</th>
+<th ng-if="! signedIn"></th>
 </tr>
 </thead>
 <tbody>
 <tr ng-repeat="entry in schedule">
 <td nowrap>
-{{::moment(entry.performance.start, 'X').format('h:mma')}} - {{::moment(entry.performance.stop, 'X').format('h:mma')}}
+{{::moment(entry.performance.start, 'X').format('h:mma')}}
 </td>
 <td>
 <p class=h4 style="margin:0 0 12px"><a href=/show/{{::entry.show.slug}}>{{::entry.show.name}}</a></p>
-<p style=margin:0 class=hidden-print>
-<span><a href=/show/{{::entry.show.slug}} class="btn btn-xs btn-primary">Learn More</a></span>
-<span ng-if="! entry.inPast"><a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-xs btn-success" style=margin-left:10px>Buy Tickets</a></span>
+<p style=margin-bottom:0 class="text-muted small">
+{{::entry.venue.name}} &middot; {{::entry.rating}} &middot; {{entry.show.price|price}} &middot; {{entry.minutes}} minutes
 </p>
 </td>
 <td nowrap class=align-middle ng-if=signedIn>
@@ -406,6 +414,14 @@ Hide shows I can't see
 <input type=radio value=yes><span class="glyphicon glyphicon-thumbs-up"></span>
 </label>
 </div>
+<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px;margin-left:10px">
+<img src=img/ticket.svg style=width:1.5em bs-tooltip="{title:'Buy Tickets'}">
+</a>
+</td>
+<td ng-if="! signedIn" class=align-middle>
+<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px">
+<img src=img/ticket.svg style=width:1.5em bs-tooltip="{title:'Buy Tickets'}">
+</a>
 </td>
 </tr>
 </tbody>
@@ -522,7 +538,7 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </small>
 </div>
 </div>
-<div bs-active-pane=tabs.activeTab bs-tabs ng-if=$parent.signedIn>
+<div bs-active-pane=tabs.activeTab bs-tabs ng-if=$parent.signedIn class=hidden-print>
 <div data-title=Schedule name=Schedule bs-pane></div>
 <div data-title=Availability name=Availability bs-pane></div>
 <div data-title=Auto-Scheduler name=Auto-Scheduler bs-pane></div>
@@ -585,6 +601,7 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 <div class=hidden-print>
 <p class=pull-right>
 <button ng-click=openShareModal() class="btn btn-default"><i class="glyphicon glyphicon-share"></i> Share</button>
+<button onclick=window.print() class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Print</button>
 </p>
 <p>
 <button ng-click=openGoogleCalendarSyncSetup() class="btn btn-primary" ng-class="calendarSyncEnabled ? 'btn-primary' : 'btn-success'">{{calendarSyncEnabled ? 'Google Calendar Sync: On' : 'Turn On Google Calendar Sync'}}</button>
@@ -602,15 +619,23 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 <th>Time</th>
 <th>Show</th>
 <th>Venue</th>
+<th></th>
 </tr>
 <tr ng-repeat="item in amazingScheduleDay" ng-class=item.as>
-<td ng-if="item.as=='performance'" nowrap>{{moment(item.start, 'X').format('h:mm a')}}</td>
-<td ng-if="item.as=='performance'"><a href=/show/{{shows[item.show].slug}}>{{shows[item.show].name}}</a></td>
-<td ng-if="item.as=='performance'">
+<td ng-if="item.as=='performance'" nowrap class=align-middle>{{moment(item.start, 'X').format('h:mm a')}}</td>
+<td ng-if="item.as=='performance'" class=align-middle>
+<a class=hidden-print href=/show/{{shows[item.show].slug}}>{{shows[item.show].name}}</a>
+<span class=visible-print-inline>{{shows[item.show].name}}</span>
+</td>
+<td ng-if="item.as=='performance'" class=align-middle>
 <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
 {{venues[shows[item.show].venue].name}}
 </span>
-
+</td>
+<td class="text-right align-middle hidden-print">
+<a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{item.storeId}}" target=fringeshop class="btn btn-default" style="padding:6px 8px">
+<img src=img/ticket.svg style=width:1.5em bs-tooltip="{title:'Buy Tickets'}">
+</a>
 </td>
 <td ng-if="item.as!=='performance'" colspan=5 ng-class=item.as>{{item.text}}</td>
 </tr>
@@ -1207,7 +1232,7 @@ I wasn't able to fit all of the shows you want to see on the schedule.
 <li>We take Interest level and travel time between venues out of the equation.</li>
 </ol>
 <br>
-<p>With that information, we can calculate the number of possible schedules depending on how many shows you want to see:</p>
+<p>With that information, we can calculate the number of possible schedules for the number of shows you want to see and how long it would take to go through every possibility:</p>
 <div class=row>
 <div class=col-md-{{section.w}} ng-repeat="section in examplePowers">
 <table class="table table-condensed table-striped">
@@ -1226,8 +1251,10 @@ I wasn't able to fit all of the shows you want to see on the schedule.
 </table>
 </div>
 </div>
-<p>So, it quickly becomes impractical to look at every possible schedule. This is the type of problem that would be <em>perfect</em> for a <a href=https://en.wikipedia.org/wiki/Quantum_computing target=_blank>Quantum Computer</a>...and unless you have a spare Quantum computer laying around, you're stuck with this.</p>
-<p>The Auto-Scheduler uses a custom <a href=https://en.wikipedia.org/wiki/Genetic_algorithm>Genetic Algorithm</a>. Instead of looking for the best possible schedule, it looks for a really great schedule. If there is a possible combination of show times that would allow you to see every show you want, the algorithm will almost certainly never find it...but it <em>will</em> find something that's really <em>close</em> to an ideal schedule. The longer it runs, the closer it can get.</p>
+<p>As you can see, the number of possible schedules increases rapidly. If you had a super computer which could examine a million schedules per second and you wanted to see 15 shows, it would still take more than 5 days to go through them all.</p>
+<p>And this will blow your mind: if you wanted to see 50 shows and went back in time to the beginning of the universe with a supercomputer that could check <em>a trillion schedules per microsecond</em>, by 2018 it would only be 0.52% complete!</p>
+<p>So, checking every possible schedule would take a little too long and you'd miss Fringe altogether. That's why the Auto-Scheduler uses a custom <a href=https://en.wikipedia.org/wiki/Genetic_algorithm>Genetic Algorithm</a> instead. A genetic algorithm is terrible at finding the best schedule, but its excellent at finding a really good schedule.</p>
+<p>In the end, this is the type of problem that would be <em>perfect</em> for a <a href=https://en.wikipedia.org/wiki/Quantum_computing target=_blank>Quantum Computer</a>...it could theoretically determine the best schedule almost instantly. But, unless you have a spare quantum computer laying around, you're stuck with this.</p>
 </div>
 </div>
 <div class=modal-footer>

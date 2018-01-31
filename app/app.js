@@ -59,7 +59,6 @@ angular.module('fringeApp', [
     'ngRoute',
     'ui.bootstrap',
     'mgcrea.ngStrap.affix',
-    'mgcrea.ngStrap.aside',
     'mgcrea.ngStrap.modal',
     'mgcrea.ngStrap.button',
     'mgcrea.ngStrap.dropdown',

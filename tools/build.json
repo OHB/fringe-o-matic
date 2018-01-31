@@ -16,7 +16,6 @@
     "app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.html",
     "app/myFringe/autoScheduler/autoScheduler.html",
     "app/myFringe/autoScheduler/autoSchedulerModal/autoSchedulerModal.html",
-    "app/core/help/help.html",
     "app/core/loginModal/loginModal.html",
     "app/core/notifications/popover.html"
   ],
@@ -51,7 +50,6 @@
     "app/core/services/schedule.js",
     "app/core/services/user.js",
     "app/core/core.js",
-    "app/core/help/help.js",
     "app/core/loginModal/loginModal.js",
     "app/core/notifications/notifications.js",
     "app/home/home.js",
