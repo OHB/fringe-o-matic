@@ -66,8 +66,8 @@
 <h3>Current User Data</h3>
 <pre class=well style=word-wrap:break-word;overflow-wrap:break-word;white-space:initial>{{userData}}</pre>
 <h3>Set User Data</h3>
-<p>
-<button class="btn btn-primary" ng-repeat="(name, data) in testData" ng-click=import(data) style=margin-right:5px>{{name}}</button>
+<p ng-repeat="group in testData">
+<button class="btn btn-primary" ng-repeat="(name, data) in group" ng-click=import(data) style=margin-right:5px>{{name}}</button>
 </p>
 </div>
 </script>
@@ -79,7 +79,7 @@
 </div>
 <div class=container style=padding-top:20px>
 <div class=row ng-if=venues>
-<div class=col-md-3>
+<div class="col-md-3 hidden-print">
 <div class="panel panel-primary" data-offset-top=-95 bs-affix>
 <div class=panel-heading>
 <h3 class=panel-title>Distance Calculator</h3>
@@ -128,7 +128,7 @@ These venues are at the same location...so a minute, maybe?
 <td style=padding-top:9px ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
 <span class="label label-venue-default label-venue-{{venueId}}" style=font-size:.9em>{{venue.name}}</span>
 </td>
-<td class=text-right style=vertical-align:middle ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
+<td class="text-right hidden-print" style=vertical-align:middle ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
 <a class="btn btn-default btn-sm" ng-href=/shows/venue/{{venue.slug}}>Shows</a>
 <a class="btn btn-default btn-sm" ng-href=/map/venue/{{venue.slug}}>Map</a>
 </td>
@@ -150,7 +150,7 @@ These venues are at the same location...so a minute, maybe?
 <p class="text-center lead" style=margin-top:100px>Loading...</p>
 </div>
 <div class=container ng-if=loaded>
-<div class=row style="margin:30px 0;color:#fff" ng-style="{backgroundColor: backgroundColor, color: textColor}">
+<div class="row hidden-print" style="margin:30px 0;color:#fff" ng-style="{backgroundColor: backgroundColor, color: textColor}">
 <div class=col-md-7 style=padding-left:20px>
 <div class=h3 style=line-height:1em ng-if=$parent.$parent.signedIn ng-style="{color: titleColor}">
 <interest show-id=showId></interest>
@@ -168,6 +168,19 @@ These venues are at the same location...so a minute, maybe?
 </p>
 </div>
 <div class=col-md-5 style="height:450px;background:url(img/show/{{show.image}}) center no-repeat;background-size:cover" ng-style="{boxShadow: 'inset 20px 0 20px -6px ' + backgroundColor}"></div>
+</div>
+<div class="row visible-print-block">
+<div class=col-md-12>
+<div class=h3 style=line-height:1em ng-if=$parent.$parent.signedIn ng-style="{color: titleColor}">
+<interest show-id=showId></interest>
+</div>
+<h1>{{show.name}}</h1>
+<p ng-if=::show.artist>
+<strong ng-bind=show.artist></strong><span ng-if=show.artistLocation>, {{show.artistLocation}}</span>
+</p>
+<hr>
+<p>{{venues[show.venue].name}}</p>
+</div>
 </div>
 <div class=row>
 <div class="col-md-8 lead">
@@ -200,7 +213,7 @@ These venues are at the same location...so a minute, maybe?
 </div>
 <div class=container>
 <div class=row>
-<div class=col-md-3>
+<div class="col-md-3 hidden-print">
 <div data-offset-top=-95 bs-affix>
 <div class="form-group has-feedback">
 <label>Filter by keyword</label>
@@ -259,7 +272,7 @@ Hide shows I can't see
 </em>&nbsp;
 </p>
 </div>
-<p style=margin-bottom:35px>
+<p style=margin-bottom:35px class=hidden-print>
 <span><a href=/show/{{::show.slug}} class="btn btn-primary">Learn More</a></span>
 <span ng-if=::show.storeId><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target=fringeshop class="btn btn-info" style=margin-left:5px>Buy Tickets</a></span>
 </p>
@@ -287,7 +300,7 @@ Hide shows I can't see
 </div>
 <div class=container>
 <div class=row ng-if=loaded>
-<div class=col-md-3>
+<div class="col-md-3 hidden-print">
 <div data-offset-top=-95 bs-affix style=padding-top:3px>
 <div ng-if=signedIn>
 <div class=btn-group ng-model=settings.scheduleMode bs-radio-group style=width:100%>
@@ -337,7 +350,7 @@ Hide shows I can't see
 </td>
 <td>
 <p class=h4 style="margin:0 0 12px"><a href=/show/{{::entry.show.slug}}>{{::entry.show.name}}</a></p>
-<p style=margin:0>
+<p style=margin:0 class=hidden-print>
 <span><a href=/show/{{::entry.show.slug}} class="btn btn-xs btn-primary">Learn More</a></span>
 <span ng-if="! entry.inPast"><a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target=fringeshop class="btn btn-xs btn-success" style=margin-left:10px>Buy Tickets</a></span>
 </p>
@@ -410,7 +423,7 @@ Hide shows I can't see
 <div class=container>
 <p class="lead text-center" ng-if="! mapLoaded">Loading map...</p>
 <div class=row ng-if=markerGroups ng-style="{visibility: !mapLoaded ? 'hidden' : 'visible'}">
-<div class=col-md-3>
+<div class="col-md-3 hidden-print">
 <h3>Views</h3>
 <ul class=list-unstyled>
 <li ng-repeat="view in ::views"><a href ng-click=gotoView(view)>{{view.name}}</a></li>
@@ -455,14 +468,49 @@ Hide shows I can't see
 </div>
 </div>
 </script>
+<script type="text/ng-template" id="app/public/public.html">
+<div class=container ng-if="! schedule">
+<p class="text-center lead" style=margin-top:100px>Loading...</p>
+</div>
+<div class=container ng-if=schedule>
+<div class=page-header>
+<a href=/ class="btn btn-primary pull-right">Automatically create your own Fringe schedule for free!</a>
+<h1>{{title}}</h1>
+</div>
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Date</th>
+<th>Time</th>
+<th>Show</th>
+<th>Venue</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="pId in sortedPerformances" ng-if="schedule.indexOf(pId) > -1" ng-init="performance = performances[pId]; show = shows[performance.show]; venue = venues[show.venue];">
+<td>{{moment(performance.start, 'X').format('ddd, MMM D')}}</td>
+<td>{{moment(performance.start, 'X').format('h:mma')}}</td>
+<th><a href=/show/{{show.slug}}>{{show.name}}</a></th>
+<td>{{venue.name}}</td>
+</tr>
+</tbody>
+</table>
+<br>
+<br>
+<p class=text-center>
+<a href=/ class="btn btn-primary btn-lg">Automatically create your own Fringe schedule for free!</a>
+</p>
+</div>
+</script>
 <script type="text/ng-template" id="app/myFringe/myFringe.html">
 <div class=jumbotron ng-class="{'has-tabs': $parent.signedIn}">
 <div class=container>
 <div class=row>
 <div class=col-md-8>
 <h1>My Fringe</h1>
+<h2 class=visible-print-inline>{{tabs.activeTab}}</h2>
 </div>
-<div class=col-md-4 bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}" style=margin-top:20px ng-show=isSignedIn>
+<div class="col-md-4 hidden-print" bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}" style=margin-top:20px>
 <p class=lead style=margin-bottom:5px>Fringe Level: {{statuses[status].name}}</p>
 <uib-progress max=maxLevel animate=false style=margin-bottom:2px>
 <uib-bar value=level type=success></uib-bar>
@@ -520,12 +568,8 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </div>
 </div>
 <div class=row ng-if="hasSchedule && loaded">
-<div class=col-md-3>
+<div class="col-md-3 hidden-print">
 <div data-offset-top=-95 bs-affix>
-<p class=text-center>
-<button ng-click=openGoogleCalendarSyncSetup() class="btn btn-primary" ng-class="calendarSyncEnabled ? 'btn-primary' : 'btn-success'">{{calendarSyncEnabled ? 'Google Calendar Sync: On' : 'Turn On Google Calendar Sync'}}</button>
-</p>
-<br>
 <month-day-picker days=days model=filter.currentDay></month-day-picker>
 <p class=text-center>
 <button class="btn btn-default btn-sm" ng-disabled="! filter.currentDay" ng-click="filter.currentDay = 0">Show Full Schedule</button>
@@ -537,6 +581,15 @@ Add <ng-pluralize count=nextLevelRemaining when=plurals.aShow></ng-pluralize> to
 </div>
 </div>
 <div class=col-md-9>
+<div class=hidden-print>
+<p class=pull-right>
+<button ng-click=openShareModal() class="btn btn-default"><i class="glyphicon glyphicon-share"></i> Share</button>
+</p>
+<p>
+<button ng-click=openGoogleCalendarSyncSetup() class="btn btn-primary" ng-class="calendarSyncEnabled ? 'btn-primary' : 'btn-success'">{{calendarSyncEnabled ? 'Google Calendar Sync: On' : 'Turn On Google Calendar Sync'}}</button>
+</p>
+<br>
+</div>
 <table class="table table-striped amazing-schedule">
 <tbody ng-repeat="(day, amazingScheduleDay) in amazingSchedule" ng-if="! filter.currentDay || filter.currentDay == day">
 <tr class=header>
@@ -670,6 +723,43 @@ Create a new calendar:
 <button class="btn btn-primary" type=button ng-click=close()>Close</button>
 </div>
 </div>
+</script>
+<script type="text/ng-template" id="app/myFringe/schedule/shareModal/shareModal.html">
+<div class=modal-header>
+<h3 class=modal-title>Share Schedule</h3>
+</div>
+<div ng-show=editScheduleName>
+<div class=modal-body>
+<p>Give your schedule a title. It will be displayed when others view your schedule.</p>
+<div class=form-group>
+<label>Schedule Title</label>
+<input class=form-control placeholder=Search ng-model=newScheduleName ng-minlength=5 ng-maxlength=100 maxlength=100>
+<small>(e.g., Matt's Fringe Schedule)</small>
+</div>
+</div>
+<div class=modal-footer>
+<button class="btn btn-default" type=button ng-click="scheduleName.length ? editScheduleName = false : close()">Cancel</button>
+<button class="btn btn-success" type=button ng-click=save() ng-disabled="! newScheduleName">Save</button>
+</div>
+</div>
+<div ng-show="! editScheduleName">
+<div class=modal-body>
+<p><strong>Schedule Title:</strong> {{scheduleName}} <a href ng-click="editScheduleName = true" class="btn btn-default btn-xs">edit</a></p>
+<br>
+<p>Share your schedule with anyone by giving them this link:</p>
+<p class=well>https://fringeomatic.com/public/{{publicHash}}</p>
+<br>
+<p class=text-center>
+<a href=/public/{{publicHash}} target=_blank class="btn btn-primary btn-lg">Preview</a>
+</p>
+<br>
+<p class=small>Note: Your public schedule will be updated with changes to your schedule.</p>
+</div>
+<div class=modal-footer>
+<button class="btn btn-primary" type=button ng-click=close()>Close</button>
+</div>
+</div>
+
 </script>
 <script type="text/ng-template" id="app/myFringe/availability/availability.html">
 <div ng-if=availabilitySlots>
@@ -1096,7 +1186,7 @@ I wasn't able to fit all of the shows you want to see on the schedule.
 <li>You can hand-pick some show times that you like, reject the rest, and run the generator again.
 <ul class=small>
 <li>PRO: The size of the problem is reduced making it easier to solve.</li>
-<li>CON: You're locked-in to the show times you hand-pick and consequences of that.</li>
+<li>CON: You're locked-in to the show times you hand-pick and the consequences of that.</li>
 </ul>
 <br>
 </li>
@@ -1135,7 +1225,7 @@ I wasn't able to fit all of the shows you want to see on the schedule.
 </table>
 </div>
 </div>
-<p>So, it quickly becomes impractical to look at every possible schedule. This is the type of problem that would be <em>perfect</em> for a <a href=https://en.wikipedia.org/wiki/Quantum_computing target=_blank>Quantum Computer</a>.</p>
+<p>So, it quickly becomes impractical to look at every possible schedule. This is the type of problem that would be <em>perfect</em> for a <a href=https://en.wikipedia.org/wiki/Quantum_computing target=_blank>Quantum Computer</a>...and unless you have a spare Quantum computer laying around, you're stuck with this.</p>
 <p>The Auto-Scheduler uses a custom <a href=https://en.wikipedia.org/wiki/Genetic_algorithm>Genetic Algorithm</a>. Instead of looking for the best possible schedule, it looks for a really great schedule. If there is a possible combination of show times that would allow you to see every show you want, the algorithm will almost certainly never find it...but it <em>will</em> find something that's really <em>close</em> to an ideal schedule. The longer it runs, the closer it can get.</p>
 </div>
 </div>

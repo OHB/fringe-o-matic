@@ -2,7 +2,7 @@
     <p class="text-center lead" style="margin-top: 100px">Loading...</p>
 </div>
 <div class="container" ng-if="loaded">
-    <div class="row" style="margin: 30px 0; color: white" ng-style="{backgroundColor: backgroundColor, color: textColor}">
+    <div class="row hidden-print" style="margin: 30px 0; color: white" ng-style="{backgroundColor: backgroundColor, color: textColor}">
         <div class="col-md-7" style="padding-left: 20px">
             <div class="h3" style="line-height: 1em" ng-if="$parent.$parent.signedIn" ng-style="{color: titleColor}">
                 <interest show-id="showId"></interest>
@@ -20,6 +20,19 @@
             </p>
         </div>
         <div class="col-md-5" style="height: 450px; background: url('img/show/{{show.image}}') center no-repeat; background-size: cover" ng-style="{boxShadow: 'inset 20px 0 20px -6px ' + backgroundColor}"></div>
+    </div>
+    <div class="row visible-print-block">
+        <div class="col-md-12">
+            <div class="h3" style="line-height: 1em" ng-if="$parent.$parent.signedIn" ng-style="{color: titleColor}">
+                <interest show-id="showId"></interest>
+            </div>
+            <h1>{{show.name}}</h1>
+            <p ng-if="::show.artist">
+                <strong ng-bind="show.artist"></strong><span ng-if="show.artistLocation">, {{show.artistLocation}}</span>
+            </p>
+            <hr />
+            <p>{{venues[show.venue].name}}</p>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-8 lead">

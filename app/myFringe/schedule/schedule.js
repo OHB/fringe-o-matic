@@ -99,6 +99,14 @@ angular.module('fringeApp').component('myFringeSchedule', {
             $scope.filter.currentDay = $scope.days[0];
         }
 
+        $scope.openShareModal = function() {
+            $uibModal.open({
+                templateUrl: 'app/myFringe/schedule/shareModal/shareModal.html',
+                controller: 'ShareModalCtrl',
+                size: 'md'
+            });
+        };
+
         $scope.openGoogleCalendarSyncSetup = function() {
             $uibModal.open({
                 templateUrl: 'app/myFringe/schedule/googleCalendarSyncSetupModal/googleCalendarSyncSetupModal.html',

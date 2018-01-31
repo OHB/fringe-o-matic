@@ -6,7 +6,7 @@
 <div class="container">
     <p class="lead text-center" ng-if="! mapLoaded">Loading map...</p>
     <div class="row" ng-if="markerGroups" ng-style="{visibility: !mapLoaded ? 'hidden' : 'visible'}">
-        <div class="col-md-3">
+        <div class="col-md-3 hidden-print">
             <h3>Views</h3>
             <ul class="list-unstyled">
                 <li ng-repeat="view in ::views"><a href ng-click="gotoView(view)">{{view.name}}</a></li>

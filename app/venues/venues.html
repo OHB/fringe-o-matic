@@ -5,7 +5,7 @@
 </div>
 <div class="container" style="padding-top:20px">
     <div class="row" ng-if="venues">
-        <div class="col-md-3">
+        <div class="col-md-3 hidden-print">
             <div class="panel panel-primary" data-offset-top="-95" bs-affix>
                 <div class="panel-heading">
                     <h3 class="panel-title">Distance Calculator</h3>
@@ -54,7 +54,7 @@
                             <td style="padding-top: 9px" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
                                 <span class="label label-venue-default label-venue-{{venueId}}" style="font-size: 0.9em">{{venue.name}}</span>
                             </td>
-                            <td class="text-right" style="vertical-align: middle" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
+                            <td class="text-right hidden-print" style="vertical-align: middle" ng-style="{borderBottom: $last ? '1px solid #ddd' : 0, borderTop: $first ? 0 : '1px solid #ddd'}">
                                 <a class="btn btn-default btn-sm" ng-href="/shows/venue/{{venue.slug}}">Shows</a>
                                 <a class="btn btn-default btn-sm" ng-href="/map/venue/{{venue.slug}}">Map</a>
                             </td>

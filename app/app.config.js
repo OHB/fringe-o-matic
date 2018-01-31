@@ -230,6 +230,8 @@ angular.module('fringeApp')
                     template: '<fringe-map></fringe-map>'
                 }).when('/map/host/:host', {
                     template: '<fringe-map></fringe-map>'
+                }).when('/public/:id', {
+                    template: '<public></public>'
                 }).when('/credits', {
                     templateUrl: 'pages/credits.html'
                 }).when('/privacy', {

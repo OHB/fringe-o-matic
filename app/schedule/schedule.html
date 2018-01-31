@@ -5,7 +5,7 @@
 </div>
 <div class="container">
     <div class="row" ng-if="loaded">
-        <div class="col-md-3">
+        <div class="col-md-3 hidden-print">
             <div data-offset-top="-95" bs-affix style="padding-top: 3px">
                 <div ng-if="signedIn">
                     <div class="btn-group" ng-model="settings.scheduleMode" bs-radio-group style="width:100%">
@@ -62,7 +62,7 @@
                         </td>
                         <td>
                             <p class="h4" style="margin:0 0 12px;"><a href="/show/{{::entry.show.slug}}">{{::entry.show.name}}</a></p>
-                            <p style="margin:0">
+                            <p style="margin:0" class="hidden-print">
                                 <span><a href="/show/{{::entry.show.slug}}" class="btn btn-xs btn-primary">Learn More</a></span>
                                 <span ng-if="! entry.inPast"><a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-xs btn-success" style="margin-left: 10px">Buy Tickets</a></span>
                             </p>

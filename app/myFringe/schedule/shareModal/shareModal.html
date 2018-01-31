@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <h3 class="modal-title">Share Schedule</h3>
+</div>
+<div ng-show="editScheduleName">
+    <div class="modal-body">
+        <p>Give your schedule a title. It will be displayed when others view your schedule.</p>
+        <div class="form-group">
+            <label>Schedule Title</label>
+            <input type="text" class="form-control" placeholder="Search" ng-model="newScheduleName" ng-minlength="5" ng-maxlength="100" maxlength="100">
+            <small>(e.g., Matt's Fringe Schedule)</small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="scheduleName.length ? editScheduleName = false : close()">Cancel</button>
+        <button class="btn btn-success" type="button" ng-click="save()" ng-disabled="! newScheduleName">Save</button>
+    </div>
+</div>
+<div ng-show="! editScheduleName">
+    <div class="modal-body">
+        <p><strong>Schedule Title:</strong> {{scheduleName}} <a href ng-click="editScheduleName = true" class="btn btn-default btn-xs">edit</a></p>
+        <br />
+        <p>Share your schedule with anyone by giving them this link:</p>
+        <p class="well">https://fringeomatic.com/public/{{publicHash}}</p>
+        <br />
+        <p class="text-center">
+            <a href="/public/{{publicHash}}" target="_blank" class="btn btn-primary btn-lg">Preview</a>
+        </p>
+        <br />
+        <p class="small">Note: Your public schedule will be updated with changes to your schedule.</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="close()">Close</button>
+    </div>
+
+</div>

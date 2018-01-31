@@ -55,6 +55,15 @@ $db->query("UPDATE `user_settings` SET `autoScheduleIntroComplete`={$value} WHER
 $value = (isset($json->settings->displaySchedulerStats) ? $json->settings->displaySchedulerStats : false) ? 1 : 0;
 $db->query("UPDATE `user_settings` SET `displaySchedulerStats`={$value} WHERE `userId`={$userId}");
 
+$value = isset($json->settings->publicScheduleName) ? trim($json->settings->publicScheduleName) : null;
+if (! $value) {
+    $db->query("UPDATE `user_settings` SET `publicScheduleName`=NULL WHERE `userId`={$userId}");
+} else {
+    $statement = $db->prepare("UPDATE `user_settings` SET `publicScheduleName`=? WHERE `userId`={$userId}");
+    $statement->bind_param('s', $value);
+    $statement->execute();
+}
+
 $value = isset($json->settings->googleCalendarSyncId) ? $json->settings->googleCalendarSyncId : null;
 if (! $value) {
     $db->query("UPDATE `user_settings` SET `googleCalendarSyncId`=NULL WHERE `userId`={$userId}");
@@ -63,6 +72,8 @@ if (! $value) {
     $statement->bind_param('s', $json->settings->googleCalendarSyncId);
     $statement->execute();
 }
+
+
 
 
 $sql = [

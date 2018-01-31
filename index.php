@@ -113,7 +113,7 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
         <div ng-view></div>
     </div>
 </main>
-<footer class="text-muted" ng-cloak>
+<footer class="text-muted hidden-print" ng-cloak>
     <div class="container">
         <ul>
             <li><a href="/privacy">Privacy Policy</a></li>

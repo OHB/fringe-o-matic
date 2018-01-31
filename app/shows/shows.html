@@ -5,7 +5,7 @@
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 hidden-print">
             <div data-offset-top="-95" bs-affix>
                 <div class="form-group has-feedback">
                     <label>Filter by keyword</label>
@@ -64,7 +64,7 @@
                             </em>&nbsp;
                         </p>
                     </div>
-                    <p style="margin-bottom: 35px">
+                    <p style="margin-bottom: 35px" class="hidden-print">
                         <span><a href="/show/{{::show.slug}}" class="btn btn-primary">Learn More</a></span>
                         <span ng-if="::show.storeId"><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-info" style="margin-left: 5px">Buy Tickets</a></span>
                     </p>

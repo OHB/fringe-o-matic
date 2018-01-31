@@ -110,7 +110,8 @@ $settings = [
     'scheduleMode' => $row->scheduleMode,
     'autoScheduleIntroComplete' => (bool) $row->autoScheduleIntroComplete,
     'displaySchedulerStats' => (bool) $row->displaySchedulerStats,
-    'googleCalendarSyncId' => $row->googleCalendarSyncId
+    'googleCalendarSyncId' => $row->googleCalendarSyncId,
+    'publicScheduleName' => $row->publicScheduleName
 ];
 
 
@@ -134,6 +135,7 @@ while ($row = $result->fetch_object()) {
     $unavailability[] = $row->slotStart;
 }
 
+header('Content-type: application/json');
 echo json_encode([
     'account' => $accountData,
     'settings' => $settings,
