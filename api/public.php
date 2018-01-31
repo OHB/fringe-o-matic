@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET' || ! isset($_GET['hash'])) {
     exit;
 }
 
-if (strlen($_GET['hash']) !== 32) {
+if (strlen($_GET['hash']) !== 6) {
     http_response_code(400);
     exit;
 }

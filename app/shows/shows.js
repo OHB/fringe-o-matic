@@ -60,6 +60,7 @@ angular.module('fringeApp').component('shows', {
             $scope.resetFilters = function() {
                 $scope.search = '';
                 $scope.selectedVenue = '*';
+                $scope.selectedRating = '*';
                 $scope.hideWithoutShowtimes = false;
                 $scope.hideNotInterested = false;
                 $scope.hideNotAttending = false;
@@ -75,6 +76,10 @@ angular.module('fringeApp').component('shows', {
                 $scope.allShows = $scope.sortedShows.filter(function(showId) {
                     var show = $scope.shows[showId];
                     if ($scope.selectedVenue !== '*' && show.venue !== $scope.selectedVenue) {
+                        return false;
+                    }
+
+                    if ($scope.selectedRating !== '*' && show.rating !== $scope.selectedRating) {
                         return false;
                     }
 

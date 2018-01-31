@@ -42,6 +42,7 @@ angular.module('fringeApp').component('schedule', {
                         venueId: show.venue,
                         venue: venues[show.venue],
                         rating: ratings[show.rating],
+                        minutes: (performances[show.performances[0]].stop - performances[show.performances[0]].start) / 60,
                         isAttending: false,
                         canAttend: false,
                         canBeScheduled: false,

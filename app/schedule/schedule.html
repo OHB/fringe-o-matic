@@ -51,24 +51,27 @@
                         <th>Time</th>
                         <th>Show</th>
                         <th ng-if="signedIn">Interest</th>
-                        <th ng-if="signedIn" width="135">Going?</th>
+                        <th ng-if="signedIn" width="195">Going?</th>
+                        <th ng-if="! signedIn"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="entry in schedule">
                         <td nowrap>
-                            {{::moment(entry.performance.start, 'X').format('h:mma')}} -
-                            {{::moment(entry.performance.stop, 'X').format('h:mma')}}
+                            {{::moment(entry.performance.start, 'X').format('h:mma')}}
                         </td>
                         <td>
                             <p class="h4" style="margin:0 0 12px;"><a href="/show/{{::entry.show.slug}}">{{::entry.show.name}}</a></p>
-                            <p style="margin:0" class="hidden-print">
-                                <span><a href="/show/{{::entry.show.slug}}" class="btn btn-xs btn-primary">Learn More</a></span>
-                                <span ng-if="! entry.inPast"><a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-xs btn-success" style="margin-left: 10px">Buy Tickets</a></span>
+                            <!--<p class="hidden-print" style="margin:25px 0">-->
+                                <!--<span><a href="/show/{{::entry.show.slug}}" class="btn btn-sm btn-primary">Learn More</a></span>-->
+                                <!--<span ng-if="! entry.inPast"><a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-sm btn-success" style="margin-left: 10px">Buy Tickets</a></span>-->
+                            <!--</p>-->
+                            <p style="margin-bottom: 0" class="text-muted small">
+                                {{::entry.venue.name}} &middot;
+                                {{::entry.rating}} &middot;
+                                {{entry.show.price|price}} &middot;
+                                {{entry.minutes}} minutes
                             </p>
-                            <!--<span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>-->
-                            <!--<show-rating value="::entry.rating"></show-rating>-->
-                            <!--<span class="label label-success">{{entry.show.price|price}}</span>-->
                         </td>
                         <td nowrap class="align-middle" ng-if="signedIn">
                             <interest show-id="entry.showId"></interest>
@@ -120,6 +123,14 @@
                                     <input type="radio" value="yes"><span class="glyphicon glyphicon-thumbs-up"></span>
                                 </label>
                             </div>
+                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px">
+                                <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
+                            </a>
+                        </td>
+                        <td ng-if="! signedIn" class="align-middle">
+                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px">
+                                <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
+                            </a>
                         </td>
                     </tr>
                     </tbody>

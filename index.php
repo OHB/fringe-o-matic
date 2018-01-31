@@ -121,7 +121,7 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
             <li><a href="/privacy">Privacy Policy</a></li>
             <li><a href="/credits">Credits</a></li>
         </ul>
-        <p>Built with &hearts; by Lewis Johnston. Not affiliated with <a href="http://orlandofringe.org" target="_blank">Orlando Fringe</a>.<br />
+        <p>Made with &hearts; by Lewis Johnston. Not affiliated with <a href="http://orlandofringe.org" target="_blank">Orlando Fringe</a>.<br />
             <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>
     </div>
 </footer>

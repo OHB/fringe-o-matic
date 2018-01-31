@@ -66,7 +66,8 @@ angular.module('fringeApp').component('myFringeSchedule', {
                     id: performanceId,
                     start: performance.start,
                     stop: performance.stop,
-                    show: performance.show
+                    show: performance.show,
+                    storeId: performance.storeId
                 });
 
                 previousOfDay = performance;

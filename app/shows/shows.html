@@ -16,6 +16,10 @@
                     <label>Venue</label>
                     <select class="form-control" ng-model="selectedVenue" ng-options="o.value as o.label for o in venueOptions" ng-change="refresh()"></select>
                 </div>
+                <div class="form-group">
+                    <label>Rating</label>
+                    <select class="form-control" ng-model="selectedRating" ng-options="o.value as o.label for o in ratingOptions" ng-change="refresh()"></select>
+                </div>
                 <hr />
                 <div class="checkbox" ng-show="isFringeOngoing">
                     <label>
@@ -57,7 +61,10 @@
                         <interest show-id="showId"></interest>
                     </div>
                     <div style="height:100px">
-                        <p class="lead" style="line-height: 1em; margin-bottom:10px"><a href="/show/{{::show.slug}}">{{::show.name}}</a></p>
+                        <p class="lead" style="line-height: 1em; margin-bottom:10px">
+                            <a class="hidden-print" href="/show/{{::show.slug}}">{{::show.name}}</a>
+                            <span class="visible-print-inline">{{::show.name}}</span>
+                        </p>
                         <p class="small">
                             <em ng-if="::show.artist">
                                 <strong ng-bind="::show.artist"></strong><span ng-if="::show.artistLocation">, {{::show.artistLocation}}</span>
@@ -80,7 +87,8 @@
                         </span>
                     </p>
                 </div>
-                <div class="col-md-3" style="height: 220px; background: url('img/show/{{show.image}}') top; background-size: cover;"></div>
+                <div class="col-md-3 hidden-print" style="height: 220px; background: url('img/show/{{show.image}}') top; background-size: cover;"></div>
+                <hr class="visible-print-block" />
             </div>
         </div>
     </div>

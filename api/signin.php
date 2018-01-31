@@ -47,9 +47,14 @@ $statement->execute();
 $result = $statement->get_result();
 
 if ($result->num_rows === 0) {
+    $chars = str_split('acdefghkmnpqrtvwxyzACDEFGHKMNPQRTVWYZ346789');
+    shuffle($chars);
+
     $accountData = [
         'privateHash' => md5('FOMPRIVATE' . microtime(true) . rand(1000, 1000000)),
-        'publicHash' => md5('FOMPUBLIC' . microtime(true) . rand(1000, 1000000)),
+        'publicHash' => implode('', array_map(function($i) use($chars) {
+            return $chars[$i];
+        }, array_rand($chars, 6))),
         'helpCode' => strtoupper(substr(md5('FOMHELPCODE' . microtime(true) . rand(1000, 1000000)), 0, 6)),
         'isAdmin' => false
     ];

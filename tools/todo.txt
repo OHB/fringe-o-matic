@@ -7,23 +7,11 @@ click another, it works.
 related to url update
 push state?
 
-remove help? (affix, bs modal)
-
-move to an actual database
-generate user hash
-generate user id (short, easy to relate for support)
-create sharable link
-
-
 css instead of innerHeight
 
 sitemap
 
-Fringe O'Matic on St. Patrick's Day?
-
 make mobile friendly!
-
-store using token id instead of plain id
 
 custom reminder popover
 
@@ -45,11 +33,3 @@ tickets buying screen
 	select tickets to buy
 		auto populate cart???
 		mark tickets bought (optional deselect)
-
-progressbar in nav to encourage exploring?
-	welcome modal, optional tell about each page the first land
-
-context sensitive help
-
-speed up generator by creating fake performance ids which are the actual sort order
-    then the sort function doesn't need a callback

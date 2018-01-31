@@ -40,6 +40,7 @@
         <div class="hidden-print">
             <p class="pull-right">
                 <button ng-click="openShareModal()" class="btn btn-default"><i class="glyphicon glyphicon-share"></i> Share</button>
+                <button onclick="window.print()" class="btn btn-default"><i class="glyphicon glyphicon-print"></i> Print</button>
             </p>
             <p>
                 <button ng-click="openGoogleCalendarSyncSetup()" class="btn btn-primary" ng-class="calendarSyncEnabled ? 'btn-primary' : 'btn-success'">{{calendarSyncEnabled ? 'Google Calendar Sync: On' : 'Turn On Google Calendar Sync'}}</button>
@@ -57,15 +58,22 @@
                 <th>Time</th>
                 <th>Show</th>
                 <th>Venue</th>
-                <!--<th></th>-->
+                <th></th>
             </tr>
             <tr ng-repeat="item in amazingScheduleDay" ng-class="item.as">
-                <td ng-if="item.as=='performance'" nowrap>{{moment(item.start, 'X').format('h:mm a')}}</td>
-                <td ng-if="item.as=='performance'"><a href="/show/{{shows[item.show].slug}}">{{shows[item.show].name}}</a></td>
-                <td ng-if="item.as=='performance'">
-            <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
-                {{venues[shows[item.show].venue].name}}
-            </span>
+                <td ng-if="item.as=='performance'" nowrap class="align-middle">{{moment(item.start, 'X').format('h:mm a')}}</td>
+                <td ng-if="item.as=='performance'" class="align-middle">
+                    <a class="hidden-print" href="/show/{{shows[item.show].slug}}">{{shows[item.show].name}}</a>
+                    <span class="visible-print-inline">{{shows[item.show].name}}</span>
+                </td>
+                <td ng-if="item.as=='performance'" class="align-middle">
+                    <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
+                        {{venues[shows[item.show].venue].name}}
+                    </span>
+                </td>
+                <td class="text-right align-middle hidden-print">
+                    <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{item.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px">
+                        <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
                     </a>
                 </td>
                 <!--<td ng-if="item.as=='performance'">-->
