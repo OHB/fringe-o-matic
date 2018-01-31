@@ -124,39 +124,41 @@ angular.module('fringeApp').component('fringeMap', {
                 });
             };
 
-            NgMap.getMap().then(function() {
-                if ($routeParams.venue) {
-                    var venueId = Data.findVenueIdBySlug($routeParams.venue);
+            $timeout(function() {
+                NgMap.getMap().then(function() {
+                    if ($routeParams.venue) {
+                        var venueId = Data.findVenueIdBySlug($routeParams.venue);
 
-                    if (venueId) {
-                        var pos = venues[venueId].mapPos;
-                        angular.forEach($scope.markerGroups, function (group) {
-                            $scope.isGroupVisible[group.id] = true;
-                        });
-                        NgMap.getMap().then(function (map) {
-                            map.setCenter(new google.maps.LatLng(pos[0], pos[1]));
-                            map.setZoom(21);
-                        });
-                    }
-                } else if ($routeParams.host) {
-                    var hostId = Data.findVenueHostIdBySlug($routeParams.host),
-                        boundList = [];
+                        if (venueId) {
+                            var pos = venues[venueId].mapPos;
+                            angular.forEach($scope.markerGroups, function (group) {
+                                $scope.isGroupVisible[group.id] = true;
+                            });
+                            NgMap.getMap().then(function (map) {
+                                map.setCenter(new google.maps.LatLng(pos[0], pos[1]));
+                                map.setZoom(21);
+                            });
+                        }
+                    } else if ($routeParams.host) {
+                        var hostId = Data.findVenueHostIdBySlug($routeParams.host),
+                            boundList = [];
 
-                    if (hostId) {
-                        angular.forEach($scope.markerGroups, function(group) {
-                            $scope.isGroupVisible[group.id] = true;
-                            angular.forEach(group.markers, function(marker) {
-                                if (marker.host === hostId) {
-                                    boundList.push(marker.position);
-                                }
-                            })
-                        });
-                        zoomToBoundedRegion(boundList, 19);
+                        if (hostId) {
+                            angular.forEach($scope.markerGroups, function(group) {
+                                $scope.isGroupVisible[group.id] = true;
+                                angular.forEach(group.markers, function(marker) {
+                                    if (marker.host === hostId) {
+                                        boundList.push(marker.position);
+                                    }
+                                })
+                            });
+                            zoomToBoundedRegion(boundList, 19);
+                        }
+                    } else {
+                        $scope.gotoView($scope.views[MapConfig.initialView]);
                     }
-                } else {
-                    $scope.gotoView($scope.views[MapConfig.initialView]);
-                }
-                $scope.mapLoaded = true;
+                    $scope.mapLoaded = true;
+                });
             });
         }
     ]

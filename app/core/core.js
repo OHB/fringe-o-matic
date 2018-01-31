@@ -1,7 +1,6 @@
 angular.module('fringeApp').controller('CoreCtrl', [
-    '$rootScope', '$scope', '$route', '$location', '$timeout', '$window', '$q', '$uibModal',
-    'Data', 'Menu', 'User', 'Error', 'Configuration',
-    function($rootScope, $scope, $route, $location, $timeout, $window, $q, $uibModal, Data, Menu, User, Error, Configuration) {
+    '$rootScope', '$scope', '$route', '$location', '$window', '$q', '$uibModal', '$alert', 'Data', 'Menu', 'User', 'Error',
+    function($rootScope, $scope, $route, $location, $window, $q, $uibModal, $alert, Data, Menu, User, Error) {
         User.onSave(function(promise) {
             promise.then(function() {}, function() {
                 Error.error('Unable to save data to the server.', 'Have you lost your internet connection?');
@@ -98,5 +97,34 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 });
             });
         };
+
+        $scope.isOnline = navigator.onLine;
+        var updateOnlineStatus = function() {
+            $scope.isOnline = navigator.onLine;
+            $route.reload();
+
+            if ($scope.isOnline) {
+                $alert({
+                    title: "You're back online!",
+                    placement: 'top-right',
+                    animation: 'am-fade-and-slide-top',
+                    type: 'success',
+                    show: true,
+                    duration: 5
+                });
+            } else {
+                $alert({
+                    title: "You've got offline!",
+                    content: $scope.signedIn ? "You won't be able to edit anything until you go back online." : "You won't be able to sign-in.",
+                    placement: 'top-right',
+                    animation: 'am-fade-and-slide-top',
+                    type: 'danger',
+                    show: true,
+                    duration: 5
+                });
+            }
+        };
+        window.addEventListener('offline', updateOnlineStatus);
+        window.addEventListener('online', updateOnlineStatus);
     }]
 );

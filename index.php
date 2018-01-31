@@ -50,7 +50,7 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
 </head>
-<body ng-controller="CoreCtrl">
+<body ng-controller="CoreCtrl" ng-class="{'online': isOnline, 'offline': !isOnline}">
 <header class="navbar-primary navbar navbar-fixed-top">
     <div class="container" ng-init="nav = {collapsed: true}">
         <div class="navbar-header">
@@ -70,12 +70,11 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
                 <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
                     <a href="/test">Testing</a>
                 </li>
-                <!--                <li><a href ng-click="openHelp()">-->
-                <!--                        <i class="glyphicon glyphicon-question-sign" bs-tooltip="{title:'Need help?'}" data-placement="bottom"></i>-->
-                <!--                    </a>-->
-                </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" ng-cloak>
+            <ul class="nav navbar-nav navbar-right" ng-cloak ng-if="!isOnline">
+                <li class="navbar-text">Offline</li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" ng-cloak ng-if="isOnline">
                 <li ng-show="! signedIn && loaded"><a href ng-click="signIn()">Sign In</a></li>
                 <li class="dropdown" ng-show="signedIn && loaded">
                     <a href bs-dropdown>Signed in as {{signedInName}} <span class="caret"></span></a>
@@ -117,7 +116,7 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
 </main>
 <footer class="text-muted hidden-print" ng-cloak>
     <div class="container">
-        <ul>
+        <ul class="hidden-offline">
             <li><a href="/privacy">Privacy Policy</a></li>
             <li><a href="/credits">Credits</a></li>
         </ul>
@@ -139,6 +138,8 @@ if (isset($_REQUEST['compile']) || isset($COMPILE)) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/debounce.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/parse-options.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/alert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/alert.tpl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js"></script>

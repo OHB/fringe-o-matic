@@ -55,6 +55,9 @@ body.js .js-required {
     background: #337ab7;
     padding: 6px 0;
 }
+.offline .navbar-primary {
+    background: #d9534f;
+}
 .navbar-primary .navbar-brand {
     color: white;
     cursor: default;
@@ -63,8 +66,7 @@ body.js .js-required {
     color: rgba(255, 255, 255, 0.7);
 }
 .navbar-primary .navbar-brand:focus, .navbar-primary .navbar-brand:hover,
-.navbar-primary .navbar-nav > li > a:focus, .navbar-primary .navbar-nav > li > a:hover,
-.navbar-primary .navbar-text:hover {
+.navbar-primary .navbar-nav > li > a:focus, .navbar-primary .navbar-nav > li > a:hover {
     color: white;
     background-color: transparent;
 }
@@ -185,4 +187,12 @@ body.js .js-required {
 
 .popover-title {
     font-weight: 700;
+}
+
+.offline .hidden-offline, .visible-offline-block {
+    display: none;
+}
+
+.offline .visible-offline-block {
+    display: block;
 }

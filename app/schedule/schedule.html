@@ -76,7 +76,7 @@
                         <td nowrap class="align-middle" ng-if="signedIn">
                             <interest show-id="entry.showId"></interest>
                         </td>
-                        <td nowrap class="align-middle" ng-if="signedIn && entry.inPast">
+                        <td nowrap class="align-middle" ng-if="signedIn && (! online || entry.inPast)">
                             <div class="btn-group" bs-radio-group ng-model="entry.attendState">
                                 <label class="btn disabled btn-default" ng-class="entry.attendState == 'no' && 'btn-danger'">
                                     <input type="radio" value="no" disabled><span class="glyphicon glyphicon-thumbs-down"></span>
@@ -89,7 +89,7 @@
                                 </label>
                             </div>
                         </td>
-                        <td nowrap class="align-middle" ng-if="signedIn && ! entry.inPast">
+                        <td nowrap class="align-middle" ng-if="signedIn && online && ! entry.inPast">
                             <div ng-if="entry.attendState=='no'" class="btn-group" bs-radio-group ng-model="entry.attendState">
                                 <label class="btn btn-danger">
                                     <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
@@ -128,7 +128,7 @@
                             </a>
                         </td>
                         <td ng-if="! signedIn" class="align-middle">
-                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px">
+                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px">
                                 <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
                             </a>
                         </td>

@@ -26,6 +26,8 @@ angular.module('fringeApp').component('home', {
             $timeout.cancel(timeout);
         });
 
+        $scope.getStartedDisabled = ! $scope.$parent.signedIn && ! navigator.onLine;
+
         $scope.getStarted = function() {
             if (! $scope.$parent.signedIn) {
                 $scope.$parent.signIn();

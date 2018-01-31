@@ -6,7 +6,7 @@ angular.module('fringeApp').directive('interest', function() {
             desire: '='
         },
         template: function(elem, attr) {
-            var clickable = attr.showId !== undefined,
+            var clickable = attr.showId !== undefined && !navigator.onLine,
                 html = '<span';
 
             if (! clickable) {

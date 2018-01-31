@@ -5,6 +5,7 @@ angular.module('fringeApp').component('schedule', {
             $scope.signedIn = User.isSignedIn();
             $scope.moment = moment;
             $scope.plurals = Plurals;
+            $scope.online = navigator.onLine;
 
             $scope.settings = {scheduleMode: User.getSettings().scheduleMode};
             $scope.preferences = User.getPreferences();
@@ -99,9 +100,11 @@ angular.module('fringeApp').component('schedule', {
             };
 
             $scope.$watch('settings', function() {
-                var settings = User.getSettings();
-                settings.scheduleMode = $scope.settings.scheduleMode;
-                User.setSettings(settings);
+                if ($scope.online) {
+                    var settings = User.getSettings();
+                    settings.scheduleMode = $scope.settings.scheduleMode;
+                    User.setSettings(settings);
+                }
                 updatePath();
                 refresh();
             }, true);
