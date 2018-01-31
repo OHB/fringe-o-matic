@@ -10,7 +10,7 @@ if ($COMPILING) {
 }
 ?><!DOCTYPE html>
 <html ng-app="fringeApp">
-<head>
+<head itemscope="" itemtype="http://schema.org/WebPage" lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -115,8 +115,9 @@ if ($COMPILING) {
 <footer class="text-muted hidden-print" ng-cloak>
     <div class="container">
         <ul class="hidden-offline">
-            <li><a href="/privacy">Privacy Policy</a></li>
-            <li><a href="/credits">Credits</a></li>
+            <li><a href="/policies/terms">Terms of Service</a></li>
+            <li><a href="/policies/privacy">Privacy Policy</a></li>
+            <li><a href="/about/credits">Credits</a></li>
         </ul>
         <p>Made with &hearts; by Lewis Johnston. Not affiliated with <a href="http://orlandofringe.org" target="_blank">Orlando Fringe</a>.<br />
             <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>

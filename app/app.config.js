@@ -232,10 +232,12 @@ angular.module('fringeApp')
                     template: '<fringe-map></fringe-map>'
                 }).when('/public/:id', {
                     template: '<public></public>'
-                }).when('/credits', {
-                    templateUrl: 'pages/credits.html'
-                }).when('/privacy', {
-                    templateUrl: 'pages/privacy.html'
+                }).when('/about/credits', {
+                    templateUrl: 'pages/about/credits.html'
+                }).when('/policies/privacy', {
+                    templateUrl: 'pages/policies/privacy.html'
+                }).when('/policies/terms', {
+                    templateUrl: 'pages/policies/terms.html'
                 }).when('/test', {
                     template: '<test></test>'
                 }).otherwise({redirectTo: '/'});
