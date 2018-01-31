@@ -3,21 +3,10 @@ $COMPILING = isset($_REQUEST['compile']) || isset($COMPILE);
 if ($COMPILING) {
     $css = ['compiled.css'];
     $js = ['compiled.js'];
-    $templates = function() {
-        echo file_get_contents(__DIR__ . '/tools/templates.html');
-    };
 } else {
     $build = json_decode(file_get_contents('tools/build.json'));
     $css = $build->css;
     $js = $build->js;
-
-    $templates = function() use ($build) {
-        foreach ($build->templates as $filename) {
-            echo '<script type="text/ng-template" id="' . $filename . '">'
-                . file_get_contents(__DIR__ . '/' . $filename)
-                . '</script>';
-        }
-    };
 }
 ?><!DOCTYPE html>
 <html ng-app="fringeApp">
@@ -133,7 +122,15 @@ if ($COMPILING) {
             <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>
     </div>
 </footer>
-<?php $templates(); ?>
+<?php
+if (! $COMPILING) {
+    foreach ($build->templates as $filename) {
+        echo '<script type="text/ng-template" id="' . $filename . '">'
+            . file_get_contents(__DIR__ . '/' . $filename)
+            . '</script>';
+    }
+}
+?>
 <script type="text/javascript">
     document.body.className += ' js';
     ENVIRONMENT = '<?php echo $COMPILING ? 'prod' : 'dev'; ?>';

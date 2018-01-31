@@ -24,28 +24,35 @@ foreach (scandir(__DIR__ . '/../') as $file) {
 }
 
 echo "Minifying templates...\n";
-put('tools/templates.html', getFiles($build->templates, function($filename, $file) {;
-    return "<script type=\"text/ng-template\" id=\"{$filename}\">\n" .
-        post('http://html-minifier.com/raw?', ['input' => $file]) .
-        "\n</script>\n";
-}));
+$templates = "angular.module('fringeApp').run(['\$templateCache',function(\$templateCache){"
+    . getFiles($build->templates, function($filename, $file) {
+        $html = json_encode(post('http://html-minifier.com/raw?', ['input' => $file]));
+        return "\$templateCache.put('{$filename}', {$html});\n";
+    })
+    . '}]);';
+
+//put('tools/templates.html', getFiles($build->templates, function($filename, $file) {
+//    return "<script type=\"text/ng-template\" id=\"{$filename}\">\n" .
+//        post('http://html-minifier.com/raw?', ['input' => $file]) .
+//        "\n</script>\n";
+//}));
 
 echo "Minifying CSS...\n";
 put('deploy/compiled.css', getFiles($build->css));
 
 echo "Minifying JavaScript...\n";
 minify('deploy/compiled.js', 'https://closure-compiler.appspot.com/compile', [
-    'js_code' => getFiles($build->js),
+    'js_code' => getFiles($build->js) . $templates,
     'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
     'output_format' => 'text',
     'output_info' => 'compiled_code'
 ]);
 
-echo "Creating index.html...\n";
+echo "Minifying index.html...\n";
 ob_start();
 $COMPILE = true;
 include_once (__DIR__ . '/../index.php');
-put('deploy/index.html', ob_get_clean());
+minify('deploy/index.html', 'http://html-minifier.com/raw', ['input' => ob_get_clean()]);
 
 echo "\nDone!\n\n";
 
