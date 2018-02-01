@@ -1,4 +1,4 @@
-angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'User', 'Data', 'Availability', 'Sorters', function($q, Configuration, User, Data, Availability, Sorters) {
+angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'User', 'Data', 'Availability', 'Sorters', 'GoogleCalendarSync', function($q, Configuration, User, Data, Availability, Sorters, GoogleCalendarSync) {
     var self = this;
 
     this.getSchedule = function() {
@@ -29,6 +29,7 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'User', 
         if (schedule.indexOf(performanceId) === -1) {
             schedule.push(performanceId);
             User.setSchedule(schedule);
+            GoogleCalendarSync.sync();
         }
 
         this.removeMaybe(performanceId);
@@ -37,8 +38,10 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'User', 
         this.removeMaybe(performanceId);
 
         var schedule = User.getSchedule();
-        schedule.remove(performanceId);
-        User.setSchedule(schedule);
+        if (schedule.remove(performanceId)) {
+            User.setSchedule(schedule);
+            GoogleCalendarSync.sync();
+        }
     };
 
     this.addMaybe = function(performanceId) {

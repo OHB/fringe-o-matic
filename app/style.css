@@ -196,3 +196,11 @@ body.js .js-required {
 .offline .visible-offline-block {
     display: block;
 }
+
+.alert.top-right {
+    top: 65px !important;
+}
+
+.alert.top-right.alert-info {
+    border-color: #31708f;
+}

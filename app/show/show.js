@@ -12,17 +12,46 @@ angular.module('fringeApp').component('show', {
         $scope.isUserAttendingPerformance = Schedule.isUserAttendingPerformance;
         $scope.trustAsHtml = $sce.trustAsHtml;
 
+        var allShows = Data.getSortedShows(),
+            current = allShows.indexOf($scope.showId);
+
+            $scope.nextShow = Data.getShow(allShows[current === allShows.length - 1 ? 0 : current + 1]);
+            $scope.previousShow = Data.getShow(allShows[current === 0 ? allShows.length - 1 : current - 1]);
+            $scope.randomShow = Data.getShow(allShows.filter(function(i) {
+                return i !== $scope.showId;
+            }).randomElement());
+
         var img = document.createElement('img');
         img.setAttribute('src', 'img/show/' + $scope.show.image);
         img.addEventListener('load', function() {
             var swatches = new Vibrant(img).swatches();
 
             $scope.$apply(function() {
-                $scope.backgroundColor = swatches.DarkVibrant.getHex();
-                $scope.titleColor = swatches.DarkVibrant.getTitleTextColor();
-                $scope.textColor = swatches.DarkVibrant.getBodyTextColor();
+                $scope.hasImage = false;
+                if (swatches.Vibrant) {
+                    $scope.hasImage = true;
+                    $scope.backgroundColor = swatches.Vibrant.getHex();
+                    $scope.titleColor = swatches.Vibrant.getTitleTextColor();
+                    $scope.textColor = swatches.Vibrant.getBodyTextColor();
+                }
+
+                $scope.loaded = true;
+            });
+
+
+            (new Image()).src = 'img/show/' + $scope.nextShow.image;
+            (new Image()).src = 'img/show/' + $scope.previousShow.image;
+            (new Image()).src = 'img/show/' + $scope.randomShow.image;
+        });
+        img.addEventListener('error', function() {
+            $scope.$apply(function() {
+                $scope.hasImage = false;
                 $scope.loaded = true;
             });
         });
+
+        $scope.random = function() {
+            return false;
+        };
     }]
 });

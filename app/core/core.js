@@ -1,6 +1,6 @@
 angular.module('fringeApp').controller('CoreCtrl', [
-    '$rootScope', '$scope', '$route', '$location', '$window', '$q', '$uibModal', '$alert', 'Data', 'Menu', 'User', 'Error', '$analytics',
-    function($rootScope, $scope, $route, $location, $window, $q, $uibModal, $alert, Data, Menu, User, Error, $analytics) {
+    '$rootScope', '$scope', '$route', '$location', '$window', '$q', '$timeout', '$uibModal', '$alert', 'Data', 'Menu', 'User', 'Error', '$analytics',
+    function($rootScope, $scope, $route, $location, $window, $q, $timeout, $uibModal, $alert, Data, Menu, User, Error, $analytics) {
         User.onSave(function(promise) {
             promise.then(function() {}, function() {
                 Error.error('Unable to save data to the server.', 'Have you lost your internet connection?');
@@ -75,8 +75,54 @@ angular.module('fringeApp').controller('CoreCtrl', [
             });
         });
 
-        $q.all([Data.load(), firstRouteLoaded.promise, signInCheck.promise]).then(function() {
+        var dataLoaded = Data.load().then(function() {
+
+            $scope.loadingMessage = function(fringeStart, fringeStop) {
+                var now = Date.now() / 1000,
+                    duration;
+
+                if (now < fringeStart) {
+                    duration = moment.duration(fringeStart - now, 'seconds');
+                    if (duration.asDays() > 10) {
+                        return null;
+                    } else if (duration.asDays() >= 1) {
+                        return ['Get ready!', 'Fringe starts ' + duration.humanize(true) + '.'];
+                    } else {
+                        return ["It's almost time!", moment(fringeStart, 'X').format('[Fringe starts at] h:mm a!')];
+                    }
+                } else if (now < fringeStop) {
+                    duration = moment.duration(fringeStop - now, 'seconds');
+
+                    if (duration.asDays() >= 2) {
+                        return ["It's Fringe!", 'There are ' + Math.floor(duration.asDays()) + ' days left.'];
+                    } else if (duration.asDays() >= 1) {
+                        return ["It's almost over!", 'There is only one more day of Fringe! :('];
+                    } else {
+                        return ['On no!', 'Today is the last day of Fringe! :('];
+                    }
+                } else {
+                    return ['Are you excited?', 'Fringe 2019 is less than a year away!']
+                }
+            }(Data.getFringeStart(), Data.getFringeStop());
+        });
+
+        $q.all([dataLoaded, firstRouteLoaded.promise, signInCheck.promise]).then(function() {
             $scope.loaded = true;
+
+            if ($scope.loadingMessage) {
+                $timeout(function() {
+                    $alert({
+                        title: $scope.loadingMessage[0],
+                        content: $scope.loadingMessage[1],
+                        placement: 'top-right',
+                        animation: 'am-fade-and-slide-top',
+                        type: 'info',
+                        show: true,
+                        duration: 10
+                    });
+                }, 1000);
+            }
+
         }, function() {
             Error.error('Unable to retrieve data from server', 'Please wait a moment and try again.');
         });

@@ -1,5 +1,5 @@
 angular.module('fringeApp')
-    .service('GoogleCalendarSync', ['Data', 'Schedule', 'User', '$q', 'debounce', function(Data, Schedule, User, $q, debounce) {
+    .service('GoogleCalendarSync', ['Data', 'User', '$q', 'debounce', function(Data, User, $q, debounce) {
         var self = this,
             calendarScope = 'https://www.googleapis.com/auth/calendar',
             onSyncStartFn = function() {},
@@ -34,8 +34,8 @@ angular.module('fringeApp')
                         existingPerformanceToEventMap[item.extendedProperties.private.performanceId] = item.id;
                         return item.extendedProperties.private.performanceId;
                     }),
-                    itemsToSend = Schedule.getSchedule().diff(existingCalendarItems),
-                    itemsToDelete = existingCalendarItems.diff(Schedule.getSchedule()),
+                    itemsToSend = User.getSchedule().diff(existingCalendarItems),
+                    itemsToDelete = existingCalendarItems.diff(User.getSchedule()),
                     total = itemsToSend.length + itemsToDelete.length,
                     progress = 0;
 

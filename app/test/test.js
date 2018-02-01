@@ -1,6 +1,6 @@
 angular.module('fringeApp').component('test', {
     templateUrl: 'app/test/test.html',
-    controller: ['$scope', 'User', function($scope, User) {
+    controller: ['$scope', 'User', 'GoogleCalendarSync', function($scope, User, GoogleCalendarSync) {
         $scope.userData = User.export();
 
         $scope.import = function(data) {
@@ -17,6 +17,8 @@ angular.module('fringeApp').component('test', {
 
             User.import(JSON.stringify(newData));
             $scope.userData = User.export();
+            GoogleCalendarSync.sync();
+
         };
 
         $scope.testData = [{

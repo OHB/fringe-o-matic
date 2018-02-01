@@ -2,16 +2,21 @@
     <p class="text-center lead" style="margin-top: 100px">Loading...</p>
 </div>
 <div class="container" ng-if="loaded">
-    <div class="row hidden-print" style="margin: 30px 0; color: white" ng-style="{backgroundColor: backgroundColor, color: textColor}">
-        <div class="col-md-7" style="padding-left: 20px">
-            <div class="h3" style="line-height: 1em" ng-if="$parent.$parent.signedIn" ng-style="{color: titleColor}">
+    <div class="row" style="margin-top: 20px; margin-bottom: 20px">
+        <div class="col-md-4"><a href="/show/{{previousShow.slug}}" class="btn btn-default">&larr; Previous Show</a></div>
+        <div class="col-md-4 text-center"><a href="/show/{{randomShow.slug}}" class="btn btn-default">Random Show</a></div>
+        <div class="col-md-4 text-right"><a href="/show/{{nextShow.slug}}" class="btn btn-default">Next Show &rarr;</a></div>
+    </div>
+    <div class="row hidden-print" style="margin-bottom: 30px; background: #23074d; background: -webkit-linear-gradient(to right, #23074d, #cc5333); background: linear-gradient(to right, #23074d, #cc5333); color: white">
+        <div style="padding: 0 20px; height: 450px" ng-class="show.image ? 'col-md-7' : 'col-md-12'" ng-style="hasImage ? {background: backgroundColor, color: textColor} : {}">
+            <div class="h3" style="line-height: 1em" ng-if="$parent.$parent.signedIn">
                 <interest show-id="showId"></interest>
             </div>
-            <h1>{{show.name}}</h1>
+            <h1 ng-style="{color: titleColor}" style="margin-top: 50px">{{show.name}}</h1>
             <p ng-if="::show.artist">
                 <strong ng-bind="show.artist"></strong><span ng-if="show.artistLocation">, {{show.artistLocation}}</span>
             </p>
-            <hr />
+            <hr style="border-top: 1px solid {{titleColor}}">
             <p>{{venues[show.venue].name}}</p>
             <br />
             <br />
@@ -19,7 +24,7 @@
                 <a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeId" analytics-on analytics-event="Click" analytics-category="Show" analytics-label="Buy Tickets">Buy Tickets</a>
             </p>
         </div>
-        <div class="col-md-5" style="height: 450px; background: url('img/show/{{show.image}}') center no-repeat; background-size: cover" ng-style="{boxShadow: 'inset 20px 0 20px -6px ' + backgroundColor}"></div>
+        <div class="col-md-5" ng-if="hasImage" style="height: 450px; background: #fff url('img/show/{{show.image}}') center no-repeat; background-size: cover"></div>
     </div>
     <div class="row visible-print-block">
         <div class="col-md-12">
@@ -35,11 +40,11 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 lead">
+        <div class="col-md-9 lead text-justify">
             <div style="margin-top: 10px" ng-bind-html="trustAsHtml(show.description)"></div>
             <p ng-if="show.warnings"><br /><em class="small">Note: {{show.warnings.join(', ')}}</em></p>
         </div>
-        <div class="col-md-3 col-md-offset-1">
+        <div class="col-md-2 col-md-offset-1">
             <h3 style="margin-top:10px">Notes</h3>
             <p>
                 <strong>Length:</strong> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes<br />
@@ -54,5 +59,11 @@
                 </li>
             </ul>
         </div>
+    </div>
+    <hr />
+    <div class="row" style="margin-top: 15px; margin-bottom: 15px">
+        <div class="col-md-4"><a href="/show/{{previousShow.slug}}" class="btn btn-default">&larr; Previous Show</a></div>
+        <div class="col-md-4 text-center"><a href="/show/{{randomShow.slug}}" class="btn btn-default">Random Show</a></div>
+        <div class="col-md-4 text-right"><a href="/show/{{nextShow.slug}}" class="btn btn-default">Next Show &rarr;</a></div>
     </div>
 </div>

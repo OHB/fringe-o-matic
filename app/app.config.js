@@ -244,7 +244,7 @@ angular.module('fringeApp')
         }
     ])
     .config(['$analyticsProvider', function($analyticsProvider) {
-        $analyticsProvider.trackExceptions(true);
+        $analyticsProvider.trackExceptions(false);
         if (ENVIRONMENT === 'dev') {
             $analyticsProvider.developerMode(true);
         }

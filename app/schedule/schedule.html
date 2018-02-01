@@ -52,7 +52,7 @@
                         <th>Show</th>
                         <th ng-if="signedIn">Interest</th>
                         <th ng-if="signedIn" width="195">Going?</th>
-                        <th ng-if="! signedIn"></th>
+                        <th ng-if="! signedIn" class="hidden-print"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -61,7 +61,10 @@
                             {{::moment(entry.performance.start, 'X').format('h:mma')}}
                         </td>
                         <td>
-                            <p class="h4" style="margin:0 0 12px;"><a href="/show/{{::entry.show.slug}}">{{::entry.show.name}}</a></p>
+                            <p class="h4" style="margin:0 0 12px;">
+                                <a class="hidden-print" href="/show/{{::entry.show.slug}}">{{::entry.show.name}}</a>
+                                <span class="visible-print-inline">{{::entry.show.name}}</span>
+                            </p>
                             <p style="margin-bottom: 0" class="text-muted small">
                                 {{::entry.venue.name}} &middot;
                                 {{::entry.rating}} &middot;
@@ -119,7 +122,7 @@
                                     <input type="radio" value="yes"><span class="glyphicon glyphicon-thumbs-up"></span>
                                 </label>
                             </div>
-                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px" analytics-on analytics-event="Click" analytics-category="Schedule" analytics-label="Buy Tickets">
+                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default hidden-print" style="padding: 6px 8px; margin-left:10px" analytics-on analytics-event="Click" analytics-category="Schedule" analytics-label="Buy Tickets">
                                 <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
                             </a>
                         </td>

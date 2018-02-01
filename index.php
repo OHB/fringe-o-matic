@@ -89,7 +89,7 @@ if ($COMPILING) {
                 <li ng-show="! signedIn && loaded"><a href ng-click="signIn()">Sign In</a></li>
                 <li class="dropdown" ng-show="signedIn && loaded">
                     <a href bs-dropdown>Signed in as {{signedInName}} <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" style="border-radius: 4px">
                         <li><a href ng-click="signOut()">Sign Out</a></li>
                     </ul>
                 </li>
@@ -119,6 +119,7 @@ if ($COMPILING) {
     <div ng-if="! error && ! loaded" class="js-required">
         <div class="container" style="padding-top: 10rem">
             <div class="spinner"></div>
+            <p class="text-center lead" ng-cloak><strong>{{loadingMessage[0]}}</strong><br>{{loadingMessage[1]}}</p>
         </div>
     </div>
     <div ng-if="! error && loaded" ng-cloak>
@@ -132,7 +133,7 @@ if ($COMPILING) {
             <li><a href="/policies/privacy">Privacy Policy</a></li>
             <li><a href="/about/credits">Credits</a></li>
         </ul>
-        <p>Made with &hearts; by Lewis Johnston. Not affiliated with <a href="http://orlandofringe.org" target="_blank">Orlando Fringe</a>.<br />
+        <p>Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018. Not affiliated with <a href="http://orlandofringe.org" target="_blank">Orlando Fringe</a>.<br />
             <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>
     </div>
 </footer>

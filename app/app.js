@@ -39,6 +39,8 @@ Array.prototype.remove = function(value) {
 
     if (i > -1) {
         this.splice(i, 1);
+
+        return true;
     }
 };
 

@@ -1,0 +1,6 @@
+{
+  "require": {
+    "evert/sitemap-php": "1.*",
+    "zaininnari/html-minifier": "*"
+  }
+}

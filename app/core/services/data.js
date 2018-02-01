@@ -12,8 +12,8 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
             data = result.data;
 
             var days = Object.keys(data.availabilitySlots);
-            fringeStart = Math.min.apply(null, days);
-            fringeStop = Math.max.apply(null, days);
+            fringeStart = Math.min.apply(null, data.availabilitySlots[Math.min.apply(null, days)]);
+            fringeStop = Math.max.apply(null, data.availabilitySlots[Math.max.apply(null, days)]);
 
             deferred.resolve();
         }, function() {
@@ -110,14 +110,14 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
         return venueHostSlugs[slug];
     };
 
-    // this.getFringeStart = function() {
-    //     return fringeStart;
-    // };
-    //
-    // this.getFringeStop = function() {
-    //     return fringeStop;
-    // };
-    //
+    this.getFringeStart = function() {
+        return fringeStart;
+    };
+
+    this.getFringeStop = function() {
+        return fringeStop;
+    };
+
     this.isFringeOngoing = function() {
         var now = Date.now() / 1000;
 

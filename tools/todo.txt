@@ -10,6 +10,8 @@ push state?
 BUG
 can't click back after going to My Fringe
 
+closing while saving - modal
+
 get rid of show-rating directive
 
 css instead of innerHeight
