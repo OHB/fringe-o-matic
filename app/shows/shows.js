@@ -20,6 +20,7 @@ angular.module('fringeApp').component('shows', {
             $scope.sortedShows = Data.getSortedShows();
             $scope.performances = Data.getPerformances();
 
+            $scope.displayedShows = [];
             $scope.performanceCounts = {};
             $scope.canAttendShow = {};
 
