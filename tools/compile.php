@@ -44,6 +44,19 @@ $templates = "angular.module('fringeApp').run(['\$templateCache',function(\$temp
     . '}]);';
 
 
+echo "Minifying pages...\n";
+mkdir(__DIR__ . '/../deploy/pages', 0777, true);
+
+foreach (findFiles(__DIR__ . '/../pages') as $item) {
+    $filename = basename($item);
+    $path = substr($item, strlen(__DIR__ . '/../pages'), -strlen($filename));
+    @mkdir(__DIR__ . '/../deploy/pages' . $path, 0777, true);
+    minify('deploy/pages' . $path . $filename, 'http://html-minifier.com/raw?', [
+        'input' => file_get_contents($item)
+    ]);
+}
+
+
 echo "Minifying CSS...\n";
 put('deploy/compiled.css', getFiles($build->css));
 
@@ -100,7 +113,20 @@ echo "\nDone!\n\n";
 
 
 
-
+function findFiles($dir) {
+    foreach (scandir($dir) as $item) {
+        if (in_array($item, ['.', '..'])) {
+            continue;
+        }
+        if (is_dir($dir . '/' . $item)) {
+            foreach (findFiles($dir . '/' . $item) as $item2) {
+                yield $item2;
+            }
+        } else {
+            yield $dir . '/' . $item;
+        }
+    }
+}
 
 function getFiles($arr, callable $cb = null) {
     return implode('', array_map(function($filename) use ($cb) {

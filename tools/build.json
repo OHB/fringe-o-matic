@@ -73,7 +73,6 @@
   "copyFolders": [
     "api",
     "img",
-    "pages",
     "vendor"
   ],
   "rootIgnoreFiles": [
