@@ -28,6 +28,7 @@
     "app/myFringe/schedule/style.css"
   ],
   "js": [
+    "lib/prototypes.js",
     "lib/genetics.js",
     "lib/ng-map.min.js",
     "lib/qImproved.js",

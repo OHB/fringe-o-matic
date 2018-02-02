@@ -36,31 +36,31 @@
         <div class="small" ng-if="userData.settings.displaySchedulerStats">
             <div class="row">
                 <div class="col-md-3">
-                    <strong>Generation</strong><br />
+                    <strong>Generation</strong><br>
                     {{currentGeneration | number}}/{{generationCount | number}}
                 </div>
-                <div class="col-md-3"><strong>Schedules Tested</strong><br />
+                <div class="col-md-3"><strong>Schedules Tested</strong><br>
                     {{currentGeneration * populationSize | number}}/{{populationSize * generationCount | number}}
                 </div>
                 <div class="col-md-3">
-                    <strong>Current Best</strong><br />
+                    <strong>Current Best</strong><br>
                     {{bestFitness - bestExtraPoints | number}}/{{idealFitness | number}} (+{{bestExtraPoints}} xp = {{bestFitness | number}})
                 </div>
                 <div class="col-md-3">
-                    <strong>Current Worst</strong><br />
+                    <strong>Current Worst</strong><br>
                     {{worstFitness | number}}
                 </div>
             </div>
-            <br />
-            <br />
-            <p>This tool uses a custom <a href="https://en.wikipedia.org/wiki/Genetic_algorithm">genetic algorithm</a> running in a WebWorker to find a schedule.<br />
+            <br>
+            <br>
+            <p>This tool uses a custom <a href="https://en.wikipedia.org/wiki/Genetic_algorithm">genetic algorithm</a> running in a WebWorker to find a schedule.<br>
                 The population size ({{populationSize|number}}) and number of generations ({{generationCount|number}}) is proportional to the number of shows that need placed.</p>
-            <p>The crossover rate is {{crossoverRate}} and uses a two-point crossover with parents chosen by rank selection.<br/>
+            <p>The crossover rate is {{crossoverRate}} and uses a two-point crossover with parents chosen by rank selection.<br>
                 The mutation rate is {{mutationRate}} and makes 1 or 2 random changes to a schedule.</p>
-            <p>Each schedule is scored giving points for every show in the schedule. Higher interest shows get more points.<br />
+            <p>Each schedule is scored giving points for every show in the schedule. Higher interest shows get more points.<br>
                 Extra points (xp) are awarded when adjacent shows are in nearby venues.</p>
         </div>
-        <br />
+        <br>
         <p class="alert alert-info" style="margin-bottom:0"><i class="glyphicon glyphicon-info-sign"></i>{{infoMessages[currentMessage]}}</p>
     </div>
     <div class="modal-footer">
@@ -109,7 +109,7 @@
             </div>
             <div class="alert alert-warning" ng-if="unscheduled.length">
                 <strong>Oh no!</strong>
-                I wasn't able to fit all of the shows you want to see on the schedule.
+                We weren't able to fit all of the shows you want to see on the schedule.
                 <a href ng-click="tabs.activeTab=1">Which ones?</a>
                 <a href ng-click="tabs.activeTab=2">Why?</a>
             </div>
@@ -127,9 +127,9 @@
                     ng-if="proposed.indexOf(pId) > -1 || isUserAttendingPerformance(pId)"
                     ng-init="performance = performances[pId]"
                 >
-                    <td nowrap="nowrap"><strong>{{moment(performance.start, 'X').format('ddd, MMM Do')}}</strong><br />
+                    <td nowrap="nowrap"><strong>{{moment(performance.start, 'X').format('ddd, MMM Do')}}</strong><br>
                         {{moment(performance.start, 'X').format('h:mm a')}} - {{moment(performance.stop, 'X').format('h:mm a')}}</td>
-                    <td><strong>{{shows[performance.show].name}}</strong><br />
+                    <td><strong>{{shows[performance.show].name}}</strong><br>
                         <span class="label label-venue-default label-venue-{{shows[performance.show].venue}}">
                             {{venues[shows[performance.show].venue].name}}
                         </span>
@@ -183,7 +183,7 @@
                 <li>Such a schedule may not be possible.</li>
                 <li>This is actually a very difficult thing for computers to do.</li>
             </ol>
-            <hr />
+            <hr>
             <p class="lead">What can I do?</p>
             <p>You have a few options:</p>
             <ol>
@@ -192,14 +192,14 @@
                         <li>PRO: You may get a better schedule with more shows.</li>
                         <li>CON: You may get a worse schedule.</li>
                     </ul>
-                    <br />
+                    <br>
                 </li>
                 <li>You can hand-pick some show times that you like, reject the rest, and run the generator again.
                     <ul class="small">
                         <li>PRO: The size of the problem is reduced making it easier to solve.</li>
                         <li>CON: You're locked-in to the show times you hand-pick and the consequences of that.</li>
                     </ul>
-                    <br />
+                    <br>
                 </li>
                 <li>You can accept the schedule.
                     <ul class="small">
@@ -208,7 +208,7 @@
                     </ul>
                 </li>
             </ol>
-            <hr />
+            <hr>
             <p class="lead">Why is this such a hard problem for computers? [Nerd alert!]</p>
             <p>Let's do a simple example, and we'll assume the following:</p>
             <ol>
@@ -216,7 +216,7 @@
                 <li>You're available to see any show at any time.</li>
                 <li>We take Interest level and travel time between venues out of the equation.</li>
             </ol>
-            <br />
+            <br>
             <p>With that information, we can calculate the number of possible schedules for the number of shows you want to see and how long it would take to go through every possibility:</p>
             <div class="row">
                 <div class="col-md-{{section.w}}" ng-repeat="section in examplePowers">

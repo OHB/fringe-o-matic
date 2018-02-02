@@ -114,9 +114,20 @@ angular.module('fringeApp').component('shows', {
                     return true;
                 });
 
-                $timeout(function() {
-                    $scope.dataLoaded = true;
-                }, 100);
+                $scope.displayedShows = $scope.allShows.slice(0, 10);
+                $scope.dataLoaded = true;
+            };
+
+            $scope.addMoreItems = function() {
+                var displayed = $scope.displayedShows.length;
+
+                for (var i = displayed; i < displayed + 5; i ++) {
+                    if ($scope.allShows[i] === undefined) {
+                        break;
+                    }
+
+                    $scope.displayedShows.push($scope.allShows[i]);
+                }
             };
 
             var trackKeywordFilter = debounce(function() {

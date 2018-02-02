@@ -18,8 +18,8 @@
             </p>
             <hr style="border-top: 1px solid {{titleColor}}">
             <p>{{venues[show.venue].name}}</p>
-            <br />
-            <br />
+            <br>
+            <br>
             <p>
                 <a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeId" analytics-on analytics-event="Click" analytics-category="Show" analytics-label="Buy Tickets">Buy Tickets</a>
             </p>
@@ -35,20 +35,20 @@
             <p ng-if="::show.artist">
                 <strong ng-bind="show.artist"></strong><span ng-if="show.artistLocation">, {{show.artistLocation}}</span>
             </p>
-            <hr />
+            <hr>
             <p>{{venues[show.venue].name}}</p>
         </div>
     </div>
     <div class="row">
         <div class="col-md-9 lead text-justify">
             <div style="margin-top: 10px" ng-bind-html="trustAsHtml(show.description)"></div>
-            <p ng-if="show.warnings"><br /><em class="small">Note: {{show.warnings.join(', ')}}</em></p>
+            <p ng-if="show.warnings"><br><em class="small">Note: {{show.warnings.join(', ')}}</em></p>
         </div>
         <div class="col-md-2 col-md-offset-1">
             <h3 style="margin-top:10px">Notes</h3>
             <p>
-                <strong>Length:</strong> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes<br />
-                <strong>Rating:</strong> {{ratings[show.rating]}}<br />
+                <strong>Length:</strong> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes<br>
+                <strong>Rating:</strong> {{ratings[show.rating]}}<br>
                 <strong>Tickets:</strong> {{show.price | price}}
             </p>
             <h3>Show Times</h3>
@@ -60,7 +60,7 @@
             </ul>
         </div>
     </div>
-    <hr />
+    <hr>
     <div class="row" style="margin-top: 15px; margin-bottom: 15px">
         <div class="col-md-4"><a href="/show/{{previousShow.slug}}" class="btn btn-default">&larr; Previous Show</a></div>
         <div class="col-md-4 text-center"><a href="/show/{{randomShow.slug}}" class="btn btn-default">Random Show</a></div>

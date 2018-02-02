@@ -16,47 +16,52 @@
 <div ng-show="hasPermission && ! isSetup">
     <div class="modal-body">
         <p class="lead">Which calendar should we copy your schedule to?</p>
-        <div class="radio">
-            <label>
-                <input type="radio" ng-model="setupConfig.target" name="setupTarget" value="primary">
-                Primary calendar (recommended)
-            </label>
+        <div ng-if="! primaryCalendar">
+            <p>Loading...</p>
         </div>
-        <div class="radio">
-            <label>
-                <input type="radio" ng-model="setupConfig.target" name="setupTarget" value="secondary">
-                Another calendar
-            </label>
-        </div>
-
-        <blockquote style="font-size: 100%" ng-show="setupConfig.target == 'secondary'">
+        <div ng-if="primaryCalendar">
             <div class="radio">
-                <label style="width:100%">
-                    <input type="radio" ng-model="setupConfig.secondary" name="secondaryCalendar" value="NEW">
-                    Create a new calendar:
-                    <input type="text" ng-model="setupConfig.secondaryName" class="form-control" style="margin:5px 0" placeholder="New calendar name">
+                <label>
+                    <input type="radio" ng-model="setupConfig.target" name="setupTarget" value="primary">
+                    Primary calendar (recommended)
                 </label>
             </div>
-            <div ng-show="secondaryCalendars.length">
-                <p>or select an existing calendar:</p>
-                <div class="radio" ng-repeat="calendar in secondaryCalendars">
-                    <label>
-                        <input type="radio" ng-model="setupConfig.secondary" name="secondaryCalendar" value="{{calendar.id}}">
-                        {{calendar.name}}
+            <div class="radio">
+                <label>
+                    <input type="radio" ng-model="setupConfig.target" name="setupTarget" value="secondary">
+                    Another calendar
+                </label>
+            </div>
+
+            <blockquote style="font-size: 100%" ng-show="setupConfig.target == 'secondary'">
+                <div class="radio">
+                    <label style="width:100%">
+                        <input type="radio" ng-model="setupConfig.secondary" name="secondaryCalendar" value="NEW">
+                        Create a new calendar:
+                        <input type="text" ng-model="setupConfig.secondaryName" class="form-control" style="margin:5px 0" placeholder="New calendar name">
                     </label>
                 </div>
-            </div>
-        </blockquote>
+                <div ng-show="secondaryCalendars.length">
+                    <p>or select an existing calendar:</p>
+                    <div class="radio" ng-repeat="calendar in secondaryCalendars">
+                        <label>
+                            <input type="radio" ng-model="setupConfig.secondary" name="secondaryCalendar" value="{{calendar.id}}">
+                            {{calendar.name}}
+                        </label>
+                    </div>
+                </div>
+            </blockquote>
+        </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-default" type="button" ng-click="close()" ng-disabled="working">Close</button>
-        <button class="btn btn-primary" type="button" ng-click="setup()" ng-disabled="setupConfig.secondary=='NEW' && ! setupConfig.secondaryName.length">Continue</button>
+        <button class="btn btn-primary" type="button" ng-click="setup()" ng-disabled="! primaryCalendar || (setupConfig.secondary=='NEW' && ! setupConfig.secondaryName.length)">Continue</button>
     </div>
 </div>
 
 <div ng-show="isSetup && isSyncing">
     <div class="modal-body" ng-show="! max">
-        <p class="lead">Setting up calendar...</p>
+        <p class="lead">Creating calendar...</p>
         <div class="progress">
             <div class="progress-bar progress-bar-striped active" style="width: 100%"></div>
         </div>
@@ -76,9 +81,9 @@
             <li>shows previously synced to your calendar will not be removed</li>
             <li>you can turn it back on again later</li>
         </ul>
-        <br />
+        <br>
         <p class="text-center">
-            <button ng-click="turnOffScreen = false" class="btn btn-success btn-lg">Keep it on</button><br />
+            <button ng-click="turnOffScreen = false" class="btn btn-success btn-lg">Keep it on</button><br>
             <button ng-click="turnOff(); turnOffScreen = false" class="btn btn-danger" style="margin-top: 10px">Turn it off</button>
         </p>
     </div>
@@ -88,13 +93,13 @@
     <div class="modal-body">
         <p class="lead">Google Calendar Sync is turned on.</p>
         <p>Any time you add or remove a show from your schedule, your Google calendar will be updated automatically.</p>
-        <br />
+        <br>
         <p class="text-center">
             <a href="{{calendarUrl}}" target="_blank" class="btn btn-primary btn-lg" analytics-on analytics-event="Click" analytics-category="Google Calendar Sync Modal" analytics-label="Open Google Calendar">Open Google Calendar</a>
         </p>
-        <br />
+        <br>
         <p>If you have an Android device, you can see your calendar in the Google Calendar app. It may take a few moments for changes to appear.</p>
-        <br />
+        <br>
         <p><strong>Useful links:</strong></p>
         <ul>
             <li><a href="https://support.google.com/calendar/answer/151674?co=GENIE.Platform%3DAndroid&hl=en&oco=0" target="_blank">Sync Calendar with iPhone or iPad</a></li>

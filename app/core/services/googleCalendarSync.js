@@ -1,5 +1,5 @@
 angular.module('fringeApp')
-    .service('GoogleCalendarSync', ['Data', 'User', '$q', 'debounce', function(Data, User, $q, debounce) {
+    .service('GoogleCalendarSync', ['Data', 'User', '$q', 'debounce', '$timeout', function(Data, User, $q, debounce, $timeout) {
         var self = this,
             calendarScope = 'https://www.googleapis.com/auth/calendar',
             onSyncStartFn = function() {},
@@ -20,7 +20,7 @@ angular.module('fringeApp')
 
             var calendarId = getSyncCalendarId(),
                 deferred = $q.defer(),
-                eventReminders = '<br /><p><strong>Remember to arrive 10 minutes prior to showtime and to wear your Fringe button!</strong></p>';
+                eventReminders = '<br><p><strong>Remember to arrive 10 minutes prior to showtime and to wear your Fringe button!</strong></p>';
 
             onSyncStartFn(deferred.promise);
 
@@ -52,7 +52,7 @@ angular.module('fringeApp')
                                     location = venue.name + ' at ' + venueHost.name + ', ' + venueHost.address.join(', '),
                                     description = '<p>' + show.description + '</p>' +
                                         eventReminders +
-                                        '<p><a href="https://fringeomatic.com/show/' + show.slug + '">Show Information</a><br />' +
+                                        '<p><a href="https://fringeomatic.com/show/' + show.slug + '">Show Information</a><br>' +
                                         '<a href="http://fringeomatic.com/my-fringe">My Fringe</a></p>';
 
                                 location = location.replace(venue.name + ' at ' + venue.name, venue.name);
@@ -156,12 +156,18 @@ angular.module('fringeApp')
         };
 
         this.setupInNew = function(name) {
-            return gapi.client.calendar.calendars.insert({
+            var deferred = $q.defer();
+
+            gapi.client.calendar.calendars.insert({
                 summary: name,
                 timeZone: 'America/New_York'
             }).then(function(response) {
-                return self.setupInExisting(response.result.id);
+                self.setupInExisting(response.result.id).then(deferred.resolve, deferred.reject, deferred.notify);
+            }, function() {
+                deferred.reject();
             });
+
+            return deferred.promise;
         };
 
         this.setupInExisting = function(calendarId) {

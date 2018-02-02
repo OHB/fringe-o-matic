@@ -20,7 +20,7 @@
                     <label>Rating</label>
                     <select class="form-control" ng-model="selectedRating" ng-options="o.value as o.label for o in ratingOptions" ng-change="ratingSelected()"></select>
                 </div>
-                <hr />
+                <hr>
                 <div class="checkbox" ng-show="isFringeOngoing">
                     <label>
                         <input type="checkbox" ng-change="hideWithoutShowtimesSelected()" ng-model="hideWithoutShowtimes">
@@ -47,15 +47,15 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9" infinite-scroll="addMoreItems()" infinite-scroll-distance="2">
             <div class="row text-center" style="margin:100px 0" ng-if="! dataLoaded">
                 <p class="lead text-center">Loading...</p>
             </div>
-            <div class="row text-center" style="margin:100px 0" ng-if="dataLoaded && !allShows.length">
+            <div class="row text-center" style="margin:100px 0" ng-if="dataLoaded && !displayedShows.length">
                 <p class="lead text-center">No matching shows.</p>
                 <p><button class="btn btn-sm" ng-click="resetFilters();refresh()">Clear filters</button></p>
             </div>
-            <div class="row" ng-repeat="showId in allShows" ng-init="show=shows[showId]" style="background:#f9f9f9; margin-bottom: 10px" ng-show="dataLoaded">
+            <div class="row" ng-repeat="showId in displayedShows" ng-init="show=shows[showId]" style="background:#f9f9f9; margin-bottom: 10px" ng-show="displayedShows.length">
                 <div class="col-md-9" style="padding:15px">
                     <div class="pull-right lead" style="line-height: 1em" ng-if="$parent.$parent.signedIn">
                         <interest show-id="showId"></interest>

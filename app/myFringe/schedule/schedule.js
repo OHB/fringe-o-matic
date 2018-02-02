@@ -97,7 +97,7 @@ angular.module('fringeApp').component('myFringeSchedule', {
         if ($scope.days.indexOf(moment().startOf('day').unix()) > -1) {
             $scope.filter.currentDay = moment().startOf('day').unix();
         } else {
-            $scope.filter.currentDay = $scope.days[0];
+            $scope.filter.currentDay = 0;
         }
 
         $scope.openShareModal = function() {

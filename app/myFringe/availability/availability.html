@@ -31,8 +31,8 @@
                                         ng-init="dow = moment(dayId, 'X').format('ddd')"
                                         ng-class="{'weekend': dow == 'Sat' || dow == 'Sun'}"
                                 >
-                                    {{::dow}}<br />
-                                    <span class="lead">{{::moment(dayId, 'X').format('D')}}</span><br />
+                                    {{::dow}}<br>
+                                    <span class="lead">{{::moment(dayId, 'X').format('D')}}</span><br>
                                     {{::moment(dayId, 'X').format('MMM')}}
                                 </th>
                             </tr>

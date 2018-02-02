@@ -62,33 +62,42 @@ angular.module('fringeApp').component('schedule', {
 
                 $scope.dataLoaded = false;
 
-                $timeout(function() {
-                    var possiblePerformances = Schedule.getPossiblePerformances(),
-                        showsAttending = Schedule.getShowsAttending(),
-                        performancesAttending = Schedule.getSchedule(),
-                        now = Date.now() / 1000;
+                var possiblePerformances = Schedule.getPossiblePerformances(),
+                    showsAttending = Schedule.getShowsAttending(),
+                    performancesAttending = Schedule.getSchedule(),
+                    now = Date.now() / 1000;
 
-                    $scope.schedule = baseSchedule.filter(function(entry) {
-                        return (! (entry.performance.start < $scope.filter.currentDay || entry.performance.start > $scope.filter.currentDay + 86400));
-                    }).map(function(entry) {
-                        entry.isAttending = performancesAttending.indexOf(entry.id) > -1;
-                        entry.canAttend = Availability.isUserAvailable(entry.performance.start, entry.performance.stop);
-                        entry.canBeScheduled = possiblePerformances.indexOf(entry.id) > -1;
-                        entry.attendState = Schedule.getPerformanceScheduleState(entry.id);
-                        entry.inPast = entry.performance.start < now;
+                $scope.schedule = baseSchedule.filter(function(entry) {
+                    return (! (entry.performance.start < $scope.filter.currentDay || entry.performance.start > $scope.filter.currentDay + 86400));
+                }).map(function(entry) {
+                    entry.isAttending = performancesAttending.indexOf(entry.id) > -1;
+                    entry.canAttend = Availability.isUserAvailable(entry.performance.start, entry.performance.stop);
+                    entry.canBeScheduled = possiblePerformances.indexOf(entry.id) > -1;
+                    entry.attendState = Schedule.getPerformanceScheduleState(entry.id);
+                    entry.inPast = entry.performance.start < now;
 
-                        return entry;
-                    }).filter(function(entry) {
-                        if ($scope.settings.scheduleMode === 'full' || entry.attendState === 'yes') {
-                            return true;
-                        }
+                    return entry;
+                }).filter(function(entry) {
+                    if ($scope.settings.scheduleMode === 'full' || entry.attendState === 'yes') {
+                        return true;
+                    }
 
-                        return ! entry.inPast && entry.canBeScheduled && showsAttending.indexOf(entry.showId) === -1;
-                    });
-                    $timeout(function() {
-                        $scope.dataLoaded = true;
-                    });
+                    return ! entry.inPast && entry.canBeScheduled && showsAttending.indexOf(entry.showId) === -1;
                 });
+                $scope.dataLoaded = true;
+                $scope.displayedSchedule = $scope.schedule.slice(0, 10);
+            };
+
+            $scope.addMoreItems = function() {
+                var displayed = $scope.displayedSchedule.length;
+
+                for (var i = displayed; i < displayed + 5; i ++) {
+                    if ($scope.schedule[i] === undefined) {
+                        break;
+                    }
+
+                    $scope.displayedSchedule.push($scope.schedule[i]);
+                }
             };
 
             var updatePath = function() {

@@ -1,6 +1,6 @@
 angular.module('fringeApp').controller('CoreCtrl', [
-    '$rootScope', '$scope', '$route', '$location', '$window', '$q', '$timeout', '$uibModal', '$alert', 'Data', 'Menu', 'User', 'Error', '$analytics',
-    function($rootScope, $scope, $route, $location, $window, $q, $timeout, $uibModal, $alert, Data, Menu, User, Error, $analytics) {
+    '$rootScope', '$scope', '$route', '$location', '$window', '$q', '$timeout', '$uibModal', '$alert', 'Data', 'Menu', 'User', 'Error', 'GoogleCalendarSync', '$analytics',
+    function($rootScope, $scope, $route, $location, $window, $q, $timeout, $uibModal, $alert, Data, Menu, User, Error, GoogleCalendarSync, $analytics) {
         User.onSave(function(promise) {
             promise.then(function() {}, function() {
                 Error.error('Unable to save data to the server.', 'Have you lost your internet connection?');
@@ -36,6 +36,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 $scope.isUserAdmin = User.getAccount().isAdmin;
                 $analytics.eventTrack('Sign In', {category: 'User'});
                 $analytics.setUsername(User.getAccount().privateHash);
+                GoogleCalendarSync.sync();
 
                 if ($location.path() === '/') {
                     $location.path('/my-fringe');
@@ -122,6 +123,8 @@ angular.module('fringeApp').controller('CoreCtrl', [
                     });
                 }, 1000);
             }
+
+            GoogleCalendarSync.sync();
 
         }, function() {
             Error.error('Unable to retrieve data from server', 'Please wait a moment and try again.');

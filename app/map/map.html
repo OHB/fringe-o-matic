@@ -12,7 +12,7 @@
                 <ul class="list-unstyled">
                     <li ng-repeat="view in ::views"><a href ng-click="gotoView(view)">{{view.name}}</a></li>
                 </ul>
-                <hr />
+                <hr>
                 <h3 style="margin-bottom: 15px">Layers</h3>
                 <ul class="nav nav-default nav-pills nav-stacked">
                     <li ng-repeat="group in ::markerGroups" ng-class="{active:isGroupVisible[group.id]}">
@@ -39,9 +39,9 @@
                             <div ng-non-bindable>
                                 <p class="lead">{{markerWindow.title}}</p>
                                 <address ng-if="markerWindow.location || markerWindow.address">
-                                    <strong ng-if="markerWindow.location">{{markerWindow.location}}<br /></strong>
+                                    <strong ng-if="markerWindow.location">{{markerWindow.location}}<br></strong>
                                     <span ng-if="markerWindow.address">
-                                    {{markerWindow.address[0]}}<br />
+                                    {{markerWindow.address[0]}}<br>
                                     {{markerWindow.address[1]}}
                                     </span>
                                 </address>
