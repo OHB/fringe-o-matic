@@ -22,8 +22,7 @@
     cursor: initial;
 }
 .availability-legend .availability-block {
-    min-width: 90px;
-    display: inline-block;
+    margin-top: 2px;
 }
 .table.availability .weekend {
     background-color: #f8f8f8;

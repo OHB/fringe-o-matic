@@ -23,7 +23,6 @@ angular.module('fringeApp').service('User', ['$q', '$http', 'debounce', function
                 data = response.data;
                 lastSavedData = angular.copy(data);
                 deferred.resolve();
-                console.log('User signed in');
             }, function() {
                 deferred.reject();
             });

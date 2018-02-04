@@ -7,22 +7,23 @@
     <require-online>
         <p class="lead text-center" ng-if="! mapLoaded">Loading map...</p>
         <div class="row" ng-if="markerGroups" ng-style="{visibility: !mapLoaded ? 'hidden' : 'visible'}">
-            <div class="col-md-3 hidden-print">
-                <h3>Views</h3>
-                <ul class="list-unstyled">
-                    <li ng-repeat="view in ::views"><a href ng-click="gotoView(view)">{{view.name}}</a></li>
-                </ul>
-                <hr>
-                <h3 style="margin-bottom: 15px">Layers</h3>
-                <ul class="nav nav-default nav-pills nav-stacked">
-                    <li ng-repeat="group in ::markerGroups" ng-class="{active:isGroupVisible[group.id]}">
-                        <a href ng-click="toggleGroup(group)">{{group.name}}</a>
-                    </li>
-                </ul>
+            <div class="col-sm-3 hidden-print">
+                <div class="hidden-xs">
+                    <map-controls></map-controls>
+                </div>
+                <div class="visible-xs-block panel panel-info">
+                    <div class="panel-heading" ng-click="showFilters = !showFilters">
+                        <i class="pull-right glyphicon" ng-class="showFilters ? 'glyphicon-collapse-down' : 'glyphicon-collapse-up'"></i>
+                        Map Controls
+                    </div>
+                    <div class="panel-body" ng-class="! showFilters && 'collapse'">
+                        <map-controls></map-controls>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-sm-9">
                 <div>
-                    <ng-map ng-style="{height: (innerHeight - 110) + 'px'}" clickable-icons="false" fullscreen-control="false" max-zoom="20" min-zoom="7" street-view-control="false" tilt="0" map-type-control-options="{mapTypeIds: ['roadmap', 'hybrid']}">
+                    <ng-map ng-style="{height: 'calc(100vh - ' + ($parent.$parent.$parent.navHeight + 60) + 'px)'}" clickable-icons="false" fullscreen-control="false" max-zoom="20" min-zoom="7" street-view-control="false" tilt="0" map-type-control-options="{mapTypeIds: ['roadmap', 'hybrid']}">
                         <shape name="polygon"
                                paths="{{lawnPolygon}}"
                                stroke-color="#94af72"

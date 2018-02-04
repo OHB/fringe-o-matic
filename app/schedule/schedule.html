@@ -5,34 +5,31 @@
 </div>
 <div class="container">
     <div class="row" ng-if="loaded">
-        <div class="col-md-3 hidden-print">
-            <div data-offset-top="-95" bs-affix style="padding-top: 3px">
-                <div ng-if="signedIn">
-                    <div class="btn-group" ng-model="settings.scheduleMode" bs-radio-group style="width:100%">
-                        <label class="btn btn-default" style="width:50%"
-                               ng-class="settings.scheduleMode=='full' && 'btn-primary'"
-                               bs-tooltip="{title: 'Shows full schedule.'}"
-                        >
-                            <input type="radio" value="full"> Full
-                        </label>
-                        <label class="btn btn-default" style="width:50%"
-                               ng-class="settings.scheduleMode=='smart' && 'btn-primary'"
-                               bs-tooltip="{title: 'Hides performances you\'re not interested in, can\'t attend, or are seeing at a different time.'}"
-                        >
-                            <input type="radio" value="smart"> Smart
-                        </label>
-                    </div>
-                    <br>
-                    <br>
-                </div>
+        <div class="col-md-3 hidden-print" style="padding-top: 3px">
+            <div data-offset-top="-95" bs-affix class="hidden-xs hidden-sm">
+                <full-smart-toggle></full-smart-toggle>
                 <month-day-picker days="days" model="filter.currentDay"></month-day-picker>
+            </div>
+            <div class="hidden-md hidden-lg" style="margin-bottom: 10px">
+                <full-smart-toggle></full-smart-toggle>
             </div>
         </div>
         <div class="col-md-9" infinite-scroll="addMoreItems()" infinite-scroll-distance="1.5">
+            <div class="visible-sm-block" ng-show="dataLoaded" style="margin-bottom:10px">
+                <div style="max-width: 50vw; margin: auto">
+                    <month-day-picker days="days" model="filter.currentDay"></month-day-picker>
+                </div>
+            </div>
+            <div class="visible-xs-block" ng-show="dataLoaded" style="margin-bottom:10px">
+                <div style="max-width: 100vh; margin: auto">
+                    <month-day-picker days="days" model="filter.currentDay"></month-day-picker>
+                </div>
+            </div>
             <div>
                 <div class="page-header" style="margin:0">
                     <h1 style="margin:0 0 20px">
-                        {{moment(filter.currentDay, 'X').format('dddd, MMMM D')}}
+                        <span class="hidden-xs">{{moment(filter.currentDay, 'X').format('dddd, MMMM D')}}</span>
+                        <span class="visible-xs-inline">{{moment(filter.currentDay, 'X').format('ddd, MMM D')}}</span>
                         <small ng-show="dataLoaded"><ng-pluralize count="schedule.length" when="plurals.show"></ng-pluralize></small>
                     </h1>
                 </div>
@@ -44,92 +41,51 @@
             <div class="row text-center" style="margin:100px 0" ng-if="!dataLoaded">
                 <p class="lead text-center">Loading...</p>
             </div>
-            <div inner-height="innerHeight" ng-style="{minHeight: (innerHeight-368) + 'px'}">
+            <div>
                 <table class="table table-striped" ng-show="schedule.length && dataLoaded">
                     <thead>
                     <tr>
                         <th>Time</th>
                         <th>Show</th>
-                        <th ng-if="signedIn">Interest</th>
-                        <th ng-if="signedIn" width="195">Going?</th>
-                        <th ng-if="! signedIn" class="hidden-print"></th>
+                        <th ng-if="signedIn" class="hidden-xs">Interest</th>
+                        <th ng-if="signedIn" class="hidden-xs" width="195">Going?</th>
+                        <th ng-if="! signedIn" class="hidden-print hidden-xs"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="entry in displayedSchedule track by entry.id">
                         <td nowrap>
                             {{::moment(entry.performance.start, 'X').format('h:mma')}}
+                            <div class="visible-xs-block" style="margin-top: 15px">
+                                <performance-ticket-button store-id="::entry.performance.storeId" analytics-on analytics-category="Schedule"></performance-ticket-button>
+                            </div>
                         </td>
                         <td>
                             <p class="h4" style="margin:0 0 12px;">
                                 <a class="hidden-print" href="/show/{{::entry.show.slug}}">{{::entry.show.name}}</a>
                                 <span class="visible-print-inline">{{::entry.show.name}}</span>
                             </p>
-                            <p style="margin-bottom: 0" class="text-muted small">
-                                {{::entry.venue.name}} &middot;
-                                {{::entry.rating}} &middot;
-                                {{::entry.show.price|price}} &middot;
-                                {{::entry.minutes}} minutes
-                            </p>
+                            <div class="visible-xs-block" ng-if="::signedIn" style="margin: 5px 0">
+                                <interest show-id="entry.showId"></interest>
+                            </div>
+                            <ul class="list-inline list-inline-bullets text-muted small" style="margin-bottom: 0">
+                                <li>{{::entry.venue.name}}</li>
+                                <li>{{::entry.rating}}</li>
+                                <li>{{::entry.show.price|price}}</li>
+                                <li>{{::entry.minutes}} minutes</li>
+                            </ul>
+                            <div class="visible-xs-block small" ng-if="::signedIn" style="margin-top: 10px">
+                                <attending-buttons></attending-buttons>
+                            </div>
                         </td>
-                        <td nowrap class="align-middle" ng-if="signedIn">
+                        <td nowrap class="align-middle hidden-xs" ng-if="::signedIn">
                             <interest show-id="entry.showId"></interest>
                         </td>
-                        <td nowrap class="align-middle" ng-if="::signedIn && (! online || entry.inPast)">
-                            <div class="btn-group" bs-radio-group ng-model="entry.attendState">
-                                <label class="btn disabled btn-default" ng-class="::entry.attendState == 'no' && 'btn-danger'">
-                                    <input type="radio" value="no" disabled><span class="glyphicon glyphicon-thumbs-down"></span>
-                                </label>
-                                <label class="btn disabled btn-default" ng-class="::entry.attendState == 'maybe' && 'btn-warning'">
-                                    <input type="radio" value="maybe" disabled><span class="glyphicon glyphicon-question-sign"></span>
-                                </label>
-                                <label class="btn disabled btn-default" ng-class="::entry.attendState == 'yes' && 'btn-success'">
-                                    <input type="radio" value="yes" disabled><span class="glyphicon glyphicon-thumbs-up"></span>
-                                </label>
-                            </div>
+                        <td nowrap class="align-middle hidden-xs" ng-if="::signedIn">
+                            <attending-buttons></attending-buttons>
                         </td>
-                        <td nowrap class="align-middle" ng-if="::signedIn && online && ! entry.inPast">
-                            <div ng-if="::entry.attendState=='no'" class="btn-group" bs-radio-group ng-model="entry.attendState">
-                                <label class="btn btn-danger">
-                                    <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
-                                </label>
-                                <label class="btn btn-default" ng-click="addMaybe(entry.id)" bs-tooltip="{title:'Maybe attending'}">
-                                    <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
-                                </label>
-                                <label class="btn btn-default" bs-tooltip="{title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-click="entry.canBeScheduled && addToSchedule(entry.id)" ng-class="{disabled: !entry.canBeScheduled}">
-                                    <input type="radio" value="yes" ng-disabled="!entry.canBeScheduled"><span class="glyphicon glyphicon-thumbs-up"></span>
-                                </label>
-                            </div>
-                            <div ng-if="::entry.attendState=='maybe'" class="btn-group" bs-radio-group ng-model="entry.attendState">
-                                <label class="btn btn-default" ng-click="removeFromSchedule(entry.id)" bs-tooltip="{title: 'Not attending'}">
-                                    <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
-                                </label>
-                                <label class="btn btn-warning">
-                                    <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
-                                </label>
-                                <label class="btn btn-default" bs-tooltip="{title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-class="{disabled: !entry.canBeScheduled}">
-                                    <input type="radio" value="yes" ng-disabled="!entry.canBeScheduled"><span class="glyphicon glyphicon-thumbs-up"></span>
-                                </label>
-                            </div>
-                            <div ng-if="::entry.attendState=='yes'" class="btn-group" bs-radio-group ng-model="entry.attendState">
-                                <label class="btn btn-default"ng-click="removeFromSchedule(entry.id)" bs-tooltip="{title: 'Remove from schedule'}">
-                                    <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
-                                </label>
-                                <label class="btn btn-default" ng-click="addMaybe(entry.id)" bs-tooltip="{title:'Remove from schedule, maybe attending'}">
-                                    <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
-                                </label>
-                                <label class="btn btn-success">
-                                    <input type="radio" value="yes"><span class="glyphicon glyphicon-thumbs-up"></span>
-                                </label>
-                            </div>
-                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{entry.performance.storeId}}" target="fringeshop" class="btn btn-default hidden-print" style="padding: 6px 8px; margin-left:10px" analytics-on analytics-event="Click" analytics-category="Schedule" analytics-label="Buy Tickets">
-                                <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
-                            </a>
-                        </td>
-                        <td ng-if="::! signedIn" class="align-middle">
-                            <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{::entry.performance.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px; margin-left:10px" analytics-on analytics-event="Click" analytics-category="Schedule" analytics-label="Buy Tickets">
-                                <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
-                            </a>
+                        <td ng-if="::! signedIn" class="align-middle hidden-xs">
+                            <performance-ticket-button store-id="::entry.performance.storeId" analytics-on analytics-category="Schedule"></performance-ticket-button>
                         </td>
                     </tr>
                     </tbody>

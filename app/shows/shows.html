@@ -6,44 +6,16 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3 hidden-print">
-            <div data-offset-top="-95" bs-affix>
-                <div class="form-group has-feedback">
-                    <label>Filter by keyword</label>
-                    <input type="text" class="form-control" placeholder="Search" ng-model="search" ng-change="searchTextEntered()">
-                    <span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show="search.length" ng-click="clearSearch()"></span>
+            <div class="hidden-sm hidden-xs">
+                <show-filters data-offset-top="-95" bs-affix></show-filters>
+            </div>
+            <div class="hidden-md hidden-lg panel panel-info">
+                <div class="panel-heading" ng-click="showFilters = !showFilters">
+                    <i class="pull-right glyphicon" ng-class="showFilters ? 'glyphicon-collapse-down' : 'glyphicon-collapse-up'"></i>
+                    Show Filters
                 </div>
-                <div class="form-group">
-                    <label>Venue</label>
-                    <select class="form-control" ng-model="selectedVenue" ng-options="o.value as o.label for o in venueOptions" ng-change="venueSelected()"></select>
-                </div>
-                <div class="form-group">
-                    <label>Rating</label>
-                    <select class="form-control" ng-model="selectedRating" ng-options="o.value as o.label for o in ratingOptions" ng-change="ratingSelected()"></select>
-                </div>
-                <hr>
-                <div class="checkbox" ng-show="isFringeOngoing">
-                    <label>
-                        <input type="checkbox" ng-change="hideWithoutShowtimesSelected()" ng-model="hideWithoutShowtimes">
-                        Hide shows with no performances
-                    </label>
-                </div>
-                <div class="checkbox" ng-show="$parent.$parent.signedIn">
-                    <label>
-                        <input type="checkbox" ng-change="hideNotInterestedSelected()" ng-model="hideNotInterested">
-                        Hide shows I'm not interested in
-                    </label>
-                </div>
-                <div class="checkbox" ng-show="$parent.$parent.signedIn">
-                    <label>
-                        <input type="checkbox" ng-change="hideNotAttendingSelected()" ng-model="hideNotAttending">
-                        Hide shows I'm not attending
-                    </label>
-                </div>
-                <div class="checkbox" ng-show="$parent.$parent.signedIn">
-                    <label>
-                        <input type="checkbox" ng-change="hideCantAttendSelected()" ng-model="hideCantAttend">
-                        Hide shows I can't see
-                    </label>
+                <div class="panel-body" ng-class="! showFilters && 'collapse'">
+                    <show-filters></show-filters>
                 </div>
             </div>
         </div>
@@ -55,31 +27,44 @@
                 <p class="lead text-center">No matching shows.</p>
                 <p><button class="btn btn-sm" ng-click="resetFilters();refresh()">Clear filters</button></p>
             </div>
-            <div class="row" ng-repeat="showId in displayedShows" ng-init="show=shows[showId]" style="background:#f9f9f9; margin-bottom: 10px" ng-show="displayedShows.length">
-                <div class="col-md-9" style="padding:15px">
-                    <div class="pull-right lead" style="line-height: 1em" ng-if="$parent.$parent.signedIn">
+            <div class="row" ng-repeat="showId in displayedShows" ng-init="show=shows[showId]" style="background:#f9f9f9; margin:0 0 10px 0;" ng-show="displayedShows.length">
+                <div class="col-sm-9 col-xs-8" style="padding:15px">
+                    <div class="pull-right lead hidden-xs" style="line-height: 1em" ng-if="$parent.$parent.signedIn">
                         <interest show-id="showId"></interest>
                     </div>
-                    <div style="height:100px">
+                    <div class="hidden-xs">
+                        <div style="height:100px">
+                            <p class="lead" style="line-height: 1em; margin-bottom:10px">
+                                <a class="hidden-print" href="/show/{{::show.slug}}">{{::show.name}}</a>
+                                <span class="visible-print-inline">{{::show.name}}</span>
+                            </p>
+                            <p class="small">
+                                <em ng-if="::show.artist">
+                                    <strong ng-bind="::show.artist"></strong><span ng-if="::show.artistLocation">, {{::show.artistLocation}}</span>
+                                </em>&nbsp;
+                            </p>
+                        </div>
+                        <p style="margin-bottom: 35px" class="hidden-print">
+                            <span><a href="/show/{{::show.slug}}" class="btn btn-primary">Learn More</a></span>
+                            <span ng-if="::show.storeId"><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-info" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
+                        </p>
+                    </div>
+                    <div class="visible-xs-block">
                         <p class="lead" style="line-height: 1em; margin-bottom:10px">
                             <a class="hidden-print" href="/show/{{::show.slug}}">{{::show.name}}</a>
                             <span class="visible-print-inline">{{::show.name}}</span>
                         </p>
-                        <p class="small">
-                            <em ng-if="::show.artist">
-                                <strong ng-bind="::show.artist"></strong><span ng-if="::show.artistLocation">, {{::show.artistLocation}}</span>
-                            </em>&nbsp;
+                        <p>
+                            <interest show-id="showId"></interest>
+                        </p>
+                        <p class="hidden-print">
+                            <span><a href="/show/{{::show.slug}}" class="btn btn-primary btn-sm">Learn More</a></span>
+                            <span ng-if="::show.storeId"><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-info btn-sm" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
                         </p>
                     </div>
-                    <p style="margin-bottom: 35px" class="hidden-print">
-                        <span><a href="/show/{{::show.slug}}" class="btn btn-primary">Learn More</a></span>
-                        <span ng-if="::show.storeId"><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-info" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
-                    </p>
-                    <p style="margin: 0" ng-init="firstPerformance = performances[show.performances[0]]">
+                    <p style="margin: 0" class="hidden-xs">
                         <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
-                        <show-rating value="ratings[show.rating]"></show-rating>
-                        <!--<span class="label label-success">{{show.price|price}}</span>-->
-                        <!--<span class="label label-default"><i class="glyphicon glyphicon-time"></i> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes</span>-->
+                        <show-rating value="::ratings[show.rating]"></show-rating>
                         <span class="small text-muted" style="margin-left:10px">
                             <em>
                                 <ng-pluralize count="performanceCounts[showId]" when="plurals[isFringeOngoing ? 'performanceMore' : 'performance']"></ng-pluralize>
@@ -87,7 +72,8 @@
                         </span>
                     </p>
                 </div>
-                <div class="col-md-3 hidden-print" style="height: 220px; background: url('img/show/{{show.image}}') top; background-size: cover;"></div>
+                <div class="col-sm-3 hidden-xs hidden-print" style="height: 220px; background: url('img/show/{{show.image}}') top; background-size: cover;"></div>
+                <div class="col-xs-4 visible-xs-block hidden-print" style="height: 33vw; background: url('img/show/{{show.image}}') top; background-size: cover;"></div>
                 <hr class="visible-print-block" />
             </div>
         </div>

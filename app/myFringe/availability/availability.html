@@ -1,16 +1,22 @@
 <require-online>
     <div ng-if="availabilitySlots">
         <div class="row">
-            <div class="col-md-6">
-                <p>Select the time slots you are available by clicking them. Each slot is an hour.</p>
+            <div class="col-sm-10 col-xs-7">
+                <p class="hidden-xs">Select the time slots you are available by clicking them. Each slot is an hour.</p>
+                <p class="visible-xs-block">Select the time slots you are available by tapping them. Each slot is an hour.</p>
                 <p class="hidden-xs">You can click and drag to select multiple slots at once.</p>
+                <p class="visible-xs-block">Scroll left and right to see the other days.</p>
             </div>
-            <div class="col-md-6 availability-legend text-right">
-                <strong>Legend:</strong>
-                &nbsp;
-                <span class="availability-block bg-info" bs-tooltip="{title:'You have a show scheduled during this slot.'}">Scheduled</span>
-                <span class="availability-block bg-success">Available</span>
-                <span class="availability-block unavailable">Unavailable</span>
+            <div class="col-sm-2 col-xs-5 availability-legend text-center">
+                <div class="availability-block bg-info" bs-tooltip="{title:'You have a show scheduled during this slot.'}">
+                    Scheduled
+                </div>
+                <div class="availability-block bg-success">
+                    Available
+                </div>
+                <div class="availability-block unavailable">
+                    Unavailable
+                </div>
             </div>
         </div>
         <div style="overflow-x: auto; max-width: 100vw">
@@ -44,7 +50,8 @@
                                         ng-repeat="(dayId, daySlots) in ::availabilitySlots"
                                         ng-init="start = +dayId + timeId; stop = start + slotSize; empty = daySlots.indexOf(start) == -1; dow = moment(dayId, 'X').format('ddd')"
                                         ng-class="::{empty: empty, weekend: dow == 'Sat' || dow == 'Sun'}"
-                                        ng-mousedown="slotPerformances[start].length ? showPerformances(start, stop, slotPerformances[start]) : dragStart(start)"
+                                        ng-click="slotPerformances[start].length ? showPerformances(start, stop, slotPerformances[start])"
+                                        ng-mousedown="slotPerformances[start].length == 0 && !empty && dragStart(start)"
                                         ng-mouseover="! slotPerformances[start].length && start > 0 && dragOver(start)"
                                 >
                                     <div

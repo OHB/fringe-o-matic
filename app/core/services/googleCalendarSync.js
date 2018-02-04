@@ -2,10 +2,12 @@ angular.module('fringeApp')
     .service('GoogleCalendarSync', ['Data', 'User', '$q', 'debounce', '$timeout', function(Data, User, $q, debounce, $timeout) {
         var self = this,
             calendarScope = 'https://www.googleapis.com/auth/calendar',
-            onSyncStartFn = function() {},
+            onSyncFn = function() {},
             getCurrentUser = function() {
                 return gapi.auth2.getAuthInstance().currentUser.get();
-            };
+            },
+            currentSyncPromise,
+            syncCancelled = false;
 
         var getSyncCalendarId = function() {
             var settings = User.getSettings();
@@ -18,15 +20,27 @@ angular.module('fringeApp')
                 return $q.when();
             }
 
+            if (currentSyncPromise) {
+                syncCancelled = true;
+                var promise = currentSyncPromise;
+                currentSyncPromise = undefined;
+
+                return promise.then(function() {
+                    syncCancelled = false;
+                    return sync();
+                });
+            }
+
             var calendarId = getSyncCalendarId(),
                 deferred = $q.defer(),
                 eventReminders = '<br><p><strong>Remember to arrive 10 minutes prior to showtime and to wear your Fringe button!</strong></p>';
 
-            onSyncStartFn(deferred.promise);
+            currentSyncPromise = deferred.promise;
+            onSyncFn(deferred.promise);
 
             gapi.client.calendar.events.list({
                 calendarId: calendarId,
-                privateExtendedProperty: 'fringeSeason=OrlandoMay2018',
+                privateExtendedProperty: 'fringeSeason=2018-orlando-fringe-festival',
                 maxResults: 500
             }).then(function(response) {
                 var existingPerformanceToEventMap = {},
@@ -45,6 +59,10 @@ angular.module('fringeApp')
                     function() {
                         return $q.serial(itemsToSend.map(function(performanceId) {
                             return function() {
+                                if (syncCancelled) {
+                                    return $q.when();
+                                }
+
                                 var performance = Data.getPerformance(performanceId),
                                     show = Data.getShow(performance.show),
                                     venue = Data.getVenue(show.venue),
@@ -67,7 +85,7 @@ angular.module('fringeApp')
                                         end: {dateTime: moment(performance.stop, 'X').toISOString(), timeZone: 'America/New_York'},
                                         extendedProperties: {
                                             private: {
-                                                fringeSeason: 'OrlandoMay2018',
+                                                fringeSeason: '2018-orlando-fringe-festival',
                                                 performanceId: performanceId
                                             }
                                         },
@@ -83,8 +101,12 @@ angular.module('fringeApp')
                                     }
                                 }).then(function() {
                                     deferred.notify({progress: ++ progress, max: total});
+
+                                    return $timeout(500);
                                 }, function() {
                                     deferred.notify({progress: ++ progress, max: total});
+
+                                    return $timeout(500);
                                 });
                             };
                         }))
@@ -92,18 +114,29 @@ angular.module('fringeApp')
                     function() {
                         return $q.serial(itemsToDelete.map(function(performanceId) {
                             return function() {
+                                if (syncCancelled) {
+                                    return $q.when();
+                                }
+
                                 return gapi.client.calendar.events.delete({
                                     calendarId: calendarId,
                                     eventId: existingPerformanceToEventMap[performanceId]
                                 }).then(function() {
                                     deferred.notify({progress: ++ progress, max: total});
+
+                                    return $timeout(500);
                                 }, function() {
                                     deferred.notify({progress: ++ progress, max: total});
+
+                                    return $timeout(500);
                                 });
                             };
                         }));
                     }
-                ]).then(deferred.resolve);
+                ]).then(function() {
+                    currentSyncPromise = undefined;
+                    deferred.resolve();
+                });
             }, function(response) {
                 if (response.status === 404) {
                     self.disconnect();
@@ -117,8 +150,8 @@ angular.module('fringeApp')
             return 'https://calendar.google.com/calendar/r?cid=' + getSyncCalendarId();
         };
 
-        this.onSyncStart = function(fn) {
-            onSyncStartFn = fn;
+        this.onSync = function(fn) {
+            onSyncFn = fn;
         };
 
         this.hasPermission = function() {
@@ -133,7 +166,7 @@ angular.module('fringeApp')
             return this.hasPermission() && getSyncCalendarId() !== null;
         };
 
-        this.sync = debounce(sync, 2000);
+        this.sync = debounce(sync, 1000);
 
         this.getCalendars = function() {
             return gapi.client.calendar.calendarList.list({

@@ -1,0 +1,51 @@
+<div>
+    <div ng-if="! online || entry.inPast">
+        <div class="btn-group" bs-radio-group ng-model="entry.attendState">
+            <label class="btn disabled btn-default" ng-class="entry.attendState == 'no' && 'btn-danger'">
+                <input type="radio" value="no" disabled><span class="glyphicon glyphicon-thumbs-down"></span>
+            </label>
+            <label class="btn disabled btn-default" ng-class="entry.attendState == 'maybe' && 'btn-warning'">
+                <input type="radio" value="maybe" disabled><span class="glyphicon glyphicon-question-sign"></span>
+            </label>
+            <label class="btn disabled btn-default" ng-class="entry.attendState == 'yes' && 'btn-success'">
+                <input type="radio" value="yes" disabled><span class="glyphicon glyphicon-thumbs-up"></span>
+            </label>
+        </div>
+    </div>
+    <div ng-if="online && ! entry.inPast">
+        <div ng-if="entry.attendState=='no'" class="btn-group" bs-radio-group ng-model="entry.attendState">
+            <label class="btn btn-danger">
+                <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
+            </label>
+            <label class="btn btn-default" ng-click="addMaybe(entry.id)" bs-tooltip="{title:'Maybe attending'}">
+                <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
+            </label>
+            <label class="btn btn-default" bs-tooltip="{title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-click="entry.canBeScheduled && addToSchedule(entry.id)" ng-class="{disabled: !entry.canBeScheduled}">
+                <input type="radio" value="yes" ng-disabled="!entry.canBeScheduled"><span class="glyphicon glyphicon-thumbs-up"></span>
+            </label>
+        </div>
+        <div ng-if="entry.attendState=='maybe'" class="btn-group" bs-radio-group ng-model="entry.attendState">
+            <label class="btn btn-default" ng-click="removeFromSchedule(entry.id)" bs-tooltip="{title: 'Not attending'}">
+                <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
+            </label>
+            <label class="btn btn-warning">
+                <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
+            </label>
+            <label class="btn btn-default" bs-tooltip="{title: ! entry.canAttend ? 'You are unable to attend based on your availability' : (! entry.canBeScheduled ? 'You are attending a different show at this time or don\'t have enough time to travel between venues' : 'Add to schedule')}" ng-class="{disabled: !entry.canBeScheduled}">
+                <input type="radio" value="yes" ng-disabled="!entry.canBeScheduled"><span class="glyphicon glyphicon-thumbs-up"></span>
+            </label>
+        </div>
+        <div ng-if="entry.attendState=='yes'" class="btn-group" bs-radio-group ng-model="entry.attendState">
+            <label class="btn btn-default"ng-click="removeFromSchedule(entry.id)" bs-tooltip="{title: 'Remove from schedule'}">
+                <input type="radio" value="no"><span class="glyphicon glyphicon-thumbs-down"></span>
+            </label>
+            <label class="btn btn-default" ng-click="addMaybe(entry.id)" bs-tooltip="{title:'Remove from schedule, maybe attending'}">
+                <input type="radio" value="maybe"><span class="glyphicon glyphicon-question-sign"></span>
+            </label>
+            <label class="btn btn-success">
+                <input type="radio" value="yes"><span class="glyphicon glyphicon-thumbs-up"></span>
+            </label>
+        </div>
+        <performance-ticket-button store-id="::entry.performance.storeId" analytics-on analytics-category="Schedule"></performance-ticket-button>
+    </div>
+</div>

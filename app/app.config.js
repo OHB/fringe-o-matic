@@ -200,10 +200,12 @@ angular.module('fringeApp')
             $routeProvider
                 .when('/', {
                     template: '<home></home>'
-                }).when('/my-fringe/:subpage?', {
+                }).when('/my-fringe', {
                     template: '<my-fringe></my-fringe>'
-
-
+                }).when('/my-fringe/availability', {
+                    template: '<my-fringe></my-fringe>'
+                }).when('/my-fringe/auto-scheduler', {
+                    template: '<my-fringe></my-fringe>'
                 }).when('/shows-old', {
                     template: '<shows-old></shows-old>'
                 }).when('/shows-old/show/:show', {

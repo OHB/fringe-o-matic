@@ -85,7 +85,7 @@ angular.module('fringeApp').component('schedule', {
                     return ! entry.inPast && entry.canBeScheduled && showsAttending.indexOf(entry.showId) === -1;
                 });
                 $scope.dataLoaded = true;
-                $scope.displayedSchedule = $scope.schedule.slice(0, 10);
+                $scope.displayedSchedule = $scope.schedule.slice(0, 20);
             };
 
             $scope.addMoreItems = function() {
@@ -137,9 +137,6 @@ angular.module('fringeApp').component('schedule', {
                 $scope.filter.dayId = $scope.days.indexOf($scope.filter.currentDay) + 1;
                 updatePath();
                 refresh();
-                setTimeout(function() {
-                    window.scroll(0, 196);
-                });
             });
 
             $scope.addToSchedule = function(performanceId) {

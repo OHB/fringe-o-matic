@@ -61,8 +61,8 @@ if ($COMPILING) {
         ga('create', 'UA-113297473-1', '<?php echo $COMPILING ? 'auto' : 'none'; ?>');
     </script>
 </head>
-<body ng-controller="CoreCtrl" ng-class="{'online': isOnline, 'offline': !isOnline}">
-<header class="navbar-primary navbar navbar-fixed-top">
+<body ng-controller="CoreCtrl" ng-class="{'online': isOnline, 'offline': !isOnline, 'syncing': isSyncing}">
+<header class="navbar-primary navbar navbar-fixed-top" offset-height="navHeight">
     <div class="container" ng-init="nav = {collapsed: true}">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" ng-cloak ng-show="loaded" ng-click="nav.collapsed = !nav.collapsed">
@@ -71,16 +71,23 @@ if ($COMPILING) {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">Fringe-o-Matic</a>
+            <a href="/" class="navbar-brand pointer">Fringe-o-Matic</a>
+            <ul class="nav navbar-nav visible-xs-block" ng-cloak style="margin:0">
+                <li class="navbar-text cloud-icon" ng-if="signedIn">
+                    <i class="glyphicon glyphicon-cloud"></i>
+                    <i class="glyphicon glyphicon-ok"></i>
+                    <i class="glyphicon glyphicon-refresh"></i>
+                </li>
+            </ul>
         </div>
         <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}" ng-if="! error">
             <ul class="nav navbar-nav" ng-cloak>
-                <li ng-repeat="item in ::menu" ng-class="{active:currentRoute == '/' + item.route}">
+                <li ng-repeat="item in ::menu" ng-class="{active:currentRoute == '/' + item.route, 'hidden-sm': item.route == ''}">
                     <a href="/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
                 </li>
-                <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
-                    <a href="/test">Testing</a>
-                </li>
+<!--                <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">-->
+<!--                    <a href="/test">Test</a>-->
+<!--                </li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak ng-if="!isOnline">
                 <li class="navbar-text">Offline</li>
@@ -88,7 +95,7 @@ if ($COMPILING) {
             <ul class="nav navbar-nav navbar-right" ng-cloak ng-if="isOnline">
                 <li ng-show="! signedIn && loaded"><a href ng-click="signIn()">Sign In</a></li>
                 <li class="dropdown" ng-show="signedIn && loaded">
-                    <a href bs-dropdown>Signed in as {{signedInName}} <span class="caret"></span></a>
+                    <a href bs-dropdown>Signed in <span class="hidden-sm">as {{signedInName}}</span> <span class="caret"></span></a>
                     <ul class="dropdown-menu" style="border-radius: 4px">
                         <li><a href ng-click="signOut()">Sign Out</a></li>
                     </ul>
@@ -96,11 +103,16 @@ if ($COMPILING) {
                 <li ng-if="loaded" ng-controller="NotificationsCtrl">
                     <a href ng-if="show" data-template-url="app/core/notifications/popover.html" data-auto-close="1" data-placement="bottom-right" bs-popover analytics-on analytics-event="Open" analytics-category="Notifications"><i class="glyphicon glyphicon-bell"></i></a>
                 </li>
+                <li class="navbar-text cloud-icon hidden-xs" ng-if="signedIn">
+                    <i class="glyphicon glyphicon-cloud"></i>
+                    <i class="glyphicon glyphicon-ok"></i>
+                    <i class="glyphicon glyphicon-refresh"></i>
+                </li>
             </ul>
         </div>
     </div>
 </header>
-<main inner-height="innerHeight" ng-style="{minHeight:(innerHeight-134)+'px'}">
+<main ng-style="{paddingTop: navHeight + 'px', minHeight:'calc(100vh - ' + (footerHeight + 1) + 'px)'}">
     <noscript>
         <div class="container" style="padding-top: 8rem">
             <h1>Error</h1>
@@ -126,7 +138,7 @@ if ($COMPILING) {
         <div ng-view></div>
     </div>
 </main>
-<footer class="text-muted hidden-print" ng-cloak>
+<footer class="text-muted hidden-print" ng-cloak offset-height="footerHeight">
     <div class="container">
         <ul class="hidden-offline">
             <li><a href="/policies/terms">Terms of Service</a></li>

@@ -27,6 +27,7 @@ body > footer ul {
     padding-left: 0;
     margin-bottom: 1rem;
 }
+
 body > footer li {
     display: inline-block;
 }
@@ -43,9 +44,11 @@ body > footer a {
 .no-js {
     display: none;
 }
+
 body.js .js-required {
     display: initial;
 }
+
 .pointer {
     cursor: pointer !important;
     pointer-events: auto !important;
@@ -55,38 +58,58 @@ body.js .js-required {
     background: #337ab7;
     padding: 6px 0;
 }
+
 .offline .navbar-primary {
     background: #d9534f;
 }
+
 .navbar-primary .navbar-brand {
     color: white;
     cursor: default;
 }
+
 .navbar-primary .navbar-nav > li > a, .navbar-primary .navbar-text {
     color: rgba(255, 255, 255, 0.7);
 }
+
 .navbar-primary .navbar-brand:focus, .navbar-primary .navbar-brand:hover,
 .navbar-primary .navbar-nav > li > a:focus, .navbar-primary .navbar-nav > li > a:hover {
     color: white;
     background-color: transparent;
 }
+
 .navbar-primary .navbar-nav > .active > a, .navbar-primary .navbar-nav > .active > a:focus, .navbar-primary .navbar-nav > .active > a:hover,
 .navbar-primary .navbar-nav .open > a, .navbar-primary .navbar-nav .open > a:hover {
     background-color: transparent;
     font-weight: 700;
     color: white;
 }
+
 .navbar-primary .navbar-toggle .icon-bar {
     background: white;
 }
+
+.navbar-primary .navbar-collapse:not(.collapse) .dropdown-menu > li > a {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .navbar-primary .navbar-nav > li > a, .navbar-primary .navbar-text {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
 .jumbotron {
     border-bottom: 1px solid #ddd;
     background: #eee url(/img/skulls.png);
     background-position-y: -30px;
 }
+
 .jumbotron .progress {
     background-color: white;
 }
+
 .jumbotron .nav-tabs > li:not(.active) > a {
     color: #7a7a7a;
     background-color: #f6f6f6;
@@ -95,22 +118,49 @@ body.js .js-required {
     border: 1px solid #ddd;
     box-shadow: inset 0 -5px 15px -10px #333;
 }
+
 .jumbotron .nav-tabs > li:not(.active) > a:hover {
     color: #555;
     background-color: #f6f6f6;
     margin-top: 0;
     padding-bottom: 10px;
 }
+
 .jumbotron.has-tabs {
     box-shadow: inset 0 -5px 15px -10px #333;
     padding-bottom: 0;
 }
+
 .jumbotron .nav-tabs {
     margin-top: 48px;
     border: 0;
 }
+
 .jumbotron .nav-tabs > li > a {
     cursor: pointer;
+}
+
+.nav-tabs > li:last-child > a {
+    margin-right: 0;
+}
+
+@media (max-width: 767px) {
+    .jumbotron {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .jumbotron .nav-tabs {
+        margin: 30px -11px 0 -11px;
+    }
+
+    .jumbotron .nav-tabs > li > a {
+        padding: 5px 8px;
+    }
+
+    .jumbotron .nav-tabs > li:not(.active) > a {
+        padding-bottom: 3px;
+    }
 }
 
 .align-middle {
@@ -128,6 +178,7 @@ body.js .js-required {
 .modal-header .nav-tabs {
     margin: 0 -15px;
 }
+
 .modal-header .nav-tabs > li:first-child {
     margin-left: 15px;
 }
@@ -139,6 +190,7 @@ body.js .js-required {
     padding-bottom: 8px;
     border: 1px solid #ddd;
 }
+
 .modal-header .nav-tabs > li:not(.active) > a:hover {
     color: #555;
     background-color: #f6f6f6;
@@ -157,22 +209,30 @@ body.js .js-required {
 }
 
 @-webkit-keyframes sk-rotateplane {
-    0% { -webkit-transform: perspective(120px) }
-    50% { -webkit-transform: perspective(120px) rotateY(180deg) }
-    100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+    0% {
+        -webkit-transform: perspective(120px)
+    }
+    50% {
+        -webkit-transform: perspective(120px) rotateY(180deg)
+    }
+    100% {
+        -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg)
+    }
 }
 
 @keyframes sk-rotateplane {
     0% {
         transform: perspective(120px) rotateX(0deg) rotateY(0deg);
         -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
-    } 50% {
-          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-          -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
-      } 100% {
-            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-        }
+    }
+    50% {
+        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+    }
+    100% {
+        transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    }
 }
 
 .nav.nav-pills.nav-pills-condensed > li > a {
@@ -203,4 +263,109 @@ body.js .js-required {
 
 .alert.top-right.alert-info {
     border-color: #31708f;
+}
+
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.cloud-icon {
+    margin: 0;
+    line-height: 0;
+    position: relative;
+    width: 50px;
+}
+
+.cloud-icon i {
+    position: absolute;
+}
+
+.cloud-icon .glyphicon-cloud {
+    font-size: 20px;
+    margin: 15px;
+}
+
+.cloud-icon .glyphicon-ok {
+    font-size: 10px;
+    margin: 19px;
+    color: #337ab7;
+}
+
+.cloud-icon .glyphicon-refresh {
+    font-size: 27px;
+    margin: 11px;
+    color: #fff;
+    -webkit-animation: spin 2s infinite linear;
+    -o-animation: spin 2s infinite linear;
+    animation: spin 2s infinite linear;
+    display: none;
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .cloud-icon .glyphicon-cloud {
+        margin: 15px 10px;
+    }
+
+    .cloud-icon .glyphicon-ok {
+        margin: 19px 15px;
+    }
+
+    .cloud-icon .glyphicon-refresh {
+        margin: 11px 7px;
+    }
+
+    .syncing .cloud-icon .glyphicon-cloud {
+        margin: 19px 14px;
+        font-size: 13px;
+    }
+}
+.syncing .cloud-icon .glyphicon-cloud {
+    margin: 19px 18px;
+    font-size: 13px;
+}
+
+.syncing .cloud-icon .glyphicon-ok {
+    display: none;
+}
+
+.syncing .cloud-icon .glyphicon-refresh {
+    display: inline-block;
+}
+
+.list-inline-bullets {
+    display: block;
+}
+
+.list-inline-bullets li {
+    display: inline-block;
+    padding-right: 0;
+    padding-left: 4px;
+}
+
+.list-inline-bullets li:not(:last-child):after {
+    content: '\b7';
+    margin-left: 7px;
 }

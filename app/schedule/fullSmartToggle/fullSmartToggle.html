@@ -1,0 +1,18 @@
+<div ng-if="signedIn">
+    <div class="btn-group" ng-model="settings.scheduleMode" bs-radio-group style="width:100%">
+        <label class="btn btn-default" style="width:50%"
+               ng-class="settings.scheduleMode=='full' && 'btn-primary'"
+               bs-tooltip="{title: 'Shows full schedule.'}"
+        >
+            <input type="radio" value="full"> Full
+        </label>
+        <label class="btn btn-default" style="width:50%"
+               ng-class="settings.scheduleMode=='smart' && 'btn-primary'"
+               bs-tooltip="{title: 'Hides performances you\'re not interested in, can\'t attend, or are seeing at a different time.'}"
+        >
+            <input type="radio" value="smart"> Smart
+        </label>
+    </div>
+    <br>
+    <br>
+</div>

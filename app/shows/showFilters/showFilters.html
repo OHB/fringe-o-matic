@@ -1,0 +1,40 @@
+<div>
+    <div class="form-group has-feedback">
+        <label>Filter by keyword</label>
+        <input type="text" class="form-control" placeholder="Search" ng-model="search" ng-change="searchTextEntered()">
+        <span class="glyphicon glyphicon-remove form-control-feedback pointer text-muted" ng-show="search.length" ng-click="clearSearch()"></span>
+    </div>
+    <div class="form-group">
+        <label>Venue</label>
+        <select class="form-control" ng-model="selectedVenue" ng-options="o.value as o.label for o in venueOptions" ng-change="venueSelected()"></select>
+    </div>
+    <div class="form-group">
+        <label>Rating</label>
+        <select class="form-control" ng-model="selectedRating" ng-options="o.value as o.label for o in ratingOptions" ng-change="ratingSelected()"></select>
+    </div>
+    <hr>
+    <div class="checkbox" ng-show="isFringeOngoing">
+        <label>
+            <input type="checkbox" ng-change="hideWithoutShowtimesSelected()" ng-model="hideWithoutShowtimes">
+            Hide shows with no performances
+        </label>
+    </div>
+    <div class="checkbox" ng-show="$parent.$parent.signedIn">
+        <label>
+            <input type="checkbox" ng-change="hideNotInterestedSelected()" ng-model="hideNotInterested">
+            Hide shows I'm not interested in
+        </label>
+    </div>
+    <div class="checkbox" ng-show="$parent.$parent.signedIn">
+        <label>
+            <input type="checkbox" ng-change="hideNotAttendingSelected()" ng-model="hideNotAttending">
+            Hide shows I'm not attending
+        </label>
+    </div>
+    <div class="checkbox" ng-show="$parent.$parent.signedIn">
+        <label>
+            <input type="checkbox" ng-change="hideCantAttendSelected()" ng-model="hideCantAttend">
+            Hide shows I can't see
+        </label>
+    </div>
+</div>

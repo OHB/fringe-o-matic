@@ -1,10 +1,25 @@
 angular.module('fringeApp').controller('CoreCtrl', [
     '$rootScope', '$scope', '$route', '$location', '$window', '$q', '$timeout', '$uibModal', '$alert', 'Data', 'Menu', 'User', 'Error', 'GoogleCalendarSync', '$analytics',
     function($rootScope, $scope, $route, $location, $window, $q, $timeout, $uibModal, $alert, Data, Menu, User, Error, GoogleCalendarSync, $analytics) {
-        User.onSave(function(promise) {
-            promise.then(function() {}, function() {
-                Error.error('Unable to save data to the server.', 'Have you lost your internet connection?');
+        var syncCount = 0;
+
+        var updateDataSyncIndicator = function(promise) {
+            $scope.isSyncing = true;
+            syncCount ++;
+            promise.then(function() {
+                $scope.isSyncing = --syncCount > 0;
+            }, function() {
+                Error.error('Unable to save data to the server.', 'Some data may be lost. Please wait a moment and refresh the page.');
             });
+        };
+
+        User.onSave(updateDataSyncIndicator);
+        GoogleCalendarSync.onSync(updateDataSyncIndicator);
+
+        window.addEventListener('beforeunload', function(e) {
+            if (syncCount > 0) {
+                e.returnValue = "Please wait until your data has finished being saved.";
+            }
         });
 
         Error.onError(function(error) {
@@ -47,6 +62,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
         };
 
         var signInCheck = $q.defer();
+        updateDataSyncIndicator(signInCheck.promise);
 
         gapi.load('client:auth2:signin2', function() {
             gapi.client.init({
@@ -62,9 +78,13 @@ angular.module('fringeApp').controller('CoreCtrl', [
                     var profile = googleAuth.currentUser.get().getBasicProfile();
 
                     return User.signIn(googleAuth.currentUser.get().getAuthResponse().id_token).then(function() {
-                        $scope.signedIn = true;
-                        $scope.signedInName = profile.getName();
-                        $scope.isUserAdmin = User.getAccount().isAdmin;
+                        $timeout(function() {
+                            $scope.$apply(function() {
+                                $scope.signedIn = true;
+                                $scope.signedInName = profile.getName();
+                                $scope.isUserAdmin = User.getAccount().isAdmin;
+                            });
+                        });
                         $analytics.setUsername(User.getAccount().privateHash);
                         $analytics.eventTrack('Sign In Auto', {category: 'User'});
                         signInCheck.resolve();
@@ -109,6 +129,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
 
         $q.all([dataLoaded, firstRouteLoaded.promise, signInCheck.promise]).then(function() {
             $scope.loaded = true;
+            $scope.isSyncing = false;
 
             if ($scope.loadingMessage) {
                 $timeout(function() {

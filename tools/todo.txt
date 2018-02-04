@@ -7,35 +7,27 @@ click another, it works.
 related to url update
 push state?
 
-BUG
-can't click back after going to My Fringe
-
-closing while saving - modal
-
-get rid of show-rating directive
-
 css instead of innerHeight
 
-sitemap
+content loading / loaded directive
+    transclude content on load, surely this works even though directive needs scope!
 
 make mobile friendly!
+    DONE: Menu, Privacy, Credits, Venues, Shows, Home, My Fringe, Schedule, Show, Map, My Availability
+    TO DO: My Schedule, Auto-Scheduler
 
 custom reminder popover
 
 no ticket links for free shows
-
-ticket links to my schedule
 
 i need the extra points for empty days
 	this is tricky
 	points for close together (current does venue distance, but it should only apply if the two performances are close together in the schedule)
 	points for empty days (needs to include from fringe start to first show and last show to fringe end)
 
-my schedule
-	add tri-select
-	option to hide maybes
 
-tickets buying screen
+
+tickets buying screen?
 	mark tickets as bought
 	select tickets to buy
 		auto populate cart???

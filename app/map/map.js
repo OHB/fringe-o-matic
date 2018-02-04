@@ -87,20 +87,11 @@ angular.module('fringeApp').component('fringeMap', {
                 zoomToBoundedRegion(boundList);
             };
 
-            var updateHeight = function() {
-                $scope.innerHeight = $window.innerHeight;
-                $timeout(function() {
-                    NgMap.getMap().then(function(map) {
-                        google.maps.event.trigger(map, "resize");
-                    });
-                });
-            };
-
             angular.element($window).on('resize', debounce(function() {
-                $scope.$apply(updateHeight);
+                NgMap.getMap().then(function(map) {
+                    google.maps.event.trigger(map, "resize");
+                });
             }, 100));
-
-            updateHeight();
 
             var closeMarkerWindow = function() {
                 if ($scope.markerWindow) {
