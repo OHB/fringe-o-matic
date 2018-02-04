@@ -56,7 +56,7 @@
                     <tr ng-repeat="entry in displayedSchedule track by entry.id">
                         <td nowrap>
                             {{::moment(entry.performance.start, 'X').format('h:mma')}}
-                            <div class="visible-xs-block" style="margin-top: 15px">
+                            <div class="visible-xs-block text-center" style="margin-top: 15px" ng-if="online && ! entry.inPast">
                                 <performance-ticket-button store-id="::entry.performance.storeId" analytics-on analytics-category="Schedule"></performance-ticket-button>
                             </div>
                         </td>

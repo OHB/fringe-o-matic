@@ -17,7 +17,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
         GoogleCalendarSync.onSync(updateDataSyncIndicator);
 
         window.addEventListener('beforeunload', function(e) {
-            if (syncCount > 0) {
+            if (syncCount > 0 && ! $scope.error) {
                 e.returnValue = "Please wait until your data has finished being saved.";
             }
         });
