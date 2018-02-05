@@ -3,30 +3,42 @@
 </div>
 <div class="container" ng-if="schedule">
     <div class="page-header">
-        <a href="/" class="btn btn-primary pull-right" analytics-on analytics-event="Click" analytics-category="Public Schedule" analytics-label="Top Advertisement">Automatically create your own Fringe schedule for free!</a>
+        <a href="/" class="btn btn-primary pull-right hidden-xs hidden-sm" analytics-on analytics-event="Click" analytics-category="Public Schedule" analytics-label="Top Advertisement">Automatically create your own Fringe schedule for free!</a>
         <h1>{{title}}</h1>
     </div>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Date</th>
-            <th>Time</th>
+            <th>
+                <span class="hidden-sm hidden-xs">Date</span>
+                <span class="hidden-md hidden-lg">Date/Time</span>
+            </th>
+            <th class="hidden-sm hidden-xs">Time</th>
             <th>Show</th>
-            <th>Venue</th>
+            <th class="hidden-xs">Venue</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="pId in sortedPerformances" ng-if="schedule.indexOf(pId) > -1" ng-init="performance = performances[pId]; show = shows[performance.show]; venue = venues[show.venue];">
-            <td>{{moment(performance.start, 'X').format('ddd, MMM D')}}</td>
-            <td>{{moment(performance.start, 'X').format('h:mma')}}</td>
-            <th><a href="/show/{{show.slug}}">{{show.name}}</a></th>
-            <td>{{venue.name}}</td>
+            <td nowrap>
+                {{moment(performance.start, 'X').format('ddd, MMM D')}}
+                <div class="visible-sm visible-xs">
+                    {{moment(performance.start, 'X').format('h:mma')}}
+                </div>
+            </td>
+            <td nowrap class="hidden-sm hidden-xs">{{moment(performance.start, 'X').format('h:mma')}}</td>
+            <th class="hidden-xs"><a href="/show/{{show.slug}}">{{show.name}}</a></th>
+            <td class="visible-xs">
+                <strong><a href="/show/{{show.slug}}">{{show.name}}</a></strong>
+                <div class="small text-muted">{{venue.name}}</div>
+            </td>
+            <td class="hidden-xs">{{venue.name}}</td>
         </tr>
         </tbody>
     </table>
     <br>
     <br>
     <p class="text-center">
-        <a href="/" class="btn btn-primary btn-lg" analytics-on analytics-event="Click" analytics-category="Public Schedule" analytics-label="Bottom Advertisement">Automatically create your own Fringe schedule for free!</a>
+        <a href="/" class="btn btn-primary btn-lg" analytics-on analytics-event="Click" analytics-category="Public Schedule" analytics-label="Bottom Advertisement" style="white-space: normal"><span style="white-space: nowrap">Automatically create your own</span> <span style="white-space: nowrap">Fringe schedule for free!</span></a>
     </p>
 </div>

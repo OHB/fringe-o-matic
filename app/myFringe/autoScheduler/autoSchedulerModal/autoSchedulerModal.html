@@ -18,7 +18,7 @@
                     type="primary"></uib-progressbar>
         </p>
         <div class="row">
-            <div class="col-md-3" ng-repeat="desire in ['4', '3', '2', '1']">
+            <div class="col-sm-3" ng-repeat="desire in ['4', '3', '2', '1']">
                 <small>
                     <interest desire="desire"></interest>
                     <em ng-if="userData.settings.displaySchedulerStats">({{desireFitnessPoints[desire]}} points)</em>
@@ -33,20 +33,20 @@
                 </uib-progressbar>
             </div>
         </div>
-        <div class="small" ng-if="userData.settings.displaySchedulerStats">
+        <div class="small hidden-xs" ng-if="userData.settings.displaySchedulerStats">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-sm-3">
                     <strong>Generation</strong><br>
                     {{currentGeneration | number}}/{{generationCount | number}}
                 </div>
-                <div class="col-md-3"><strong>Schedules Tested</strong><br>
+                <div class="col-sm-3"><strong>Schedules Tested</strong><br>
                     {{currentGeneration * populationSize | number}}/{{populationSize * generationCount | number}}
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3">
                     <strong>Current Best</strong><br>
                     {{bestFitness - bestExtraPoints | number}}/{{idealFitness | number}} (+{{bestExtraPoints}} xp = {{bestFitness | number}})
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3">
                     <strong>Current Worst</strong><br>
                     {{worstFitness | number}}
                 </div>
@@ -64,7 +64,7 @@
         <p class="alert alert-info" style="margin-bottom:0"><i class="glyphicon glyphicon-info-sign"></i>{{infoMessages[currentMessage]}}</p>
     </div>
     <div class="modal-footer">
-        <button bs-checkbox class="btn pull-left btn-default"
+        <button bs-checkbox class="btn pull-left btn-default hidden-xs"
                 bs-tooltip="{title: 'Stats for nerds'}" data-placement="right"
                 ng-model="userData.settings.displaySchedulerStats"
         >
@@ -78,10 +78,10 @@
 
 
 <div ng-if="proposed" ng-init="tabs={activeTab:0}">
-    <div class="modal-header" style="border: 0; padding-bottom:0">
+    <div class="modal-header" style="border: 0; padding-bottom:0" offset-height="headerHeight">
         <h3 class="modal-title">Review Schedule</h3>
-        <div class="row" style="margin-top:15px">
-            <div class="col-md-3" ng-repeat="desire in ['4', '3', '2', '1']">
+        <div class="row hidden-xs" style="margin-top:15px">
+            <div class="col-sm-3" ng-repeat="desire in ['4', '3', '2', '1']">
                 <small>
                     <interest desire="desire"></interest>
                     <em ng-if="userData.settings.displaySchedulerStats && !proposed">({{desireFitnessPoints[desire]}} points)</em>
@@ -95,13 +95,21 @@
                 </uib-progressbar>
             </div>
         </div>
-        <div bs-active-pane="tabs.activeTab" bs-tabs ng-if="unscheduled.length > 0">
-            <div data-title="Proposed Schedule" bs-pane></div>
-            <div data-title="Unscheduled Shows" bs-pane></div>
-            <div data-title="More Information" bs-pane></div>
+        <div class="hidden-xs">
+            <div bs-active-pane="tabs.activeTab" bs-tabs ng-if="unscheduled.length > 0">
+                <div data-title="Proposed Schedule" bs-pane></div>
+                <div data-title="Unscheduled Shows" bs-pane></div>
+                <div data-title="More Information" bs-pane></div>
+            </div>
+        </div>
+        <div class="visible-xs" style="margin-top: 15px">
+            <div bs-active-pane="tabs.activeTab" bs-tabs ng-if="unscheduled.length > 0">
+                <div data-title="Schedule" bs-pane></div>
+                <div data-title="Unscheduled Shows" bs-pane></div>
+            </div>
         </div>
     </div>
-    <div class="modal-body" inner-height="innerHeight" ng-style="{maxHeight: (innerHeight-295) + 'px'}" style="overflow-y: scroll">
+    <div class="modal-body" ng-style="{maxHeight: 'calc(100vh - ' + (headerHeight + footerHeight + 25) + 'px)'}" style="overflow-y: scroll">
         <div ng-show="tabs.activeTab == 0">
             <div class="alert alert-success" ng-if="!unscheduled.length">
                 <strong>Success!</strong>
@@ -111,9 +119,9 @@
                 <strong>Oh no!</strong>
                 We weren't able to fit all of the shows you want to see on the schedule.
                 <a href ng-click="tabs.activeTab=1">Which ones?</a>
-                <a href ng-click="tabs.activeTab=2">Why?</a>
+                <a href ng-click="tabs.activeTab=2" class="hidden-xs">Why?</a>
             </div>
-            <table class="table" style="margin-bottom:0">
+            <table class="table hidden-xs" style="margin-bottom:0">
                 <thead>
                 <tr>
                     <th>Date/Time</th>
@@ -127,8 +135,11 @@
                     ng-if="proposed.indexOf(pId) > -1 || isUserAttendingPerformance(pId)"
                     ng-init="performance = performances[pId]"
                 >
-                    <td nowrap="nowrap"><strong>{{moment(performance.start, 'X').format('ddd, MMM Do')}}</strong><br>
-                        {{moment(performance.start, 'X').format('h:mm a')}} - {{moment(performance.stop, 'X').format('h:mm a')}}</td>
+                    <td nowrap="nowrap">
+                        <strong>{{moment(performance.start, 'X').format('ddd, MMM Do')}}</strong><br>
+                        {{moment(performance.start, 'X').format('h:mma')}}
+                        <span class="hidden-sm"> - {{moment(performance.stop, 'X').format('h:mma')}}</span>
+                    </td>
                     <td><strong>{{shows[performance.show].name}}</strong><br>
                         <span class="label label-venue-default label-venue-{{shows[performance.show].venue}}">
                             {{venues[shows[performance.show].venue].name}}
@@ -156,21 +167,70 @@
                 </tr>
                 </tbody>
             </table>
+            <table class="table visible-xs" style="margin-bottom:0">
+                <thead>
+                <tr>
+                    <th>Show</th>
+                    <th class="text-right">Accept?</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="pId in sortedPerformances"
+                    ng-if="proposed.indexOf(pId) > -1 || isUserAttendingPerformance(pId)"
+                    ng-init="performance = performances[pId]"
+                >
+                    <td colspan="2">
+                        <div class="pull-right">
+                            <div ng-if="isUserAttendingPerformance(pId)" nowrap bs-tooltip="{title:'Already on your schedule.'}">
+                                <button class="btn disabled">
+                                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                                </button>
+                                <button class="btn btn-success disabled">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                </button>
+                            </div>
+                            <div nowrap ng-if="! isUserAttendingPerformance(pId)">
+                                <button class="btn" ng-class="{'btn-danger': !accept[pId]}" ng-click="accept[pId]=false">
+                                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                                </button>
+                                <button class="btn" ng-class="{'btn-success': accept[pId]}" ng-click="accept[pId]=true">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <strong>{{shows[performance.show].name}}</strong><br>
+                        <p class="small">
+                            <strong>{{moment(performance.start, 'X').format('ddd, MMM Do')}}</strong>, {{moment(performance.start, 'X').format('h:mma')}}
+                        </p>
+                        <p class="small text-muted">
+                            <interest desire="userData.preferences[performance.show]"></interest>
+                            &middot;
+                            {{venues[shows[performance.show].venue].name}}
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <div ng-show="tabs.activeTab == 1">
-            <p class="lead">{{unscheduled.length > 1 ? 'These are the shows' : 'This is the show'}} I couldn't fit on the schedule.</p>
-            <p>Want <a href ng-click="tabs.activeTab=2">more information</a>?</p>
+            <p class="lead">{{unscheduled.length > 1 ? 'These are the shows' : 'This is the show'}} we couldn't fit on the schedule.</p>
+            <p class="hidden-xs">Want <a href ng-click="tabs.activeTab=2">more information</a>?</p>
             <table class="table" style="margin-bottom:0">
                 <thead>
                 <tr>
                     <th>Show</th>
-                    <th>Desire</th>
+                    <th class="hidden-xs">Desire</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="showId in unscheduled">
-                    <td>{{shows[showId].name}}</td>
                     <td>
+                        {{shows[showId].name}}
+                        <div class="visible-xs text-muted small">
+                            <interest desire="userData.preferences[showId]"></interest>
+                        </div>
+                    </td>
+                    <td nowrap class="hidden-xs">
                         <interest desire="userData.preferences[showId]"></interest>
                     </td>
                 </tr>
@@ -242,9 +302,9 @@
             <p>In the end, this is the type of problem that would be <em>perfect</em> for a <a href="https://en.wikipedia.org/wiki/Quantum_computing" target="_blank">Quantum Computer</a>...it could theoretically determine the best schedule almost instantly. But, unless you have a spare quantum computer laying around, you're stuck with this.</p>
         </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" offset-height="footerHeight">
         <button class="btn btn-primary pull-left" type="button" ng-click="start()">Try Again</button>
-        <button class="btn btn-success" type="button" ng-click="save()">Save Schedule</button>
-        <button class="btn btn-danger" type="button" ng-click="close()">Discard Schedule</button>
+        <button class="btn btn-success" type="button" ng-click="save()">Save<span class="hidden-xs"> Schedule</span></button>
+        <button class="btn btn-danger" type="button" ng-click="close()">Discard<span class="hidden-xs"> Schedule</span></button>
     </div>
 </div>

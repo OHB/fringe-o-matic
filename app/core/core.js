@@ -98,33 +98,36 @@ angular.module('fringeApp').controller('CoreCtrl', [
 
         var dataLoaded = Data.load().then(function() {
 
-            $scope.loadingMessage = function(fringeStart, fringeStop) {
-                var now = Date.now() / 1000,
-                    duration;
+            var fringeStart = Data.getFringeStart(),
+                fringeStop = Data.getFringeStop(),
+                now = Date.now() / 1000,
+                duration,
+                message;
 
-                if (now < fringeStart) {
-                    duration = moment.duration(fringeStart - now, 'seconds');
-                    if (duration.asDays() > 10) {
-                        return null;
-                    } else if (duration.asDays() >= 1) {
-                        return ['Get ready!', 'Fringe starts ' + duration.humanize(true) + '.'];
-                    } else {
-                        return ["It's almost time!", moment(fringeStart, 'X').format('[Fringe starts at] h:mm a!')];
-                    }
-                } else if (now < fringeStop) {
-                    duration = moment.duration(fringeStop - now, 'seconds');
-
-                    if (duration.asDays() >= 2) {
-                        return ["It's Fringe!", 'There are ' + Math.floor(duration.asDays()) + ' days left.'];
-                    } else if (duration.asDays() >= 1) {
-                        return ["It's almost over!", 'There is only one more day of Fringe! :('];
-                    } else {
-                        return ['On no!', 'Today is the last day of Fringe! :('];
-                    }
+            if (now < fringeStart) {
+                duration = moment.duration(fringeStart - now, 'seconds');
+                if (duration.asDays() > 10) {
+                    message = null;
+                } else if (duration.asDays() >= 1) {
+                    message = ['Get ready!', 'Fringe starts ' + duration.humanize(true) + '.'];
                 } else {
-                    return ['Are you excited?', 'Fringe 2019 is less than a year away!']
+                    message = ["It's almost time!", moment(fringeStart, 'X').format('[Fringe starts at] h:mm a!')];
                 }
-            }(Data.getFringeStart(), Data.getFringeStop());
+            } else if (now < fringeStop) {
+                duration = moment.duration(fringeStop - now, 'seconds');
+
+                if (duration.asDays() >= 2) {
+                    message = ["It's Fringe!", 'There are ' + Math.floor(duration.asDays()) + ' days left.'];
+                } else if (duration.asDays() >= 1) {
+                    message = ["It's almost over!", 'There is only one more day of Fringe! :('];
+                } else {
+                    message = ['On no!', 'Today is the last day of Fringe! :('];
+                }
+            } else {
+                message = ['Are you excited?', 'Fringe 2019 is less than a year away!']
+            }
+
+            $scope.loadingMessage = message;
         });
 
         $q.all([dataLoaded, firstRouteLoaded.promise, signInCheck.promise]).then(function() {
@@ -180,26 +183,15 @@ angular.module('fringeApp').controller('CoreCtrl', [
             $scope.isOnline = navigator.onLine;
             $route.reload();
 
-            if ($scope.isOnline) {
-                $alert({
-                    title: "You're back online!",
-                    placement: 'top-right',
-                    animation: 'am-fade-and-slide-top',
-                    type: 'success',
-                    show: true,
-                    duration: 5
-                });
-            } else {
-                $alert({
-                    title: "You've got offline!",
-                    content: $scope.signedIn ? "You won't be able to edit anything until you go back online." : "You won't be able to sign-in.",
-                    placement: 'top-right',
-                    animation: 'am-fade-and-slide-top',
-                    type: 'danger',
-                    show: true,
-                    duration: 5
-                });
-            }
+            $alert({
+                title: $scope.isOnline ? "You're back online!" : "You've got offline!",
+                content: $scope.isOnline ? null : ($scope.signedIn ? "You won't be able to edit anything until you go back online." : "You won't be able to sign-in."),
+                placement: 'top-right',
+                animation: 'am-fade-and-slide-top',
+                type: $scope.isOnline ? 'success' : 'danger',
+                show: true,
+                duration: 5
+            });
         };
         window.addEventListener('offline', updateOnlineStatus);
         window.addEventListener('online', updateOnlineStatus);

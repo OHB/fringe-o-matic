@@ -10,23 +10,15 @@
         <div ng-if="screen == 'intro'">
             <h1>Introduction</h1>
             <p class="lead">The Auto-Scheduler helps build your schedule automatically. It needs to know two things:</p>
-            <blockquote>
-                <h3 style="margin-top:0">1. What shows do you want to see?</h3>
-                <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
-                <br>
-                <div class="row">
-                    <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-md-2 text-center" ng-class="$first && 'col-md-offset-1'">
-                        <interest desire="i" class="lead"></interest><br>
-                        {{interestText[i]}}
-                    </div>
-                </div>
-                <br>
-                <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
-                <br>
-                <h3>2. When are you available?</h3>
-                <p>On the <a href="/my-fringe/availability">My Availability</a> tab, you can select which times you are available to see shows.</p>
-                <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
-            </blockquote>
+            <br>
+            <h3 style="margin-top:0">1. What shows do you want to see?</h3>
+            <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons.</p>
+            <br>
+            <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
+            <br>
+            <h3>2. When are you available?</h3>
+            <p>On the <a href="/my-fringe/availability">My Availability</a> tab, you can select which times you are available to see shows.</p>
+            <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
             <br>
             <div class="text-center">
                 <button class="btn btn-lg btn-primary" ng-click="completeIntro()">Got it!</button>
@@ -37,8 +29,14 @@
             <p class="lead">Before you can use this page, you need to select shows that you're interested in.</p>
             <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
             <br>
-            <div class="row">
-                <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-md-2 text-center" ng-class="$first && 'col-md-offset-1'">
+            <div class="row hidden-sm">
+                <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-sm-2 text-center" style="margin-bottom:15px" ng-class="$first && 'col-md-offset-1'">
+                    <interest desire="i" class="lead"></interest><br>
+                    {{interestText[i]}}
+                </div>
+            </div>
+            <div class="row visible-sm">
+                <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-sm-2 text-center" style="margin-bottom:15px;width:20%">
                     <interest desire="i" class="lead"></interest><br>
                     {{interestText[i]}}
                 </div>
@@ -48,7 +46,66 @@
             <p>Once you've done that, come back to this screen.</p>
         </div>
         <div class="row" ng-if="screen != 'intro' && screen != 'no-interests'">
-            <div class="col-md-9">
+            <div class="col-md-3 col-md-push-9">
+                <div class="panel panel-default hidden-xs hidden-sm" style="margin-top: 25px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Schedule Progress</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <strong>Fullness</strong>
+                            <uib-progressbar
+                                    class="progress"
+                                    max="availablePerformanceCount"
+                                    value="availablePerformanceCount - possiblePerformanceCount"
+                                    animate="true"
+                                    type="primary"></uib-progressbar>
+                        </div>
+                        <hr>
+                        <div ng-repeat="desire in [4, '3', '2', '1']">
+                            <small>
+                                <interest desire="desire"></interest>
+                                <em class="pull-right">{{progressByDesire[desire]}}/{{progressByDesireMax[desire]}}</em>
+                            </small>
+                            <uib-progressbar
+                                    class="progress"
+                                    ng-style="$last && {marginBottom: 0}"
+                                    max="progressByDesireMax[desire]"
+                                    value="progressByDesire[desire]"
+                                    animate="true"
+                                    type="{{getProgressType(progressByDesire[desire], progressByDesireMax[desire])}}"></uib-progressbar>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden-xs hidden-md hidden-lg">
+                    <div>
+                        <strong>Schedule Fullness</strong>
+                        <uib-progressbar
+                                class="progress"
+                                max="availablePerformanceCount"
+                                value="availablePerformanceCount - possiblePerformanceCount"
+                                animate="true"
+                                type="primary"></uib-progressbar>
+                    </div>
+                    <div class="row">
+                        <div ng-repeat="desire in [4, '3', '2', '1']" class="col-md-12 col-sm-3">
+                            <small>
+                                <interest desire="desire"></interest>
+                                <em class="pull-right">{{progressByDesire[desire]}}/{{progressByDesireMax[desire]}}</em>
+                            </small>
+                            <uib-progressbar
+                                    class="progress"
+                                    ng-style="$last && {marginBottom: 0}"
+                                    max="progressByDesireMax[desire]"
+                                    value="progressByDesire[desire]"
+                                    animate="true"
+                                    type="{{getProgressType(progressByDesire[desire], progressByDesireMax[desire])}}"></uib-progressbar>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div class="col-md-9 col-md-pull-3">
                 <div ng-if="screen == 'schedule-full'">
                     <h1>Your schedule is full!</h1>
                     <br>
@@ -75,30 +132,34 @@
                         ></ng-pluralize>
                         you can see!</h1>
                     <br>
-                    <p>These shows can be added to your schedule without impacting your ability to see other shows.</p>
+                    <p>These shows <span class="visible-xs-inline">that you're interested in</span> can be added to your schedule without impacting your ability to see other shows.</p>
                     <br>
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th>Date/Time</th>
                             <th>Show</th>
-                            <th>Interest</th>
+                            <th class="hidden-xs">Interest</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="entry in instantAddPerformances">
                             <td nowrap>
-                                <strong>{{::moment(entry.performance.start, 'X').format('dddd, MMMM D')}}</strong><br>
-                                {{::moment(entry.performance.start, 'X').format('h:mm a')}} -
-                                {{::moment(entry.performance.stop, 'X').format('h:mm a')}}
+                                <span class="hidden-xs">
+                                    <strong>{{::moment(entry.performance.start, 'X').format('dddd, MMMM D')}}</strong><br>
+                                    {{::moment(entry.performance.start, 'X').format('h:mm a')}} -
+                                    {{::moment(entry.performance.stop, 'X').format('h:mm a')}}
+                                </span>
+                                <span class="visible-xs">
+                                    <strong>{{::moment(entry.performance.start, 'X').format('ddd, MMM D')}}</strong><br>
+                                    {{::moment(entry.performance.start, 'X').format('h:mm a')}}
+                                </span>
                             </td>
                             <td>
                                 <p class="h4" style="margin:0 0 10px;"><a href="/show/{{::entry.show.slug}}">{{::entry.show.name}}</a></p>
                                 <span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>
-                                <show-rating value="::entry.show.rating"></show-rating>
-                                <span class="label label-success">{{entry.show.price|price}}</span>
                             </td>
-                            <td nowrap class="align-middle"><interest show-id="entry.showId"></interest></td>
+                            <td nowrap class="align-middle hidden-xs"><interest show-id="entry.showId"></interest></td>
                         </tr>
                         </tbody>
                     </table>
@@ -133,38 +194,6 @@
                     <br>
                     <br>
                     <p><a href="/my-fringe" class="btn btn-primary">View Schedule</a></p>
-                </div>
-            </div>
-            <div class="col-md-3" style="padding-top: 25px">
-                <div class="panel panel-default" data-offset-top="-80" bs-affix>
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Schedule Progress</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div>
-                            <strong>Fullness</strong>
-                            <uib-progressbar
-                                    class="progress"
-                                    max="availablePerformanceCount"
-                                    value="availablePerformanceCount - possiblePerformanceCount"
-                                    animate="true"
-                                    type="primary"></uib-progressbar>
-                        </div>
-                        <hr>
-                        <div ng-repeat="desire in [4, '3', '2', '1']">
-                            <small>
-                                <interest desire="desire"></interest>
-                                <em class="pull-right">{{progressByDesire[desire]}}/{{progressByDesireMax[desire]}}</em>
-                            </small>
-                            <uib-progressbar
-                                    class="progress"
-                                    ng-style="$last && {marginBottom: 0}"
-                                    max="progressByDesireMax[desire]"
-                                    value="progressByDesire[desire]"
-                                    animate="true"
-                                    type="{{getProgressType(progressByDesire[desire], progressByDesireMax[desire])}}"></uib-progressbar>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

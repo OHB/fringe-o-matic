@@ -64,7 +64,7 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                         $location.path('/my-fringe');
                     }
 
-                    $analytics.eventTrack('Show Screen', {category: 'Auto-Scheduler', label: 'Schedule Full'});
+                    $analytics.eventTrack('Show Screen', {category: 'Auto-Scheduler', label: 'Schedule Complete'});
 
                     return 'schedule-complete';
                 }

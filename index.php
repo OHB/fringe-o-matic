@@ -85,9 +85,9 @@ if ($COMPILING) {
                 <li ng-repeat="item in ::menu" ng-class="{active:currentRoute == '/' + item.route, 'hidden-sm': item.route == ''}">
                     <a href="/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
                 </li>
-<!--                <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">-->
-<!--                    <a href="/test">Test</a>-->
-<!--                </li>-->
+                <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
+                    <a href="/test">T</a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak ng-if="!isOnline">
                 <li class="navbar-text">Offline</li>
@@ -145,7 +145,7 @@ if ($COMPILING) {
             <li><a href="/policies/privacy">Privacy Policy</a></li>
             <li><a href="/about/credits">Credits</a></li>
         </ul>
-        <p>Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018. Not affiliated with <a href="http://orlandofringe.org" target="_blank">Orlando Fringe</a>.<br />
+        <p style="margin:0">Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018. Not affiliated with <a href="http://orlandofringe.org" target="_blank">Orlando Fringe</a>.<br />
             <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>
     </div>
 </footer>

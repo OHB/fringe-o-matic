@@ -50,7 +50,7 @@
                                         ng-repeat="(dayId, daySlots) in ::availabilitySlots"
                                         ng-init="start = +dayId + timeId; stop = start + slotSize; empty = daySlots.indexOf(start) == -1; dow = moment(dayId, 'X').format('ddd')"
                                         ng-class="::{empty: empty, weekend: dow == 'Sat' || dow == 'Sun'}"
-                                        ng-click="slotPerformances[start].length ? showPerformances(start, stop, slotPerformances[start])"
+                                        ng-click="slotPerformances[start].length && showPerformances(start, stop, slotPerformances[start])"
                                         ng-mousedown="slotPerformances[start].length == 0 && !empty && dragStart(start)"
                                         ng-mouseover="! slotPerformances[start].length && start > 0 && dragOver(start)"
                                 >

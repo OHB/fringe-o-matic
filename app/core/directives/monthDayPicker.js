@@ -3,7 +3,7 @@ angular.module('fringeApp').directive('monthDayPicker', function() {
         restrict: 'E',
         template: '<div class="month-day-picker">' +
             '<div ng-repeat="month in ::months">' +
-            '<h4>{{::month.header}}</h4>' +
+            '<p class=""lead">{{::month.header}}</p>' +
             '<table class="table table-condensed table-bordered">' +
             '<thead>' +
             '<tr>' +

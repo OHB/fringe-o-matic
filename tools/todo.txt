@@ -7,14 +7,12 @@ click another, it works.
 related to url update
 push state?
 
+show page schema events
+
 css instead of innerHeight
 
 content loading / loaded directive
     transclude content on load, surely this works even though directive needs scope!
-
-make mobile friendly!
-    DONE: Menu, Privacy, Credits, Venues, Shows, Home, My Fringe, Schedule, Show, Map, My Availability
-    TO DO: My Schedule, Auto-Scheduler
 
 custom reminder popover
 

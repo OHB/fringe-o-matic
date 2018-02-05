@@ -38,7 +38,7 @@ foreach (scandir(__DIR__ . '/../') as $file) {
 echo "Minifying templates...\n";
 $templates = "angular.module('fringeApp').run(['\$templateCache',function(\$templateCache){"
     . getFiles($build->templates, function($filename, $file) {
-        $html = json_encode(post('http://html-minifier.com/raw?', ['input' => $file]));
+        $html = json_encode(str_replace("\n", ' ', post('http://html-minifier.com/raw?', ['input' => $file])));
         return "\$templateCache.put('{$filename}', {$html});\n";
     })
     . '}]);';
