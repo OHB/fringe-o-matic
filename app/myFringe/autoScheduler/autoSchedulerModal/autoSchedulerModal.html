@@ -135,7 +135,7 @@
                     ng-if="proposed.indexOf(pId) > -1 || isUserAttendingPerformance(pId)"
                     ng-init="performance = performances[pId]"
                 >
-                    <td nowrap="nowrap">
+                    <td nowrap>
                         <strong>{{moment(performance.start, 'X').format('ddd, MMM Do')}}</strong><br>
                         {{moment(performance.start, 'X').format('h:mma')}}
                         <span class="hidden-sm"> - {{moment(performance.stop, 'X').format('h:mma')}}</span>

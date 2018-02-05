@@ -1,23 +1,33 @@
 <div class="modal-header">
-    <h3 class="modal-title">
-        {{moment(slotStart, 'X').format('ddd, MMM Do hh:mma')}} - {{moment(slotStop, 'X').format('hh:mma')}}
+    <h3 class="modal-title hidden-xs">
+        {{moment(slotStart, 'X').format('ddd, MMM Do h:mma')}} - {{moment(slotStop, 'X').format('h:mma')}}
+    </h3>
+    <h3 class="modal-title visible-xs">
+        {{moment(slotStart, 'X').format('ddd, MMM Do')}}
+        <small>{{moment(slotStart, 'X').format('h:mma')}} - {{moment(slotStop, 'X').format('h:mma')}}</small>
     </h3>
 </div>
 <div class="modal-body">
     <table class="table">
         <thead>
         <tr>
-            <th>Time</th>
+            <th class="hidden-xs">Time</th>
             <th>Show</th>
-            <th>Venue</th>
+            <th class="hidden-xs">Venue</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="performanceId in slotPerformances" ng-init="performance = performances[performanceId]">
-            <td nowrap="nowrap">{{moment(performance.start, 'X').format('h:mm a')}} - {{moment(performance.stop, 'X').format('h:mm a')}}</td>
-            <td><strong><a href="/show/{{shows[performance.show].slug}}">{{shows[performance.show].name}}</a></strong></td>
+            <td nowrap class="hidden-xs">{{moment(performance.start, 'X').format('h:mma')}} - {{moment(performance.stop, 'X').format('h:mma')}}</td>
             <td>
+                <strong><a href="/show/{{shows[performance.show].slug}}">{{shows[performance.show].name}}</a></strong>
+                <div class="visible-xs">
+                    <p class="small">{{moment(performance.start, 'X').format('h:mma')}} - {{moment(performance.stop, 'X').format('h:mma')}}</p>
+                    <p class="small text-muted">{{venues[shows[performance.show].venue].name}}</p>
+                </div>
+            </td>
+            <td class="hidden-xs">
                 <span class="label label-venue-default label-venue-{{shows[performance.show].venue}}">
                     {{venues[shows[performance.show].venue].name}}
                 </span>
