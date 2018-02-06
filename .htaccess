@@ -1,9 +1,0 @@
-RewriteEngine on
-RewriteCond %{HTTP_HOST} ^www\.fringeomatic\.com [NC]
-RewriteRule ^(.*)$ http://fringeomatic.com/$1 [L,R=301]
-
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
-RewriteRule ^ - [L]
-
-RewriteRule ^ /
