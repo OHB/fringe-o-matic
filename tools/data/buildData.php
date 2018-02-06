@@ -8,20 +8,26 @@ $colorVenues = [11, 2, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 23];
 $byov = [3, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 
 $venueHosts = [
-    1 => ['name' => 'Orlando Shakespeare Theater', 'address' => ['812 E Rollins St', 'Orlando, FL 32803']],
-    2 => ['name' => 'Orlando Museum of Art', 'address' => ['2416 N Mills Ave', 'Orlando, FL 32803']],
-    3 => ['name' => 'Orlando Repertory Theatre', 'address' => ['1001 E Princeton St', 'Orlando, FL 32803']],
-    4 => ['name' => 'Junior Achievement', 'address' => ['2121 Camden Rd', 'Orlando, FL 32803']],
-    5 => ['name' => 'The Venue', 'address' => ['511 Virginia Dr', 'Orlando, FL 32803'], 'driving' => 'possible'],
-    6 => ['name' => 'Breakthrough Theatre of Winter Park', 'address' => ['421 W Fairbanks Ave', 'Winter Park, FL 32789'], 'driving' => 'assumed'],
-    7 => ['name' => "St. Matthew's Tavern at the Orlando Beer Garden", 'address' => ['1300 N Mills Ave', 'Orlando, FL 32803'], 'driving' => 'possible'],
-    8 => ['name' => 'Savoy Orlando', 'address' => ['1913 N Orange Ave', 'Orlando, FL 32804'], 'driving' => 'possible'],
-    9 => ['name' => 'The Pergande Home', 'address' => ['1314 Chichester St', 'Orlando, FL 32803'], 'driving' => 'recommended'],
-    10 => ['name' => 'Loch Haven Park', 'address' => ['777 E Princeton St', 'Orlando, FL 32803'], 'mapPos' => [28.571989, -81.366292]]
+    1 => ['name' => 'Orlando Shakespeare Theater', 'address' => ['812 E Rollins St', 'Orlando', 'FL', '32803']],
+    2 => ['name' => 'Orlando Museum of Art', 'address' => ['2416 N Mills Ave', 'Orlando', 'FL', '32803']],
+    3 => ['name' => 'Orlando Repertory Theatre', 'address' => ['1001 E Princeton St', 'Orlando', 'FL', '32803']],
+    4 => ['name' => 'Junior Achievement', 'address' => ['2121 Camden Rd', 'Orlando', 'FL', '32803']],
+    5 => ['name' => 'The Venue', 'address' => ['511 Virginia Dr', 'Orlando', 'FL', '32803'], 'driving' => 'possible'],
+    6 => ['name' => 'Breakthrough Theatre of Winter Park', 'address' => ['421 W Fairbanks Ave', 'Winter Park', 'FL', '32789'], 'driving' => 'assumed'],
+    7 => ['name' => "St. Matthew's Tavern at the Orlando Beer Garden", 'address' => ['1300 N Mills Ave', 'Orlando', 'FL', '32803'], 'driving' => 'possible'],
+    8 => ['name' => 'Savoy Orlando', 'address' => ['1913 N Orange Ave', 'Orlando', 'FL', '32804'], 'driving' => 'possible'],
+    9 => ['name' => 'The Pergande Home', 'address' => ['1314 Chichester St', 'Orlando', 'FL', '32803'], 'driving' => 'recommended'],
+    10 => ['name' => 'Loch Haven Park', 'address' => ['777 E Princeton St', 'Orlando', 'FL', '32803'], 'mapPos' => [28.571989, -81.366292]]
 ];
 
 foreach ($venueHosts as &$host) {
     $host['slug'] = makeSlug($host['name']);
+    $host['addressStreet'] = $host['address'][0];
+    $host['addressLocality'] = $host['address'][1];
+    $host['addressRegion'] = $host['address'][2];
+    $host['addressPostalCode'] = $host['address'][3];
+    $host['addressCountry'] = 'US';
+    $host['address'] = [$host['address'][0], "{$host['address'][1]}, {$host['address'][2]}  {$host['address'][3]}"];
 }
 
 $venueDetails = [

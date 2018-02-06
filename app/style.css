@@ -1,4 +1,5 @@
 body {
+    /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
     font-family: 'Quicksand', sans-serif;
     font-weight: 500;
     font-size: 15px;
@@ -145,10 +146,13 @@ body.js .js-required {
 }
 
 @media (max-width: 767px) {
+    .navbar-primary {
+        padding-bottom: 0;
+    }
     .jumbotron {
         padding-top: 10px;
         padding-bottom: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
 
     .jumbotron .nav-tabs {
@@ -377,4 +381,8 @@ body.js .js-required {
 .list-inline-bullets li:not(:last-child):after {
     content: '\b7';
     margin-left: 7px;
+}
+
+.notifications-icon .arrow {
+    margin-left: -5px !important;
 }

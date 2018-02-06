@@ -53,5 +53,61 @@ angular.module('fringeApp').component('show', {
         $scope.random = function() {
             return false;
         };
+
+        $scope.jsonld = [];
+
+        var venue = $scope.venues[$scope.show.venue],
+            host = Data.getVenueHost(venue.host);
+
+        angular.forEach($scope.show.performances, function(performanceId) {
+            var performance = $scope.performances[performanceId],
+                json = {
+                    "@context": "http://schema.org",
+                    "@type": "Event",
+                    "name": $scope.show.name,
+                    "startDate": moment(performance.start, 'X').utcOffset(-5, true).toISOString(true),
+                    "endDate": moment(performance.start, 'X').utcOffset(-5, true).toISOString(true),
+                    "location": {
+                        "@type": "Place",
+                        "name": venue.name + ' at ' + host.name,
+                        "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": host.addressStreet,
+                            "addressLocality": host.addressLocality,
+                            "addressRegion": host.addressRegion,
+                            "postalCode": host.addressPostalCode,
+                            "addressCountry": host.addressCountry
+                        }
+                    },
+                    "description": function (html) {
+                        var tmp = document.createElement("DIV");
+                        tmp.innerHTML = html;
+                        return tmp.innerText || "";
+                    }($scope.show.description),
+                    "performer": $scope.artist
+                };
+
+            if ($scope.show.image) {
+                json.image = 'https://fringeomatic.com/img/show/' + $scope.show.image;
+            }
+
+            if ($scope.show.artist) {
+                json.performer = {
+                    "@type": "PerformingGroup",
+                    "name": $scope.show.artist
+                };
+            }
+
+            if ($scope.show.price && performance.storeId) {
+                json.offers = {
+                    "@type": "Offer",
+                    "url": "https://orlandofringe.showare.com/ordertickets.asp?p=" + performance.storeId,
+                    "price": $scope.show.price,
+                    "priceCurrency": "USD"
+                };
+            }
+
+            $scope.jsonld.push(json);
+        });
     }]
 });

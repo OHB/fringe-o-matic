@@ -7,14 +7,8 @@ click another, it works.
 related to url update
 push state?
 
-show page schema events
-
-css instead of innerHeight
-
 content loading / loaded directive
     transclude content on load, surely this works even though directive needs scope!
-
-custom reminder popover
 
 no ticket links for free shows
 

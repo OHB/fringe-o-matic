@@ -58,7 +58,7 @@
                                             class="availability-block"
                                             ng-class="!empty && (slotPerformances[start].length ? 'bg-info' : (availability[start] ? 'bg-success' : 'unavailable'))"
                                             ng-if="::!empty"
-                                            bs-tooltip="!dragging && {title:slotPerformances[start].length ? 'Click to see performances' : moment(start, 'X').format('h:mm a') + ' - ' + moment(stop, 'X').format('h:mm a')}"
+                                            bs-tooltip="!dragging && {title:slotPerformances[start].length ? 'Click to see performances' : moment(start, 'X').format('h:mma') + ' - ' + moment(stop, 'X').format('h:mma')}"
                                     >
                                         {{::moment(start, 'X').format('h a')}}
                                     </div>

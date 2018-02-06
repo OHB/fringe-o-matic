@@ -111,7 +111,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 } else if (duration.asDays() >= 1) {
                     message = ['Get ready!', 'Fringe starts ' + duration.humanize(true) + '.'];
                 } else {
-                    message = ["It's almost time!", moment(fringeStart, 'X').format('[Fringe starts at] h:mm a!')];
+                    message = ["It's almost time!", moment(fringeStart, 'X').format('[Fringe starts at] h:mma!')];
                 }
             } else if (now < fringeStop) {
                 duration = moment.duration(fringeStop - now, 'seconds');

@@ -10,7 +10,7 @@ if ($COMPILING) {
 }
 ?><!DOCTYPE html>
 <html ng-app="fringeApp">
-<head itemscope="" itemtype="http://schema.org/WebPage" lang="en">
+<head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -71,14 +71,17 @@ if ($COMPILING) {
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+            <span ng-if="signedIn && isOnline" ng-cloak class="visible-xs navbar-toggle cloud-icon" style="margin-right: 20px;color:#fff">
+                <i class="glyphicon glyphicon-cloud"></i>
+                <i class="glyphicon glyphicon-ok"></i>
+                <i class="glyphicon glyphicon-refresh"></i>
+            </span>
+            <span ng-if="loaded" ng-cloak ng-controller="NotificationsCtrl">
+                <button type="button" class="visible-xs btn btn-primary navbar-toggle" ng-if="show" data-template-url="app/core/notifications/popover.html" data-auto-close="1" data-placement="bottom" bs-popover analytics-on analytics-event="Open" analytics-category="Notifications" style="margin-right:0">
+                    <i class="glyphicon glyphicon-bell"></i>
+                </button>
+            </span>
             <a href="/" class="navbar-brand pointer">Fringe-o-Matic</a>
-            <ul class="nav navbar-nav visible-xs-block" ng-cloak style="margin:0">
-                <li class="navbar-text cloud-icon" ng-if="signedIn">
-                    <i class="glyphicon glyphicon-cloud"></i>
-                    <i class="glyphicon glyphicon-ok"></i>
-                    <i class="glyphicon glyphicon-refresh"></i>
-                </li>
-            </ul>
         </div>
         <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}" ng-if="! error">
             <ul class="nav navbar-nav" ng-cloak>
@@ -100,7 +103,7 @@ if ($COMPILING) {
                         <li><a href ng-click="signOut()">Sign Out</a></li>
                     </ul>
                 </li>
-                <li ng-if="loaded" ng-controller="NotificationsCtrl">
+                <li class="hidden-xs notifications-icon" ng-if="loaded" ng-controller="NotificationsCtrl">
                     <a href ng-if="show" data-template-url="app/core/notifications/popover.html" data-auto-close="1" data-placement="bottom-right" bs-popover analytics-on analytics-event="Open" analytics-category="Notifications"><i class="glyphicon glyphicon-bell"></i></a>
                 </li>
                 <li class="navbar-text cloud-icon hidden-xs" ng-if="signedIn">
@@ -145,7 +148,7 @@ if ($COMPILING) {
             <li><a href="/policies/privacy">Privacy Policy</a></li>
             <li><a href="/about/credits">Credits</a></li>
         </ul>
-        <p style="margin:0">Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018. Not affiliated with <a href="http://orlandofringe.org" target="_blank">Orlando Fringe</a>.<br />
+        <p style="margin:0">Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018.<br />
             <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>
     </div>
 </footer>
@@ -164,7 +167,6 @@ if (! $COMPILING) {
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vibrant.js/1.0.0/Vibrant.min.js" integrity="sha256-qAQzBOPFUA4u8LLFha4hHBcGZoKk4Q8NtWqYa4K2b7g=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js" integrity="sha256-zBy1l2WBAh2vPF8rnjFMUXujsfkKjya0Jy5j6yKj0+Q=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-animate.min.js" integrity="sha256-1XBp/KwjxhvrtZiQ+ecAScAyLPe4OStn2lMX0vxTq9U=" crossorigin="anonymous"></script>
