@@ -85,9 +85,6 @@ if ($COMPILING) {
                 <li ng-repeat="item in ::menu" ng-class="{active:currentRoute == '/' + item.route, 'hidden-sm': item.route == ''}">
                     <a href="/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
                 </li>
-                <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
-                    <a href="/test">T</a>
-                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak ng-if="!isOnline">
                 <li class="navbar-text">Offline</li>
@@ -97,6 +94,9 @@ if ($COMPILING) {
                 <li class="dropdown" ng-show="signedIn && loaded">
                     <a href bs-dropdown>Signed in <span class="hidden-sm">as {{signedInName}}</span> <span class="caret"></span></a>
                     <ul class="dropdown-menu" style="border-radius: 4px">
+                        <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
+                            <a href="/test">Test</a>
+                        </li>
                         <li><a href ng-click="signOut()">Sign Out</a></li>
                     </ul>
                 </li>
@@ -177,7 +177,7 @@ if (! $COMPILING) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/affix.min.js" integrity="sha256-MAd1EYJG15HLN1OiQleYoJq4ROK+R4Fi0EVJtziJXm0=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/alert.min.js" integrity="sha256-q2EdjdwUJgoBLZ2xPHnxjwTf1uP9mzUPQ5ZKGUABdJA=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/alert.tpl.min.js" integrity="sha256-gYlmV53tPJ13BVNe8MbotY9qp6vc7PQJS61ys+TtmBc=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.js" integrity="sha256-BPKtSLXAqv0eQEPlrrkICpknj2+Xkvfn2x1k+VOw4Fk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/button.min.js" integrity="sha256-cNWwphXDPnn0Gs0/ArTC5BHTRVsxkDjzcBoZgoQyPy0=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.min.js" integrity="sha256-lxvk+40PsmX0ZF7xr8GKtTZR4wmuarMNCdH2Ngxls0s=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/dropdown.tpl.min.js" integrity="sha256-GS9Jkqgr5jCKq8oe7jrGYsZwuq3xvfNOStdPHuL3n4Q=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/modal.min.js" integrity="sha256-gshpom8oJG7Vsk1pnEc0hyHzVkrQxypbumMekjN/V7w=" crossorigin="anonymous"></script>

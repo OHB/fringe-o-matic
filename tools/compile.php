@@ -70,13 +70,6 @@ minify('deploy/compiled.js', 'https://closure-compiler.appspot.com/compile', [
 ]);
 
 
-echo "Minifying index.html...\n";
-ob_start();
-$COMPILE = true;
-include_once (__DIR__ . '/../index.php');
-minify('deploy/index.html', 'http://html-minifier.com/raw?', ['input' => ob_get_clean()]);
-
-
 echo "Creating sitemap.xml...\n";
 $sitemap = new Sitemap('https://fringeomatic.com');
 $sitemap
@@ -107,6 +100,14 @@ foreach ($data->availabilitySlots as $day => $slots) {
 
 }
 $sitemap->createSitemapIndex('http://example.com/sitemap/', 'Today');
+
+
+echo "Minifying index.html...\n";
+ob_start();
+$COMPILE = true;
+include_once (__DIR__ . '/../index.php');
+minify('deploy/index.html', 'http://html-minifier.com/raw?', ['input' => ob_get_clean()]);
+
 
 echo "\nDone!\n\n";
 

@@ -90,6 +90,7 @@
   ],
   "rootIgnoreFiles": [
     ".gitignore",
+    ".htpasswd",
     "index.php",
     "composer.phar",
     "composer.json",
