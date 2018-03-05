@@ -16,7 +16,7 @@
     <div class="row hidden-print" style="margin-bottom: 30px; background: #23074d; background: -webkit-linear-gradient(to right, #23074d, #cc5333); background: linear-gradient(to right, #23074d, #cc5333); color: white" ng-style="hasImage ? {background: backgroundColor, color: textColor} : {}">
         <div class="col-md-5 col-md-push-7" ng-if="hasImage" style="height: 450px; max-height:100vw; background: #fff url('img/show/{{show.image}}') center no-repeat; background-size: cover"></div>
         <div style="padding: 20px 20px 10px" ng-class="show.image ? 'col-md-7 col-md-pull-5' : 'col-xs-12'">
-            <div class="h3" style="line-height: 1em; margin-top:0" ng-if="$parent.$parent.signedIn">
+            <div class="h3" style="line-height: 1em; margin-top:0; color: inherit" ng-if="$parent.$parent.signedIn">
                 <interest show-id="showId"></interest>
             </div>
             <h1 ng-style="{color: titleColor}" style="margin-top: 50px">{{show.name}}</h1>

@@ -1,0 +1,29 @@
+@font-face {
+    font-family: AkzidenzGroteskMediumCondensed;
+    src: url("/lib/fonts/akzidenz-grotesk-medium-condensed.otf") format("opentype");
+}
+
+.navbar-primary {
+    background: #000;
+}
+
+.cloud-icon .glyphicon-ok {
+    color: #000;
+}
+
+.spinner {
+    background: #f15921;
+}
+
+.jumbotron h1, .page-home h1 {
+    color: #a2238d !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: AkzidenzGroteskMediumCondensed, 'Quicksand', sans-serif;
+}
+
+.navbar-toggle.btn-primary {
+    background: transparent;
+}
+

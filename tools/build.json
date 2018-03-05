@@ -25,13 +25,16 @@
     "app/core/notifications/popover.html"
   ],
   "css": [
+    "lib/css/bootstrap.min.css",
+    "lib/css/bootstrap-theme.min.css",
     "lib/bootstrap-additions.min.css",
     "app/style.css",
     "app/core/style.css",
     "app/home/style.css",
     "app/myFringe/style.css",
     "app/myFringe/availability/style.css",
-    "app/myFringe/schedule/style.css"
+    "app/myFringe/schedule/style.css",
+    "app/theme.css"
   ],
   "js": [
     "lib/prototypes.js",

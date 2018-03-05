@@ -386,3 +386,7 @@ body.js .js-required {
 .notifications-icon .arrow {
     margin-left: -5px !important;
 }
+
+.navbar-toggle {
+    margin-bottom: 0;
+}

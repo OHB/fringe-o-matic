@@ -24,3 +24,7 @@ tickets buying screen?
 	select tickets to buy
 		auto populate cart???
 		mark tickets bought (optional deselect)
+
+
+
+http://getbootstrap.com/docs/3.3/customize/?id=161e4ccfce48a5a74e6a0f7f9746424a

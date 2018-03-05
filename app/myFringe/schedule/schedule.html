@@ -87,7 +87,7 @@
             <tbody ng-repeat="(day, amazingScheduleDay) in amazingSchedule" ng-if="! filter.currentDay || filter.currentDay == day">
             <tr class="header">
                 <th colspan="5">
-                    <h3 class="bg-info">{{moment(day, 'X').format('dddd, MMM D')}}</h3>
+                    <h3>{{moment(day, 'X').format('dddd, MMM D')}}</h3>
                 </th>
             </tr>
             <tr>

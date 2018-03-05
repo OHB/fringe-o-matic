@@ -20,7 +20,7 @@ if ($COMPILING) {
     <meta name="author" content="Lewis Johnston">
     <title>Fringe-o-Matic · Automatically create your perfect Fringe schedule.</title>
 
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<!--    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />-->
     <?php foreach ($css as $filename) { ?>
         <link rel="stylesheet" type="text/css" href="<?php echo $filename; ?>" />
     <?php } ?>
