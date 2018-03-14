@@ -18,17 +18,15 @@
                             These venues are at the same location...so a minute, maybe?
                         </span>
             <span ng-show="venues[distanceCalc.from.value].host!=venues[distanceCalc.to.value].host">
-                            {{distances[distanceCalc.from.value][distanceCalc.to.value] / 60}} minutes
+                            {{timeMinimum / 60}} minutes
                         </span>
         </p>
         <p ng-if="venues[distanceCalc.from.value].host!=venues[distanceCalc.to.value].host">
             <strong>Drive or walk?</strong>
-            <span ng-show="distanceCalc.driving=='assumed'">Drive</span>
-            <span ng-show="distanceCalc.driving=='recommended'">Drive</span>
-            <span ng-show="distanceCalc.driving=='possible'">Either</span>
-            <span ng-show="distanceCalc.driving==''">Walk</span>
+            <span ng-show="recommend == 'drive'">Drive</span>
+            <span ng-show="recommend == 'walk'">Walk</span>
         </p>
-        <p ng-show="distanceCalc.driving!=''">
+        <p ng-show="timeDrive < timeWalk">
             <a class="btn btn-default btn-sm pull-right" style="margin-right:6px" href="https://www.google.com/maps/dir/?api=1&origin={{venueHosts[venues[distanceCalc.from.value].host].name}}, {{venueHosts[venues[distanceCalc.from.value].host].address.join(', ')}}&destination={{venueHosts[venues[distanceCalc.to.value].host].name}}, {{venueHosts[venues[distanceCalc.to.value].host].address.join(', ')}}&travelmode={{(distanceCalc.driving=='possible') ? 'walking' : 'driving'}}" target="_blank" analytics-on analytics-event="Click" analytics-category="Venues" analytics-label="Get Directions">Get Directions</a>
         </p>
     </div>

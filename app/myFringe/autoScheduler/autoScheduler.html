@@ -12,9 +12,8 @@
             <p class="lead">The Auto-Scheduler helps build your schedule automatically. It needs to know two things:</p>
             <br>
             <h3 style="margin-top:0">1. What shows do you want to see?</h3>
-            <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons.</p>
-            <br>
-            <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
+            <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens, you can assign an <strong>Interest</strong> to each show using the checkmark icons.</p>
+            <p>When the Auto-Scheduler runs, it will fill your schedule with higher-interest shows first.</p>
             <br>
             <h3>2. When are you available?</h3>
             <p>On the <a href="/my-fringe/availability">My Availability</a> tab, you can select which times you are available to see shows.</p>
@@ -27,7 +26,7 @@
         <div ng-if="screen == 'no-interests'">
             <h1>Not so fast!</h1>
             <p class="lead">Before you can use this page, you need to select shows that you're interested in.</p>
-            <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
+            <p>On the <a href="/shows">Shows</a> and <a href="/schedule">Schedule</a> screens, you can assign an <strong>Interest</strong> to each show using the checkmark icons. They look like this:</p>
             <br>
             <div class="row hidden-sm">
                 <div ng-repeat="i in [0, 1, 2, 3, 4]" class="col-sm-2 text-center" style="margin-bottom:15px" ng-class="$first && 'col-md-offset-1'">
@@ -42,7 +41,7 @@
                 </div>
             </div>
             <br>
-            <p>When the Auto-Scheduler runs, it will fill your schedule with higher interest shows first.</p>
+            <p>When the Auto-Scheduler runs, it will fill your schedule with higher-interest shows first.</p>
             <p>Once you've done that, come back to this screen.</p>
         </div>
         <div class="row" ng-if="screen != 'intro' && screen != 'no-interests'">

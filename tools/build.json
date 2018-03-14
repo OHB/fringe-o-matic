@@ -85,11 +85,13 @@
     "app/public/public.js",
     "app/test/test.js"
   ],
-  "copyFolders": [
-    "api",
-    "img",
-    "vendor"
-  ],
+  "copyFolders": {
+    "api": "api",
+    "img": "img",
+    "vendor": "vendor",
+    "lib/fonts": "fonts",
+    "tools-public": "tools"
+  },
   "rootIgnoreFiles": [
     ".gitignore",
     ".htpasswd",

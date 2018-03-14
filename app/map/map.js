@@ -14,25 +14,16 @@ angular.module('fringeApp').component('fringeMap', {
             $scope.views = MapConfig.views.slice(0);
             $scope.venueViews = {};
 
-            var venueMarkers = Object.keys(venues).map(function(venueId) {
+            $scope.markerGroups[0].markers = Object.keys(venues).map(function(venueId) {
                 var venue = venues[venueId];
 
                 return {
-                    byov: venue.byov,
                     position: venue.mapPos,
                     title: venue.name,
                     icon: venue.mapIcon,
                     venue: venueId,
                     host: venue.host
                 };
-            });
-
-            $scope.markerGroups[0].markers = venueMarkers.filter(function(venue) {
-                return venue.byov;
-            });
-
-            $scope.markerGroups[1].markers = venueMarkers.filter(function(venue) {
-                return ! venue.byov;
             });
 
             $scope.toggleGroup = function(group) {
@@ -65,7 +56,7 @@ angular.module('fringeApp').component('fringeMap', {
                     if (view.markerGroups === true || view.markerGroups.indexOf(group.id) > -1) {
                         $scope.isGroupVisible[group.id] = true;
                         angular.forEach(group.markers, function(marker) {
-                            if (group.id === 'venues' || group.id === 'byov') {
+                            if (group.id === 'venues') {
                                 if (view.venueHosts && view.venueHosts.indexOf(marker.venueHost) === -1) {
                                     return true;
                                 }
@@ -110,7 +101,7 @@ angular.module('fringeApp').component('fringeMap', {
                         title: marker.title,
                         location: marker.location || (marker.host && $scope.venueHosts[marker.host].name),
                         address: marker.address || (marker.host && $scope.venueHosts[marker.host].address),
-                        venue: groupId === 'venues' || groupId === 'byov' ? marker.venue : false,
+                        venue: groupId === 'venues' ? marker.venue : false,
                         id: groupId + '-' + markerId,
                         notes: marker.notes
                     };

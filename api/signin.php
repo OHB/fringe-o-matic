@@ -71,7 +71,7 @@ if ($result->num_rows === 0) {
     $statement->bind_param('i', $userId);
     $statement->execute();
 
-    $festivalData = json_decode(file_get_contents(__DIR__ . '/data.json'), JSON_OBJECT_AS_ARRAY);
+    $festivalData = json_decode(file_get_contents(__DIR__ . '/cache.json'), JSON_OBJECT_AS_ARRAY);
 
     $sql = '';
 
@@ -120,9 +120,8 @@ $settings = [
 ];
 
 
-// @todo if interested or attending != 'no'
 $schedule = $maybe = $interests = [];
-$result = $db->query("SELECT * FROM `user_performances` WHERE `userId`={$userId}");
+$result = $db->query("SELECT * FROM `user_performances` WHERE `userId`={$userId} AND (interest > 0 OR attending != 'no')");
 while ($row = $result->fetch_object()) {
     if ($row->interest) {
         $interests[$row->performanceId] = (string) $row->interest;

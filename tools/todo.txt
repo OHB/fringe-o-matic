@@ -1,3 +1,16 @@
+lawn things
+same services?
+which tree?
+
+orange button color
+missing images
+patron's picks
+
+Show screen. Image needs to be square
+
+allow multiple performances to be manually added
+
+
 BUG
 Go to Schedule
 Click a link to another page
@@ -28,3 +41,61 @@ tickets buying screen?
 
 
 http://getbootstrap.com/docs/3.3/customize/?id=161e4ccfce48a5a74e6a0f7f9746424a
+
+
+
+availableTime = 2.start - 1.end - offset(1, 2) - arrivalThreshold
+
+if availableTime >= 120
+	maybe lunch/dinner
+if availableTime >= 90
+	maybe lunch/dinner
+		suggest lawn if after is in fringe central
+		otherwise, suggest a restaurant
+
+if availableTime >= 45
+	snack/drink
+if availableTime >= 30
+	if crossing the lawn, snack or drink
+
+
+lunch happens 11-2
+dinner happens 5-7
+
+when there's back-to-back shows (<30 minutes between each) and a gap before:
+	3 shows: eat first
+	4 shows: also bring snacks
+
+
+                if (false && previousOfDay) {
+                    var venue1 = shows[previousOfDay.show].venue,
+                        venue2 = shows[performance.show].venue,
+                        minutes = venueDistances[venue1][venue2] / 60,
+                        type = minutes < 25 ? 'Walk' : 'Travel';
+
+                    if (performance.start - previousOfDay.stop > 3600) {
+                        var hour = moment(previousOfDay.stop, 'X').hour(),
+                            text = '';
+                        if (hour > 15 && hour < 19) {
+                            text = 'Dinner time!';
+                        } else if (hour > 10 && hour < 14) {
+                            text = 'Lunch time!';
+                        } else {
+                            text = [
+                                'Snack time!',
+                                'Drinks on the Great Green Lawn of Fabulousness!',
+                                'Eat some cheese curds.',
+                                'See what\'s happening in the ourdoor tent.'
+                            ].randomElement();
+                        }
+                        $scope.amazingSchedule[day].push({
+                            as: 'break',
+                            text: text
+                        });
+                    } else {
+                        $scope.amazingSchedule[day].push({
+                            as: 'travel',
+                            text: type + ' to ' + venues[venue2].name
+                        });
+                    }
+                }

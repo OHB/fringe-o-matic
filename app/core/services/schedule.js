@@ -129,7 +129,8 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'User', 
 
             while (i --) {
                 var performance2 = performances[userSchedule[i]],
-                    offset = venueDistances[show1.venue][shows[performance2.show].venue] + Configuration.minimumArriveBeforeShowTime;
+                    distances = venueDistances[show1.venue][shows[performance2.show].venue],
+                    offset = (distances[1] === undefined ? distances[0] : Math.min(distances[0], distances[1])) + Configuration.minimumArriveBeforeShowTime;
 
                 if (! (stop < performance2.start - offset || start > performance2.stop + offset)) {
                     return true;

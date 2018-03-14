@@ -3,7 +3,7 @@ namespace OHBoy\FringeOMatic;
 
 use SitemapPHP\Sitemap;
 
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $build = json_decode(file_get_contents(__DIR__ . '/build.json'));
 $data = json_decode(file_get_contents(__DIR__ . '/../api/data.json'));
@@ -21,9 +21,9 @@ rrmdir(__DIR__ . '/../vendor/google/auth/tests');
 rrmdir(__DIR__ . '/../vendor/monolog/monolog/docs');
 rrmdir(__DIR__ . '/../vendor/monolog/monolog/tests');
 
-foreach ($build->copyFolders as $folder) {
-    echo "Copying folder {$folder}...\n";
-    rcopy(__DIR__ . '/../' . $folder, __DIR__ . '/../deploy/' . $folder);
+foreach ($build->copyFolders as $from => $to) {
+    echo "Copying folder {$from} to {$to}...\n";
+    rcopy(__DIR__ . '/../' . $from, __DIR__ . '/../deploy/' . $to);
 }
 
 

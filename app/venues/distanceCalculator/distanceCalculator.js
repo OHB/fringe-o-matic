@@ -2,7 +2,7 @@ angular.module('fringeApp').component('distanceCalculator', {
     templateUrl: 'app/venues/distanceCalculator/distanceCalculator.html',
     controller: ['$scope', 'Data', '$analytics', function($scope, Data, $analytics) {
 
-        $scope.distanceCalc = {from: 0, to: undefined, driving: ''};
+        $scope.distanceCalc = {from: 0, to: undefined};
         $scope.venues = Data.getVenues();
         $scope.venueHosts = Data.getVenueHosts();
         $scope.distances = Data.getVenueDistances();
@@ -20,20 +20,15 @@ angular.module('fringeApp').component('distanceCalculator', {
             }
             first --;
 
-            var list = [
-                    $scope.venueHosts[$scope.venues[$scope.distanceCalc.from.value].host].driving,
-                    $scope.venueHosts[$scope.venues[$scope.distanceCalc.to.value].host].driving
-                ],
-                priority = ['assumed', 'recommended', 'possible'];
+            var distances = $scope.distances[$scope.distanceCalc.from.value][$scope.distanceCalc.to.value];
 
-            $scope.distanceCalc.driving = '';
-
-            for (var i = 0; i < priority.length; i ++) {
-                if (list.indexOf(priority[i]) > -1) {
-                    $scope.distanceCalc.driving = priority[i];
-
-                    return;
-                }
+            console.log($scope.distanceCalc, distances);
+            $scope.timeWalk = distances[0];
+            $scope.timeDrive = distances[1];
+            $scope.timeMinimum = $scope.timeDrive !== undefined ? Math.min($scope.timeWalk, $scope.timeDrive) : $scope.timeWalk;
+            $scope.recommend = 'walk';
+            if ($scope.timeDrive && $scope.timeWalk - $scope.timeDrive > 600) {
+                $scope.recommend = 'drive';
             }
         };
 

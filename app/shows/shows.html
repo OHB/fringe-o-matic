@@ -34,7 +34,7 @@
                     </div>
                     <div class="hidden-xs">
                         <div style="height:100px">
-                            <p class="lead" style="line-height: 1em; margin-bottom:10px">
+                            <p class="h3" style="line-height: 1em; margin-top:0; margin-bottom:10px">
                                 <a class="hidden-print" href="/show/{{::show.slug}}">{{::show.name}}</a>
                                 <span class="visible-print-inline">{{::show.name}}</span>
                             </p>
@@ -46,7 +46,7 @@
                         </div>
                         <p style="margin-bottom: 35px" class="hidden-print">
                             <span><a href="/show/{{::show.slug}}" class="btn btn-primary">Learn More</a></span>
-                            <span ng-if="::show.storeId"><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-info" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
+                            <span ng-if="::show.storeUrl"><a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-info" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
                         </p>
                     </div>
                     <div class="visible-xs-block">
@@ -59,11 +59,11 @@
                         </p>
                         <p class="hidden-print">
                             <span><a href="/show/{{::show.slug}}" class="btn btn-primary btn-sm">Learn More</a></span>
-                            <span ng-if="::show.storeId"><a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-info btn-sm" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
+                            <span ng-if="::show.storeUrl"><a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-info btn-sm" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
                         </p>
                     </div>
                     <p style="margin: 0" class="hidden-xs">
-                        <span class="label label-venue-default label-venue-{{show.venue}}">{{venues[show.venue].name}}</span>
+                        <span class="label label-venue-default label-venue-{{venues[show.venue].slug}}">{{venues[show.venue].name}}</span>
                         <show-rating value="::ratings[show.rating]"></show-rating>
                         <span class="small text-muted" style="margin-left:10px">
                             <em>
@@ -72,7 +72,7 @@
                         </span>
                     </p>
                 </div>
-                <div class="col-sm-3 hidden-xs hidden-print" ng-if="show.image" style="height: 220px; background: url('img/show/{{show.image}}') top; background-size: cover;"></div>
+                <div class="col-sm-3 hidden-xs hidden-print" ng-if="show.image" ng-style="{background: 'url(\'img/show/{{show.image}}\') center', backgroundSize: 'cover'}" style="height: 220px; background-size: cover;"></div>
                 <div class="col-xs-4 visible-xs-block hidden-print" style="height: 33vw; background: url('img/show/{{show.image}}') top; background-size: cover;"></div>
                 <hr class="visible-print-block" />
             </div>

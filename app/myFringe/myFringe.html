@@ -5,7 +5,7 @@
                 <h1>My Fringe</h1>
                 <h2 class="visible-print-inline">{{tabs.activeTab}}</h2>
             </div>
-            <div class="col-md-4 col-sm-5 hidden-print" bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}" style="margin-top: 20px" ng-if="$parent.signedIn">
+            <div class="col-md-4 col-sm-5 hidden-print fringe-level-box" bs-tooltip="{title: '(this is just our way of getting you to see more shows!)'}" style="margin-top: 20px" ng-if="$parent.signedIn">
                 <p class="lead" style="margin-bottom: 5px">Fringe Level: {{statuses[status].name}}</p>
                 <uib-progress max="maxLevel" animate="false" style="margin-bottom:2px">
                     <uib-bar value="level" type="success"></uib-bar>

@@ -213,10 +213,17 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
 
         $scope.shows = Data.getShows();
         $scope.performances = Data.getPerformances();
-        $scope.distances = Data.getVenueDistances();
         sortedShows = Data.getSortedShows();
         $scope.sortedPerformances = Data.getSortedPerformances();
         $scope.venues = Data.getVenues();
+
+        $scope.distances = {};
+        angular.forEach(Data.getVenueDistances(), function(distances1, venue1) {
+            $scope.distances[venue1] = {};
+            angular.forEach(distances1, function(distances, venue2) {
+                $scope.distances[venue1][venue2] = distances[1] === undefined ? distances[0] : Math.min(distances[0], distances[1]);
+            });
+        });
 
         // @todo possible performances always returns everything. this needs to be POTENTIAL performances
         var potentialPerformances = possiblePerformances.filter(function(performance) {
@@ -278,7 +285,6 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
 
             data.showIds.push(showId);
 
-            // @todo consider adding distances here to speed up fitness slightly
             data.shows[showId] = {
                 name: show.name,
                 desire: desire,

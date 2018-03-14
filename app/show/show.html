@@ -14,8 +14,8 @@
         </div>
     </div>
     <div class="row hidden-print" style="margin-bottom: 30px; background: #23074d; background: -webkit-linear-gradient(to right, #23074d, #cc5333); background: linear-gradient(to right, #23074d, #cc5333); color: white" ng-style="hasImage ? {background: backgroundColor, color: textColor} : {}">
-        <div class="col-md-5 col-md-push-7" ng-if="hasImage" style="height: 450px; max-height:100vw; background: #fff url('img/show/{{show.image}}') center no-repeat; background-size: cover"></div>
-        <div style="padding: 20px 20px 10px" ng-class="show.image ? 'col-md-7 col-md-pull-5' : 'col-xs-12'">
+        <div ng-if="hasImage" style="float: right; width: 450px; height: 450px; max-height:100vw; background-size: cover" ng-style="{background: '#fff url(\'img/show/{{show.image}}\') center no-repeat'}"></div>
+        <div style="padding: 20px 20px 10px; width: 100%" ng-style="hasImage ? {width: 'calc(100% - 450px)'} : {}">
             <div class="h3" style="line-height: 1em; margin-top:0; color: inherit" ng-if="$parent.$parent.signedIn">
                 <interest show-id="showId"></interest>
             </div>
@@ -28,7 +28,7 @@
             <br>
             <br>
             <p>
-                <a href="https://orlandofringe.showare.com/eventperformances.asp?evt={{show.storeId}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeId" analytics-on analytics-event="Click" analytics-category="Show" analytics-label="Buy Tickets">Buy Tickets</a>
+                <a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeUrl" analytics-on analytics-event="Click" analytics-category="Show" analytics-label="Buy Tickets">Buy Tickets</a>
             </p>
         </div>
     </div>
@@ -46,14 +46,16 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-8 col-lg-9 lead text-justify">
-            <div style="margin-top: 10px" ng-bind-html="trustAsHtml(show.description)"></div>
-            <p ng-if="show.warnings"><br><em class="small">Note: {{show.warnings.join(', ')}}</em></p>
+        <div class="col-sm-8 col-lg-9">
+            <p style="margin-top: 10px" class="lead text-justify" ng-bind-html="trustAsHtml(show.description)"></p>
+            <br ng-if="show.genres || show.warnings">
+            <p ng-if="show.genres"><span ng-repeat="genre in show.genres">{{genres[genre]}}<span ng-if="! $last">, </span></span></p>
+            <p ng-if="show.warnings"><em>Note: {{show.warnings}}</em></p>
         </div>
         <div class="col-sm-3 col-lg-2 col-sm-offset-1">
             <h3 style="margin-top:10px">Notes</h3>
             <p>
-                <strong>Length:</strong> {{(firstPerformance.stop - firstPerformance.start) / 60}} minutes<br>
+                <strong>Length:</strong> {{show.duration / 60}} minutes<br>
                 <strong>Rating:</strong> {{ratings[show.rating]}}<br>
                 <strong>Tickets:</strong> {{show.price | price}}
             </p>

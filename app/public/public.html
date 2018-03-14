@@ -3,7 +3,7 @@
 </div>
 <div class="container" ng-if="schedule">
     <div class="page-header">
-        <a href="/" class="btn btn-primary pull-right hidden-xs hidden-sm" analytics-on analytics-event="Click" analytics-category="Public Schedule" analytics-label="Top Advertisement">Automatically create your own Fringe schedule for free!</a>
+        <a ng-if="! isOwn" href="/" class="btn btn-primary pull-right hidden-xs hidden-sm" analytics-on analytics-event="Click" analytics-category="Public Schedule" analytics-label="Top Advertisement">Automatically create your own Fringe schedule for free!</a>
         <h1>{{title}}</h1>
     </div>
     <table class="table table-striped">
@@ -39,6 +39,6 @@
     <br>
     <br>
     <p class="text-center">
-        <a href="/" class="btn btn-primary btn-lg" analytics-on analytics-event="Click" analytics-category="Public Schedule" analytics-label="Bottom Advertisement" style="white-space: normal"><span style="white-space: nowrap">Automatically create your own</span> <span style="white-space: nowrap">Fringe schedule for free!</span></a>
+        <a ng-if="! isOwn" href="/" class="btn btn-primary btn-lg" analytics-on analytics-event="Click" analytics-category="Public Schedule" analytics-label="Bottom Advertisement" style="white-space: normal"><span style="white-space: nowrap">Automatically create your own</span> <span style="white-space: nowrap">Fringe schedule for free!</span></a>
     </p>
 </div>

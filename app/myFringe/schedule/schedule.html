@@ -106,12 +106,12 @@
                     </div>
                 </td>
                 <td ng-if="item.as=='performance'" class="align-middle hidden-xs">
-                    <span class="label label-venue-default label-venue-{{shows[item.show].venue}}">
+                    <span class="label label-venue-default label-venue-{{venues[shows[item.show].venue].slug}}">
                         {{venues[shows[item.show].venue].name}}
                     </span>
                 </td>
                 <td class="text-right align-middle hidden-print">
-                    <a href="https://orlandofringe.showare.com/orderticketsarea.asp?p={{item.storeId}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px" analytics-on analytics-event="Click" analytics-category="My Schedule" analytics-label="Buy Tickets">
+                    <a ng-if="item.storeUrl" href="{{item.storeUrl}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px" analytics-on analytics-event="Click" analytics-category="My Schedule" analytics-label="Buy Tickets">
                         <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
                     </a>
                 </td>

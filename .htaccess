@@ -1,3 +1,5 @@
+Options -Indexes
+
 RewriteEngine on
 RewriteCond %{HTTP_HOST} ^www\.fringeomatic\.com [NC]
 RewriteRule ^(.*)$ http://fringeomatic.com/$1 [L,R=301]

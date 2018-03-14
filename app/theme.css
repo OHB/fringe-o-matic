@@ -1,6 +1,10 @@
 @font-face {
-    font-family: AkzidenzGroteskMediumCondensed;
-    src: url("/lib/fonts/akzidenz-grotesk-medium-condensed.otf") format("opentype");
+    font-family: LogoFont;
+    src: url("/img/logo.ttf") format("truetype");
+}
+@font-face {
+    font-family: FDL;
+    src: url("/img/fdl.ttf") format("truetype");
 }
 
 .navbar-primary {
@@ -19,11 +23,48 @@
     color: #a2238d !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: AkzidenzGroteskMediumCondensed, 'Quicksand', sans-serif;
-}
-
 .navbar-toggle.btn-primary {
     background: transparent;
 }
 
+.logo {
+    font-family: LogoFont;
+}
+.navbar-brand {
+    padding: 5px 15px;
+    font-size: 40px;
+    line-height: 1;
+}
+
+.jumbotron {
+    background: #FABD8F url(/img/background.png);
+}
+.jumbotron h1 {
+    color: #000 !important;
+    font-size:100px;
+    line-height: .75;
+    font-family: FDL;
+    text-shadow: 1px 1px 5px #fff;
+}
+
+@media (max-width: 767px) {
+    .jumbotron h1 {
+        font-size: 50px;
+        line-height: 1;
+    }
+}
+
+.fringe-level-box {
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    border: 1px solid white;
+    padding: 7px 14px;
+}
+
+.jumbotron .nav-tabs {
+    margin-top: 30px;
+}
+
+.jumbotron .nav-tabs > li:not(.active) > a {
+    background: rgba(255,255,255,0.8);
+}

@@ -19,10 +19,10 @@
                         <a href="/map/host/{{host.slug}}" class="hidden-print">{{host.name}}</a>
                         <span class="visible-print-inline">{{host.name}}</span>
                     </h3>
-                    <p>{{host.address.join(', ')}}</p>
+                    <p>{{[host.addressStreet, host.addressLocality, host.addressRegion, host.addressPostCode].join(', ')}}</p>
                     <div class="row" ng-repeat="venueId in ::getHostVenues(hostId)" ng-init="venue=venues[venueId]" style="margin:0" ng-style="! $last && {borderBottom: '1px solid #ddd'}">
                         <div class="col-xs-7" style="padding: 8px 5px 5px;">
-                            <span class="visible-md-inline visible-lg-inline label label-venue-default label-venue-{{venueId}}" style="font-size: 0.9em">{{venue.name}}</span>
+                            <span class="visible-md-inline visible-lg-inline label label-venue-default label-venue-{{venue.slug}}" style="font-size: 0.9em">{{venue.name}}</span>
                             <span class="hidden-md hidden-lg">{{venue.name}}</span>
                         </div>
                         <div class="col-xs-5 text-right hidden-print" style="padding:5px">
@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-sm-4 hidden-xs">
                     <a href="/map/host/{{host.slug}}" analytics-on analytics-event="Click" analytics-category="Venues" analytics-label="Map Image">
-                        <static-map size="'336x252'" markers="host.mapPos && host.mapPos.join() || host.address.join(', ')" style="width:100%"></static-map>
+                        <static-map size="'336x252'" markers="host.mapPos && host.mapPos.join() || [host.addressStreet, host.addressLocality, host.addressRegion, host.postCode, host.addressCountry].join(', ')" style="width:100%"></static-map>
                     </a>
                 </div>
             </div>

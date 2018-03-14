@@ -9,8 +9,10 @@ angular.module('fringeApp').component('show', {
         $scope.performances = Data.getPerformances();
         $scope.venues = Data.getVenues();
         $scope.ratings = Data.getRatings();
+        $scope.genres = Data.getGenres();
         $scope.isUserAttendingPerformance = Schedule.isUserAttendingPerformance;
         $scope.trustAsHtml = $sce.trustAsHtml;
+        $scope.titleColor = '#fff';
 
         var allShows = Data.getSortedShows(),
             current = allShows.indexOf($scope.showId);
@@ -24,15 +26,23 @@ angular.module('fringeApp').component('show', {
         var img = document.createElement('img');
         img.setAttribute('src', 'img/show/' + $scope.show.image);
         img.addEventListener('load', function() {
-            var swatches = new Vibrant(img).swatches();
+            var swatches = new Vibrant(img).swatches(),
+                swatchDesires = ['Vibrant', 'DarkMuted'];
 
             $scope.$apply(function() {
                 $scope.hasImage = false;
-                if (swatches.Vibrant) {
-                    $scope.hasImage = true;
-                    $scope.backgroundColor = swatches.Vibrant.getHex();
-                    $scope.titleColor = swatches.Vibrant.getTitleTextColor();
-                    $scope.textColor = swatches.Vibrant.getBodyTextColor();
+                for (var i = 0; i < swatchDesires.length; i ++) {
+                    if (swatches[swatchDesires[i]]) {
+                        console.log('Swatch: ', swatchDesires[i]);
+                        $scope.hasImage = true;
+                        $scope.backgroundColor = swatches[swatchDesires[i]].getHex();
+                        $scope.titleColor = swatches[swatchDesires[i]].getTitleTextColor();
+                        $scope.textColor = swatches[swatchDesires[i]].getBodyTextColor();
+                        break;
+                    }
+                }
+                if (! $scope.hasImage) {
+                    console.log('No matching swatch!', swatches);
                 }
 
                 $scope.loaded = true;
@@ -66,7 +76,7 @@ angular.module('fringeApp').component('show', {
                     "@type": "Event",
                     "name": $scope.show.name,
                     "startDate": moment(performance.start, 'X').utcOffset(-5, true).toISOString(true),
-                    "endDate": moment(performance.start, 'X').utcOffset(-5, true).toISOString(true),
+                    "endDate": moment(performance.stop, 'X').utcOffset(-5, true).toISOString(true),
                     "location": {
                         "@type": "Place",
                         "name": venue.name + ' at ' + host.name,
@@ -98,10 +108,10 @@ angular.module('fringeApp').component('show', {
                 };
             }
 
-            if ($scope.show.price && performance.storeId) {
+            if ($scope.show.price && performance.storeUrl) {
                 json.offers = {
                     "@type": "Offer",
-                    "url": "https://orlandofringe.showare.com/ordertickets.asp?p=" + performance.storeId,
+                    "url": performance.storeUrl,
                     "price": $scope.show.price,
                     "priceCurrency": "USD"
                 };

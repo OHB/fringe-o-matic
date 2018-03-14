@@ -15,24 +15,27 @@ if ($COMPILING) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base href="/">
-    <meta name="description" content="Automatically create your perfect Fringe schedule.">
-    <meta name="keyords" content="Orlando Fringe Festival, Fringeomatic">
+    <meta name="description" content="Create your perfect Fringe schedule automatically.">
+    <meta name="keyords" content="Orlando Fringe Festival, Fringeomatic, Fringe-o-Matic">
     <meta name="author" content="Lewis Johnston">
-    <title>Fringe-o-Matic · Automatically create your perfect Fringe schedule.</title>
+    <title>Fringe-o-Matic · Create your perfect Fringe schedule automatically.</title>
 
-<!--    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />-->
     <?php foreach ($css as $filename) { ?>
         <link rel="stylesheet" type="text/css" href="<?php echo $filename; ?>" />
     <?php } ?>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-motion/0.4.4/angular-motion.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
     <style>
         [ng-cloak] {
             display: none !important;
         }
     </style>
-    <link rel="prefetch" href="img/skulls.png" as="image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-motion/0.4.4/angular-motion.min.css" integrity="sha256-qTTIMIPno/kmiNTCFMr/SOnkJnsZoTXqb6furogC+cQ=" crossorigin="anonymous" />
+
+    <!--    <link rel="prefetch" href="img/skulls.png" as="image">-->
+    <link rel="prefetch" href="img/background.png" as="image">
     <link rel="prefetch" href="img/ticket.svg" as="image">
+    <link rel="prefetch" href="img/logo-white.svg" as="image">
+    <link rel="prefetch" href="img/logo.svg" as="image">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -45,11 +48,11 @@ if ($COMPILING) {
     <meta name="theme-color" content="#ffffff">
 
     <meta name="twitter:title" content="Fringe-o-Matic">
-    <meta name="twitter:description" content="Automatically create your perfect Fringe schedule.">
+    <meta name="twitter:description" content="Create your perfect Fringe schedule automatically.">
 
     <meta property="og:url" content="https://fringeomatic.com">
     <meta property="og:title" content="Fringe-o-Matic">
-    <meta property="og:description" content="Automatically create your perfect Fringe schedule.">
+    <meta property="og:description" content="Create your perfect Fringe schedule automatically.">
     <meta property="og:type" content="website">
 
     <script>
@@ -81,7 +84,10 @@ if ($COMPILING) {
                     <i class="glyphicon glyphicon-bell"></i>
                 </button>
             </span>
-            <a href="/" class="navbar-brand pointer">Fringe-o-Matic</a>
+            <a href="/" class="navbar-brand pointer" title="Fringe-o-Matic">
+                <img src="img/logo-white.svg" style="height:100%">
+            </a>
+<!--            <a href="/" class="navbar-brand pointer">Fringe-o-Matic</a>-->
         </div>
         <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}" ng-if="! error">
             <ul class="nav navbar-nav" ng-cloak>
@@ -148,8 +154,7 @@ if ($COMPILING) {
             <li><a href="/policies/privacy">Privacy Policy</a></li>
             <li><a href="/about/credits">Credits</a></li>
         </ul>
-        <p style="margin:0">Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018.<br />
-            <em>The web is my stage. This is my performance. <strong>Anyone Can Fringe!</strong></em></p>
+        <p style="margin:0">Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018.</p>
     </div>
 </footer>
 <?php

@@ -1,7 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(400);
-    echo 'A';
     exit;
 }
 
@@ -9,7 +8,6 @@ $input = file_get_contents('php://input');
 
 if (strlen($input) > 10000) {
     http_response_code(400);
-    echo 'B';
     exit;
 }
 
@@ -17,13 +15,11 @@ $json = json_decode($input);
 
 if (! is_object($json)) {
     http_response_code(400);
-    echo 'C';
     exit;
 }
 
 if (! isset($json->account) || ! isset($json->account->privateHash) || ! isset($json->preferences) || ! isset($json->schedule) || ! isset($json->settings) || ! isset($json->unavailability) || ! isset($json->maybe)) {
     http_response_code(400);
-    echo 'D';
     exit;
 }
 

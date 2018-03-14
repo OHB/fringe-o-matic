@@ -53,8 +53,8 @@ angular.module('fringeApp').component('shows', {
             });
             $scope.venueOptions.unshift({value: '*', label: 'All Venues'});
 
-            $scope.ratingOptions = $scope.ratings.map(function(id, idx) {
-                return {value: idx, label: id};
+            $scope.ratingOptions = Object.keys($scope.ratings).map(function(id) {
+                return {value: id, label: $scope.ratings[id]};
             });
             $scope.ratingOptions.unshift({value: '*', label: 'All Ratings'});
 
@@ -100,6 +100,9 @@ angular.module('fringeApp').component('shows', {
                         return false;
                     }
 
+                    if ($scope.venues[show.venue] === undefined) {
+                        debugger;
+                    }
                     var target = [
                         show.name,
                         show.description | '',

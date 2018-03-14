@@ -8,7 +8,7 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
 
     this.load = function() {
         var deferred = $q.defer();
-        $http.get('api/data.json').then(function(result) {
+        $http.get('api/getData.php').then(function(result) {
             data = result.data;
 
             var days = Object.keys(data.availabilitySlots);
@@ -32,6 +32,7 @@ angular.module('fringeApp').service('Data', ['$http', '$q', 'Sorters', function(
     this.getShows = basicGetter('shows');
     this.getPerformances = basicGetter('performances');
     this.getRatings = basicGetter('ratings');
+    this.getGenres = basicGetter('genres');
     this.getVenues = basicGetter('venues');
     this.getVenueHosts = basicGetter('venueHosts');
     this.getVenueDistances = basicGetter('distances');

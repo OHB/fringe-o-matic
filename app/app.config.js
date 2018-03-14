@@ -69,12 +69,7 @@ angular.module('fringeApp')
         markerGroups: [
             {
                 id: 'venues',
-                name: 'Main Venues',
-                markers: []
-            },
-            {
-                id: 'byov',
-                name: 'BYOV',
+                name: 'Venues',
                 markers: []
             },
             {
@@ -82,7 +77,7 @@ angular.module('fringeApp')
                 name: 'Festival Locations',
                 markers: [
                     {position: [28.573538, -81.366723], title: 'Box Office', icon: 'information', host: 1},
-                    {position: [28.572936, -81.365307], title: 'Club Fringe Lounge', icon: 'club-fringe', host: 2, notes: 'Club Fringe members only.'},
+                    // {position: [28.572936, -81.365307], title: 'Club Fringe Lounge', icon: 'club-fringe', host: 2, notes: 'Club Fringe members only.'},
                     {position: [28.573403, -81.367468], title: 'Kids Fringe', icon: 'kids', host: 1},
                     {position: [28.571664, -81.366011], title: 'Information', icon: 'information', location: 'Green Lawn of Fabulousness'}
                 ]

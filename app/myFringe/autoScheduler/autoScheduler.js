@@ -99,7 +99,8 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                         }
 
                         var performance2 = performances[pId2],
-                            offset = venueDistances[venue1][shows[performance2.show].venue] + Configuration.minimumArriveBeforeShowTime;
+                            distances = venueDistances[venue1][shows[performance2.show].venue],
+                            offset = (distances[1] === undefined ? distances[0] : Math.min(distances[0], distances[1])) + Configuration.minimumArriveBeforeShowTime;
 
                         if (! (stop1 < performance2.start - offset || start1 > performance2.stop + offset)) {
                             return false;

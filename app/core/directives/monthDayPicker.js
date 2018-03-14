@@ -77,7 +77,8 @@ angular.module('fringeApp').directive('monthDayPicker', function() {
                     });
                 }
 
-                for (i = 0; i < monthStart.day() % 7; i ++) {
+                var extras = (7 - (days.length % 7)) % 7;
+                for (i = 0; i < extras; i ++) {
                     days.push(0);
                 }
 
