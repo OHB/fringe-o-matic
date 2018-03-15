@@ -6,7 +6,7 @@ use SitemapPHP\Sitemap;
 require_once __DIR__ . '/vendor/autoload.php';
 
 $build = json_decode(file_get_contents(__DIR__ . '/build.json'));
-$data = json_decode(file_get_contents(__DIR__ . '/../api/data.json'));
+$data = json_decode(file_get_contents(__DIR__ . '/../api/cache.json'));
 
 header('Content-type: text/plain');
 

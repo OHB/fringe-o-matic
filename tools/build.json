@@ -1,7 +1,8 @@
 {
   "templates": [
-    "app/home/home.html",
     "app/test/test.html",
+    "app/fun/fun.html",
+    "app/home/home.html",
     "app/venues/venues.html",
     "app/venues/distanceCalculator/distanceCalculator.html",
     "app/show/show.html",
@@ -83,6 +84,7 @@
     "app/venues/venues.js",
     "app/venues/distanceCalculator/distanceCalculator.js",
     "app/public/public.js",
+    "app/fun/fun.js",
     "app/test/test.js"
   ],
   "copyFolders": {

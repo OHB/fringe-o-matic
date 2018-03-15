@@ -153,6 +153,7 @@ if ($COMPILING) {
             <li><a href="/policies/terms">Terms of Service</a></li>
             <li><a href="/policies/privacy">Privacy Policy</a></li>
             <li><a href="/about/credits">Credits</a></li>
+            <li><a href="/fun">Fun</a></li>
         </ul>
         <p style="margin:0">Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018.</p>
     </div>
@@ -199,6 +200,8 @@ if (! $COMPILING) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.12/modules/tooltip.tpl.min.js" integrity="sha256-w52zTXyT3KOBiDaC3PJ1+7NdiIPCJd8yugyEovunS40=" crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ngInfiniteScroll/1.3.0/ng-infinite-scroll.min.js" integrity="sha256-nUL1iPqMsX6n0f19hNGgkMsUgqQmP5k8PUWbDc1R/jU=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-chart/1.0.0-beta.1/ng-google-chart.min.js" integrity="sha256-Y0vhLYAXeGrITXe4k+Vq6DmIp+WM9C6wru60kIMh3O8=" crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/1.5.0/angulartics.min.js" integrity="sha256-ySl5/+EcmYgxuebBmVID1Gcl554CUuWNQKYeN4RvNMw=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics-google-analytics/0.4.0/angulartics-ga.min.js" integrity="sha256-oibUTmLtPCt1kIEnhit4mvjv0msZqEFE1C7decTsmfA=" crossorigin="anonymous"></script>

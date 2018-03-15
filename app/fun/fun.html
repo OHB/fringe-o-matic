@@ -1,0 +1,54 @@
+<div class="jumbotron">
+    <div class="container">
+        <h1>Fun <small>(with charts!)</small></h1>
+    </div>
+</div>
+<div class="container">
+    <h3>This year, the Orlando Fringe Festival has {{showCount}} shows with {{performanceCount}} performances.</h3>
+    <br>
+    <div class="row text-center">
+        <div class="col-sm-4">
+            <h4>Most shows are an hour</h4>
+            <div google-chart chart="showDurations" style="width:100%; height: 300px"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Most shows have at least 5 performances</h4>
+            <div google-chart chart="performancesPerShow" style="height:300px; width:100%;"></div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Most shows are teen-friendly</h4>
+            <div google-chart chart="showRatings" style="width:100%; height: 300px"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row text-center">
+        <div class="col-md-5">
+            <h4>There are {{floridaArtistCount}} artists from Florida</h4>
+            <div google-chart chart="floridaArtistLocations" style="width:100%; height: 400px"></div>
+        </div>
+        <div class="col-md-7">
+            <h4>Beyond Florida, there are {{nationalArtistCount}} artists from {{usArtistLocations.data.rows.length}} states</h4>
+            <div google-chart chart="usArtistLocations" style="width:100%; height: 400px"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row text-center">
+        <div class="col-md-12">
+            <h4>There are also {{internationalArtistCount}} artists from {{internationalArtistLocations.data.rows.length}} countries</h4>
+            <div google-chart chart="internationalArtistLocations" style="width:100%; height: 750px"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row text-center">
+        <div class="col-md-6">
+            <h4>The shows are taking place at {{venueCounts.data.rows.length}} venues</h4>
+            <br>
+            <div google-chart chart="venueCounts" style="width:100%; height: 500px"></div>
+        </div>
+        <div class="col-md-6">
+            <h4>The most common genre of show is Comedy</h4>
+            <br>
+            <div google-chart chart="genreCounts" style="width:100%; height: 750px"></div>
+        </div>
+    </div>
+</div>

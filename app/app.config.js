@@ -5,13 +5,11 @@ angular.module('fringeApp')
         }
     })
     .value('Configuration', {
+        seasonSlug: '2018-orlando-fringe-festival',
         googleAuthClientId: '728570220201-2tkhj9m3stsqgprscc77o256r0f441au.apps.googleusercontent.com',
         googleApiKey: 'AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys',
         slotSize: 3600,
         minimumArriveBeforeShowTime: 600,
-        adminUsers: [
-            'g112311867146833913606'
-        ],
         interestText: [
             'Not Interested',
             'Eh...maybe.',
@@ -187,6 +185,10 @@ angular.module('fringeApp')
             [28.5721511,-81.3658485]
         ]
     })
+    .config(['agcLibraryLoaderProvider', 'agcGstaticLoaderProvider', function(agcLibraryLoaderProvider, agcGstaticLoaderProvider) {
+        agcLibraryLoaderProvider.setLoader('gstatic');
+        agcGstaticLoaderProvider.setOption('mapsApiKey', 'AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys');
+    }])
     .config(['$locationProvider', '$routeProvider',
         function config($locationProvider, $routeProvider) {
             $locationProvider.hashPrefix('!');
@@ -229,6 +231,8 @@ angular.module('fringeApp')
                     template: '<fringe-map></fringe-map>'
                 }).when('/public/:id', {
                     template: '<public></public>'
+                }).when('/fun', {
+                    template: '<fun></fun>'
                 }).when('/about/credits', {
                     templateUrl: 'pages/about/credits.html'
                 }).when('/policies/privacy', {

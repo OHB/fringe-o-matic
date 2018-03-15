@@ -1,5 +1,5 @@
 angular.module('fringeApp')
-    .service('GoogleCalendarSync', ['Data', 'User', '$q', 'debounce', '$timeout', function(Data, User, $q, debounce, $timeout) {
+    .service('GoogleCalendarSync', ['Data', 'User', 'Configuration', '$q', 'debounce', '$timeout', function(Data, User, Configuration, $q, debounce, $timeout) {
         var self = this,
             calendarScope = 'https://www.googleapis.com/auth/calendar',
             onSyncFn = function() {},
@@ -40,7 +40,7 @@ angular.module('fringeApp')
 
             gapi.client.calendar.events.list({
                 calendarId: calendarId,
-                privateExtendedProperty: 'fringeSeason=2018-orlando-fringe-festival',
+                privateExtendedProperty: 'fringeSeason=' + Configuration.seasonSlug,
                 maxResults: 500
             }).then(function(response) {
                 var existingPerformanceToEventMap = {},
@@ -85,7 +85,7 @@ angular.module('fringeApp')
                                         end: {dateTime: moment(performance.stop, 'X').toISOString(), timeZone: 'America/New_York'},
                                         extendedProperties: {
                                             private: {
-                                                fringeSeason: '2018-orlando-fringe-festival',
+                                                fringeSeason: Configuration.seasonSlug,
                                                 performanceId: performanceId
                                             }
                                         },

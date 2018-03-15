@@ -22,6 +22,10 @@
 .jumbotron h1, .page-home h1 {
     color: #a2238d !important;
 }
+.jumbotron h1 small {
+    color: #fff;
+    text-shadow: 1px 1px 5px #000;
+}
 
 .navbar-toggle.btn-primary {
     background: transparent;

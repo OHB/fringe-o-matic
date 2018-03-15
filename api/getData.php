@@ -17,7 +17,7 @@ if (! isset($_GET['refresh']) && file_exists('cache.json')) {
 $db = include __DIR__ . '/../../fringe_db_connect.php';
 
 $showPerformances = [];
-$results = $db->query('select * from performances where showId in (select id from shows where seasonId=2)');
+$results = $db->query('select * from performances where showId in (select id from shows where seasonId=2) order by start');
 while ($row = $results->fetch_assoc()) {
     if (! isset($showPerformances[$row['showId']])) {
         $showPerformances[$row['showId']] = [];

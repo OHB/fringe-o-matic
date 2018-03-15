@@ -15,7 +15,8 @@ var modules = [
     'qImproved',
     'infinite-scroll',
     'angulartics',
-    'angulartics.google.analytics'
+    'angulartics.google.analytics',
+    'googlechart'
 ];
 
 if (ENVIRONMENT === 'dev') {

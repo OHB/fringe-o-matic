@@ -10,7 +10,7 @@ RewriteRule ^ - [L]
 
 RewriteRule ^ /
 
-AuthUserFile /home/fringe15/.htpasswd
-AuthType Basic
-AuthName "Username is 'fringe'"
-Require valid-user
+#AuthUserFile /home/fringe15/.htpasswd
+#AuthType Basic
+#AuthName "Username is 'fringe'"
+#Require valid-user
