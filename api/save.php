@@ -74,7 +74,8 @@ if (! $value) {
 
 $sql = [
     "UPDATE `user_availability` SET `available`=1 WHERE `userId`={$userId}",
-    "UPDATE `user_performances` SET `interest`=0, `attending`='no' WHERE `userId`={$userId}"
+    "UPDATE `user_performances` SET `attending`='no' WHERE `userId`={$userId}",
+    "UPDATE `user_shows` SET `interest`=0 WHERE `userId`={$userId}"
 ];
 
 
@@ -112,9 +113,9 @@ foreach ($preferences as $interest => $ids) {
     if (! $ids) {
         continue;
     }
-    $performanceIds = implode(',', $ids);
+    $showIds = implode(',', $ids);
 
-    $sql[] = "UPDATE `user_performances` SET `interest`={$interest} WHERE `performanceId` IN ({$performanceIds}) AND `userId`={$userId}";
+    $sql[] = "UPDATE `user_shows` SET `interest`={$interest} WHERE `showId` IN ({$showIds}) AND `userId`={$userId}";
 }
 
 $db->multi_query(implode(';', $sql));

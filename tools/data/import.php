@@ -108,11 +108,14 @@ foreach ($csv as $bits) {
         return $genreMap[trim($i)];
     }, explode(', ', $bits[11]));
 
-    if (trim($bits[13])) {
-        $description = nl2br(htmlentities(trim($bits[13]), ENT_COMPAT, 'UTF-8'));
-    } else {
-        $description = nl2br(htmlentities(trim($bits[12]), ENT_COMPAT, 'UTF-8'));
-    }
+    $description = trim(trim($bits[13]) ? $bits[13] : $bits[12]);
+    $description = str_replace("\r\n", "\n", $description);
+    $description = str_replace("\r", '', $description);
+    $description = preg_replace("/\n\n+/", "\n\n", $description);
+    $description = implode("<br>", array_map(function($line) {
+        return htmlentities(trim($line), ENT_COMPAT, 'UTF-8');
+    }, explode("\n", $description)));
+
     $image = $bits[20] ?: null;
     if ($image) {
         $image .= '.png';
@@ -135,7 +138,7 @@ foreach ($csv as $bits) {
     }, explode("\n", trim($bits[6])));
 
     if ($bits[19]) {
-        $showId = $bits[19];
+        $showId = (int) $bits[19];
         $db->query('delete from shows where id=' . $showId);
         $statement = $db->prepare('insert into shows values(?, 2, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $statement->bind_param('issssiissiiss', $showId, $name, $slug, $description, $warnings, $venue, $rating, $artistName, $artistLocation, $price, $duration, $image, $storeUrl);
@@ -154,7 +157,7 @@ foreach ($csv as $bits) {
     }
 
     $db->query('delete from performances where showId=' . $showId);
-    $statement = $db->prepare('insert into performances values (null, ?, ?)');
+    $statement = $db->prepare('insert into performances values (null, ?, ?, null)');
     foreach ($times as $time) {
         if (! $time) {
             continue;
@@ -167,3 +170,4 @@ foreach ($csv as $bits) {
 file_put_contents('showIds.txt', implode("\n", $showIds));
 
 $db->query('delete from user_performances');
+$db->query('insert into user_performances (userId, performanceId) select u.id, p.id from users u, performances p');

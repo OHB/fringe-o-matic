@@ -1,10 +1,10 @@
 <div>
-    <p class="lead">Views</p>
+    <h4>Views</h4>
     <ul class="list-unstyled small">
         <li ng-repeat="view in ::views"><a href ng-click="gotoView(view)">{{view.name}}</a></li>
     </ul>
     <hr>
-    <p class="lead">Layers</p>
+    <h4>Layers</h4>
     <ul class="nav nav-default nav-pills nav-stacked small">
         <li ng-repeat="group in ::markerGroups" ng-class="{active:isGroupVisible[group.id]}">
             <a href ng-click="toggleGroup(group)">{{group.name}}</a>

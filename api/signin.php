@@ -73,8 +73,15 @@ if ($result->num_rows === 0) {
 
     $festivalData = json_decode(file_get_contents(__DIR__ . '/cache.json'), JSON_OBJECT_AS_ARRAY);
 
-    $sql = '';
+//    $sql = 'insert into user_shows (userId, showId) select ' . $userId . ', s.id from shows s';
+    $values = [];
+    foreach (array_keys($festivalData['shows']) as $showId) {
+        $values[] = '(' . $userId . ', ' . $showId . ')';
+    }
+    $sql .= 'INSERT INTO `user_shows` (`userId`, `showId`) VALUES ' . implode(',', $values) . ';';
 
+
+//    $sql = 'insert into user_performances (userId, performanceId) select ' . $userId . ', p.id from performances p';
     $values = [];
     foreach (array_keys($festivalData['performances']) as $performanceId) {
         $values[] = '(' . $userId . ', ' . $performanceId . ')';
@@ -121,11 +128,15 @@ $settings = [
 
 
 $schedule = $maybe = $interests = [];
-$result = $db->query("SELECT * FROM `user_performances` WHERE `userId`={$userId} AND (interest > 0 OR attending != 'no')");
+
+$result = $db->query("SELECT * FROM `user_shows` WHERE `userId`={$userId} AND interest > 0");
 while ($row = $result->fetch_object()) {
-    if ($row->interest) {
-        $interests[$row->performanceId] = (string) $row->interest;
-    }
+    $interests[$row->showId] = (string) $row->interest;
+}
+
+
+$result = $db->query("SELECT * FROM `user_performances` WHERE `userId`={$userId} AND attending != 'no'");
+while ($row = $result->fetch_object()) {
     if ($row->attending == 'yes') {
         $schedule[] = (string) $row->performanceId;
     } else if ($row->attending == 'maybe') {

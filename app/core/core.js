@@ -48,6 +48,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
             modalInstance.result.then(function(name) {
                 $scope.signedIn = true;
                 $scope.signedInName = name;
+                $scope.userHelpCode = User.getAccount().helpCode;
                 $scope.isUserAdmin = User.getAccount().isAdmin;
                 $analytics.eventTrack('Sign In', {category: 'User'});
                 $analytics.setUsername(User.getAccount().privateHash);
@@ -82,6 +83,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
                             $scope.$apply(function() {
                                 $scope.signedIn = true;
                                 $scope.signedInName = profile.getName();
+                                $scope.userHelpCode = User.getAccount().helpCode;
                                 $scope.isUserAdmin = User.getAccount().isAdmin;
                             });
                         });

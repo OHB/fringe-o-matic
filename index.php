@@ -155,6 +155,7 @@ if ($COMPILING) {
             <li><a href="/about/credits">Credits</a></li>
             <li><a href="/fun">Fun</a></li>
         </ul>
+        <p class="pull-right" ng-if="signedIn" bs-tooltip="{title: 'If you need help, we may ask for this code to find your account.'}">Help Code: {{userHelpCode}}</p>
         <p style="margin:0">Made with <span class="text-danger">&hearts;</span> by Lewis Johnston. &copy; 2018.</p>
     </div>
 </footer>

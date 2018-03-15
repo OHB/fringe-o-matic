@@ -74,10 +74,11 @@ angular.module('fringeApp')
                 id: 'fringe',
                 name: 'Festival Locations',
                 markers: [
-                    {position: [28.573538, -81.366723], title: 'Box Office', icon: 'information', host: 1},
+                    {position: [28.573317, -81.366730], title: 'Box Office', icon: 'information', host: 1},
                     // {position: [28.572936, -81.365307], title: 'Club Fringe Lounge', icon: 'club-fringe', host: 2, notes: 'Club Fringe members only.'},
-                    {position: [28.573403, -81.367468], title: 'Kids Fringe', icon: 'kids', host: 1},
-                    {position: [28.571664, -81.366011], title: 'Information', icon: 'information', location: 'Green Lawn of Fabulousness'}
+                    // {position: [28.573403, -81.367468], title: 'Kids Fringe', icon: 'kids', host: 1},
+                    {position: [28.571664, -81.366011], title: 'Information', icon: 'information', location: 'Green Lawn of Fabulousness'},
+                    {position: [28.571832, -81.366907], title: 'Outdoor Stage', icon: 'tent', location: 'Green Lawn of Fabulousness'}
                 ]
             },
             {
@@ -85,10 +86,10 @@ angular.module('fringeApp')
                 name: 'Food & Drink',
                 markers: [
                     {position: [28.572994, -81.367102], title: 'Wine & Beer', icon: 'beer-garden', host: 1},
-                    {position: [28.571936, -81.366611], title: 'McGrath Beer Tent', icon: 'beer', location: 'Green Lawn of Fabulousness'},
-                    {position: [28.572003, -81.366468], title: 'Stonewall Bar Tent', icon: 'bar', location: 'Green Lawn of Fabulousness'},
-                    {position: [28.572153, -81.366947], title: 'Ice Cream', icon: 'icecream', location: 'Green Lawn of Fabulousness'},
-                    {position: [28.571776, -81.366104], title: 'Cheese Curds', icon: 'cheese', location: 'Green Lawn of Fabulousness'}
+                    {position: [28.571936, -81.366611], title: 'McGrath Beer Tent', icon: 'beer', location: 'Green Lawn of Fabulousness'}
+                    // {position: [28.572003, -81.366468], title: 'Stonewall Bar Tent', icon: 'bar', location: 'Green Lawn of Fabulousness'},
+                    // {position: [28.572153, -81.366947], title: 'Ice Cream', icon: 'icecream', location: 'Green Lawn of Fabulousness'},
+                    // {position: [28.571776, -81.366104], title: 'Cheese Curds', icon: 'cheese', location: 'Green Lawn of Fabulousness'}
                 ]
             },
             {

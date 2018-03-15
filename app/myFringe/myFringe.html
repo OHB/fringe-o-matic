@@ -9,7 +9,7 @@
                 <p class="lead" style="margin-bottom: 5px">Fringe Level: {{statuses[status].name}}</p>
                 <uib-progress max="maxLevel" animate="false" style="margin-bottom:2px">
                     <uib-bar value="level" type="success"></uib-bar>
-                    <uib-bar value="nextLevelCount" class="level-progress"></uib-bar>
+                    <uib-bar value="nextLevelCount" type="success" style="opacity: 0.5"></uib-bar>
                 </uib-progress>
                 <small class="small" ng-if="nextLevelRemaining">
                     Add <ng-pluralize count="nextLevelRemaining" when="plurals.aShow"></ng-pluralize> to your schedule to level up!

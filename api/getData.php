@@ -3,6 +3,8 @@ header('Content-type: application/json');
 
 ob_start('ob_gzhandler');
 
+mb_internal_encoding('utf-8');
+
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(400);
     exit;

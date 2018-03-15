@@ -51,5 +51,31 @@ angular.module('fringeApp').component('home', {
                 $location.path('/my-fringe');
             }
         };
+
+        var easterEggOn = false, eeValues = [];
+        $scope.calClick = function(i) {
+            if (! easterEggOn) {
+                $timeout.cancel(timeout);
+                easterEggOn = true;
+                for (var j = 0; j < days.length; j ++) {
+                    eeValues[j] = false;
+                    days[j].style.fill = '#D5D6DB';
+                }
+            }
+            eeValues[i] = ! eeValues[i];
+            days[i].style.fill = eeValues[i] ? '#f15921' : '#D5D6DB';
+
+            // var code = eeValues.map(function(v) {
+            //     return v ? '1' : '0';
+            // }).join('');
+            //
+            // if (code === '101001110010100') {
+            //     // h
+            // } else if (code === '101010101010101') {
+            //
+            // } else if (code === '010101010101010') {
+            //
+            // }
+        }
     }]
 });
