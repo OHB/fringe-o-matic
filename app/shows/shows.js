@@ -16,6 +16,7 @@ angular.module('fringeApp').component('shows', {
             $scope.shows = Data.getShows();
             $scope.venues = Data.getVenues();
             $scope.ratings = Data.getRatings();
+            $scope.genres = Data.getGenres();
             $scope.prices = Data.getPrices();
             $scope.sortedShows = Data.getSortedShows();
             $scope.performances = Data.getPerformances();
@@ -58,10 +59,16 @@ angular.module('fringeApp').component('shows', {
             });
             $scope.ratingOptions.unshift({value: '*', label: 'All Ratings'});
 
+            $scope.genreOptions = Object.keys($scope.genres).map(function(id) {
+                return {value: id, label: $scope.genres[id]};
+            });
+            $scope.genreOptions.unshift({value: '*', label: 'All Genres'});
+
             $scope.resetFilters = function() {
                 $scope.search = '';
                 $scope.selectedVenue = '*';
                 $scope.selectedRating = '*';
+                $scope.selectedGenre = '*';
                 $scope.hideWithoutShowtimes = false;
                 $scope.hideNotInterested = false;
                 $scope.hideNotAttending = false;
@@ -81,6 +88,10 @@ angular.module('fringeApp').component('shows', {
                     }
 
                     if ($scope.selectedRating !== '*' && show.rating !== $scope.selectedRating) {
+                        return false;
+                    }
+
+                    if ($scope.selectedGenre !== '*' && show.genres.indexOf($scope.selectedGenre) === -1) {
                         return false;
                     }
 
@@ -108,7 +119,10 @@ angular.module('fringeApp').component('shows', {
                         show.description | '',
                         show.artist || '',
                         show.artistLocation || '',
-                        $scope.venues[show.venue].name
+                        $scope.venues[show.venue].name,
+                        show.genres.map(function(genre) {
+                            return $scope.genres[genre];
+                        }).join(' ')
                     ].join(' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"');
 
                     if (searchText && ! searchRegex.exec(target)) {
@@ -154,6 +168,16 @@ angular.module('fringeApp').component('shows', {
                     $analytics.eventTrack('Filter by Rating', {
                         category: 'Shows',
                         label: $scope.ratings[$scope.selectedRating]
+                    });
+                }
+                $scope.refresh();
+            };
+
+            $scope.genreSelected = function() {
+                if ($scope.selectedGenre !== '*') {
+                    $analytics.eventTrack('Filter by Genre', {
+                        category: 'Shows',
+                        label: $scope.genres[$scope.selectedGenre]
                     });
                 }
                 $scope.refresh();
