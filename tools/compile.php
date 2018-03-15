@@ -100,7 +100,7 @@ foreach ($data->availabilitySlots as $day => $slots) {
     $sitemap->addItem('/schedule/full/' . date('Y-m-d', $day), 0.9);
 
 }
-$sitemap->createSitemapIndex('http://example.com/sitemap/', 'Today');
+$sitemap->createSitemapIndex('https://fringeomatic.com/', 'Today');
 
 
 echo "Minifying index.html...\n";

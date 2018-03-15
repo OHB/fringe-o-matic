@@ -27,6 +27,9 @@
                 <p class="lead text-center">No matching shows.</p>
                 <p><button class="btn btn-sm" ng-click="resetFilters();refresh()">Clear filters</button></p>
             </div>
+            <div class="page-header" style="margin:0">
+                <h3 style="margin:0 0 20px">Showing <ng-pluralize count="allShows.length" when="plurals.show"></ng-pluralize></h3>
+            </div>
             <div class="row" ng-repeat="showId in displayedShows" ng-init="show=shows[showId]" style="background:#f9f9f9; margin:0 0 10px 0;" ng-show="displayedShows.length">
                 <div class="col-sm-9 col-xs-8" style="padding:15px">
                     <div class="pull-right lead hidden-xs" style="line-height: 1em" ng-if="$parent.$parent.signedIn">
