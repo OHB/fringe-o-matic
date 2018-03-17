@@ -29,6 +29,7 @@ angular.module('fringeApp').controller('GoogleCalendarSyncSetupModalCtrl', [
                     secondary: 'NEW',
                     secondaryName: 'My Fringe'
                 };
+                timeoutApply();
             } else {
                 $scope.calendarUrl = GoogleCalendarSync.getCalendarLink();
             }
@@ -42,7 +43,7 @@ angular.module('fringeApp').controller('GoogleCalendarSyncSetupModalCtrl', [
 
         $scope.requestPermission = function() {
             GoogleCalendarSync.requestPermission().then(function() {
-                $scope.apply(refresh);
+                $scope.$apply(refresh);
             });
         };
 

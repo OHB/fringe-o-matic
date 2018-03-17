@@ -2,5 +2,9 @@ User-agent: *
 Disallow: /api/public.php
 Disallow: /api/save.php
 Disallow: /api/signin.php
+Disallow: /test
+Disallow: /test/
+Disallow: /public
+Disallow: /public/
 
 Sitemap: https://fringeomatic.com/sitemap-index.xml

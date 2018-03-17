@@ -16,7 +16,7 @@ if ($COMPILING) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <base href="/">
     <meta name="description" content="Create your perfect Fringe schedule automatically.">
-    <meta name="keyords" content="Orlando Fringe Festival, Fringeomatic, Fringe-o-Matic">
+    <meta name="keywords" content="Orlando International Fringe Theater Festival, Fringeomatic, Fringe-o-Matic, ">
     <meta name="author" content="Lewis Johnston">
     <title>Fringe-o-Matic · Create your perfect Fringe schedule automatically.</title>
 

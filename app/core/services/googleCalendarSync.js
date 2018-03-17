@@ -67,7 +67,7 @@ angular.module('fringeApp')
                                     show = Data.getShow(performance.show),
                                     venue = Data.getVenue(show.venue),
                                     venueHost = Data.getVenueHost(venue.host),
-                                    location = venue.name + ' at ' + venueHost.name + ', ' + venueHost.address.join(', '),
+                                    location = venue.name + ' at ' + venueHost.name + ', ' + [venueHost.addressStreet, venueHost.addressLocality, venueHost.addressRegion, venueHost.addressPostCode, venueHost.addressCountry].join(', '),
                                     description = '<p>' + show.description + '</p>' +
                                         eventReminders +
                                         '<p><a href="https://fringeomatic.com/show/' + show.slug + '">Show Information</a><br>' +

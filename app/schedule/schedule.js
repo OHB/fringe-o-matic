@@ -82,8 +82,6 @@ angular.module('fringeApp').component('schedule', {
                         return true;
                     }
 
-                    console.log(entry);
-
                     return ! entry.inPast && entry.canBeScheduled && showsAttending.indexOf(entry.showId) === -1;
                 });
                 $scope.dataLoaded = true;
