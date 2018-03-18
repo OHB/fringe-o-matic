@@ -40,20 +40,15 @@ angular.module('fringeApp').directive('monthDayPicker', function() {
             };
 
             var months = [],
-                years = [],
                 days = angular.copy($scope.days),
                 i;
 
             for (i = 0; i < days.length; i ++) {
                 var day = moment(days[i], 'X'),
-                    month = day.startOf('month').unix(),
-                    year = day.startOf('year').unix();
+                    month = day.startOf('month').unix();
 
                 if (months.indexOf(month) === -1) {
                     months.push(month);
-                }
-                if (years.indexOf(year) === -1) {
-                    years.push(year);
                 }
             }
 

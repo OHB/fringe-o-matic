@@ -46,6 +46,7 @@
     "app/app.js",
     "app/app.config.js",
     "app/core/filters/price.js",
+    "app/core/directives/breadcrumbs.js",
     "app/core/directives/interest.js",
     "app/core/directives/monthDayPicker.js",
     "app/core/directives/offsetHeight.js",

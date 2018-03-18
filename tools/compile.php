@@ -102,6 +102,23 @@ foreach ($data->availabilitySlots as $day => $slots) {
 }
 $sitemap->createSitemapIndex('https://fringeomatic.com/', 'Today');
 
+echo "Creating .htaccess...\n";
+$hta = file_get_contents(__DIR__ . '/htaccess-template.txt');
+$pages = [
+    'my-fringe', 'my-fringe/', 'my-fringe/schedule', 'my-fringe/availability', 'my-fringe/auto-scheduler',
+    'show/.*',
+    'shows', 'shows/venue/.*', 'shows/genre/.*', 'shows/rating/.*',
+    'schedule', 'schedule/', 'schedule/full/.*', 'schedule/smart/.*',
+    'map', 'map/venue/.*', 'map/host/.*',
+    'public/.*',
+    'venues', 'fun', 'about/credits', 'policies/privacy', 'policies/terms'
+];
+
+$hta = str_replace('{{PAGE-REWRITES}}', implode("\n", array_map(function($page) {
+    return "RewriteRule    ^{$page}$    /    [NC,L]";
+}, $pages)), $hta);
+
+file_put_contents(__DIR__ . '/../deploy/.htaccess', $hta);
 
 echo "Minifying index.html...\n";
 ob_start();

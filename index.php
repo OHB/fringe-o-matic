@@ -85,14 +85,13 @@ if ($COMPILING) {
                 </button>
             </span>
             <a href="/" class="navbar-brand pointer" title="Fringe-o-Matic">
-                <img src="img/logo-white.svg" style="height:100%">
+                <img src="img/logo-white.svg" style="height:100%" alt="Fringe-o-Matic">
             </a>
-<!--            <a href="/" class="navbar-brand pointer">Fringe-o-Matic</a>-->
         </div>
         <div class="collapse navbar-collapse" ng-class="{collapse: nav.collapsed}" ng-if="! error">
             <ul class="nav navbar-nav" ng-cloak>
                 <li ng-repeat="item in ::menu" ng-class="{active:currentRoute == '/' + item.route, 'hidden-sm': item.route == ''}">
-                    <a href="/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
+                    <a ng-href="/{{item.route}}" ng-click="nav.collapsed = true">{{item.title}}</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" ng-cloak ng-if="!isOnline">
@@ -104,7 +103,7 @@ if ($COMPILING) {
                     <a href bs-dropdown>Signed in <span class="hidden-sm">as {{signedInName}}</span> <span class="caret"></span></a>
                     <ul class="dropdown-menu" style="border-radius: 4px">
                         <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
-                            <a href="/test">Test</a>
+                            <a href="/test" rel="nofollow">Test</a>
                         </li>
                         <li><a href ng-click="signOut()">Sign Out</a></li>
                     </ul>
