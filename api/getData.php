@@ -79,7 +79,7 @@ while ($show = $showResults->fetch_assoc()) {
             'start' => $start,
             'stop' => $end,
             'show' => (string) $show['id'],
-            'storeUrl' => $performance['storeUrl']
+            'storeUrl' => isset($_GET['tickets']) ? $performance['storeUrl'] : null
         ];
 
         if (! isset($data['availabilitySlots'][$day])) {
