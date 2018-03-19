@@ -165,6 +165,30 @@ angular.module('fringeApp').component('fun', {
             data: objToData(rats, 'Rating', 'Shows')
         };
 
+        var cities = {
+            'Coral Springs, FL': [26.271192, -80.2706044],
+            'Casselberry, FL': [28.677775, -81.3278455],
+            'Lakeland, FL': [28.0394654, -81.9498042],
+            'Longwood, FL': [28.7030519, -81.3384011],
+            'Orlando, FL': [28.5383355, -81.3792365],
+            'Oviedo, FL': [28.669997, -81.2081203],
+            'Sanford, FL': [28.8028612, -81.269453],
+            'Tallahassee, FL': [30.4382559, -84.2807329],
+            'Windermere, FL': [28.4955593, -81.5347952],
+            'Winter Garden, FL': [28.5652787, -81.5861847],
+            'Winter Park, FL': [28.5999998, -81.3392352],
+            'Atlamonte Springs, FL': [28.661109, -81.365624]
+        };
+        var data = objToData(flaloc, 'City', 'Artists');
+        data.cols.unshift({id: 'lng', label: 'lng', type: 'number'});
+        data.cols.unshift({id: 'lon', label: 'lon', type: 'number'});
+        data.rows = data.rows.map(function(row) {
+            var city = cities[row.c[0].v];
+            row.c.unshift({v: city[1]});
+            row.c.unshift({v: city[0]});
+            return row;
+        });
+
         $scope.floridaArtistLocations = {
             type: 'GeoChart',
             options: {
@@ -175,7 +199,7 @@ angular.module('fringeApp').component('fun', {
                 colorAxis: {colors: ['#f1d4ca', '#f15922']},
                 legend: 'none'
             },
-            data: objToData(flaloc, 'City', 'Artists')
+            data: data
         };
 
         $scope.usArtistLocations = {
