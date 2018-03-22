@@ -20,7 +20,7 @@ foreach ($data->performance as $performance) {
     $start = strtotime($performance->PerformanceDateTime);
     $showareVenueId = $performance->SingleAreaVenueAreaID;
 
-    if (in_array($eventId, [188, 314, 315])) {
+    if ($eventId == -1 || in_array($eventId, [188, 314, 315])) {
         continue;
     }
 
@@ -50,7 +50,7 @@ foreach ($data->performance as $performance) {
     }
 
     if (! $performanceId) {
-        print_r([$performance->PerformanceDateTime, $eventId, $perfId, $start]);
+        print_r([$performance->Event, $performance->PerformanceDateTime, $eventId, $perfId, $start]);
         print_r([$showId]);
         exit;
     }

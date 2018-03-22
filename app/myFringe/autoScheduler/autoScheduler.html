@@ -111,17 +111,61 @@
                     <p>It's not possible to add any more shows to your schedule.</p>
                     <p ng-if="allDesiredShowsOnSchedule">But, all of the shows you're interested in are on your schedule.</p>
                 </div>
-                <div ng-if="screen == 'schedule-complete'">
-                    <h1>Good news!</h1>
+                <div ng-if="screen == 'schedule-complete' || screen == 'no-possible-desired'">
+                    <div ng-if="screen == 'no-possible-desired'">
+                        <h1>There's bad news and there's good news</h1>
+                        <br>
+                        <p><strong>Bad news:</strong> there's no room on your schedule for any more of the shows you're interested in.</p>
+                        <p><strong>Good news:</strong> there's still room on your schedule for other shows.</p>
+                    </div>
+                    <div ng-if="screen == 'schedule-complete'">
+                        <h1>Good news!</h1>
+                        <br>
+                        <p>Every show you want to see is on your schedule.</p>
+                        <p>But, there's still room on your schedule for other shows.</p>
+                    </div>
+                    <div ng-if="suggestedPerformances.length > 0">
+                        <br>
+                        <h3>Other shows you may like:</h3>
+                        <br>
+                        <div class="row" ng-repeat="suggestion in suggestedPerformances | limitTo:5" ng-init="performance=performances[suggestion.performance]; show=shows[performance.show]">
+                            <div class="col-sm-2">
+                                <img ng-src="/img/show/{{show.image}}" style="width:100%">
+                            </div>
+                            <div class="col-sm-10">
+                                <h3 style="margin-top:0">
+                                    <a href="/show/{{show.slug}}">{{show.name}}</a>
+                                    <small>{{moment(performance.start, 'X').format('MMM D, h:mma')}}</small>
+                                </h3>
+                                <p>
+                                    <span class="label label-venue-default label-venue-{{venues[show.venue].slug}}">{{venues[show.venue].name}}</span>
+                                    <show-rating value="::ratings[show.rating]"></show-rating>
+                                    <span ng-if="show.genres" class="text-muted small">
+                                    &nbsp;
+                                    &middot;
+                                    &nbsp;
+                                    <span ng-repeat="genre in show.genres">{{genres[genre]}}<span ng-if="! $last">, </span></span>
+                                </span>
+                                </p>
+                                <p ng-bind-html="trustAsHtml(show.description)" style="margin-top:15px"></p>
+                                <div class="small">
+                                    <p ng-if="show.warnings"><em>Note: {{show.warnings}}</em></p>
+                                </div>
+                                <div class="well well-sm" style="margin-top: 15px" ng-init="performance2 = performances[suggestion.adjacentPerformance]; show2 = shows[performance2.show]">
+                                    <span ng-if="performance2.start > performance.stop">Starts {{(performance2.start - performance.stop) / 60}} minutes after</span>
+                                    <span ng-if="performance2.start < performance.stop">Ends {{(performance.start - performance2.stop) / 60}} minutes before</span>
+                                    the {{moment(performance2.start, 'X').format('h:mma')}} performance of <em>{{show2.name}}</em> which is on your schedule, and is
+                                    <span ng-if="show.venue == show2.venue">in the same venue.</span>
+                                    <span ng-if="show.venue != show2.venue && venues[show.venue].host == venues[show2.venue].host">also at {{venueHosts[venues[show.venue].host].name}}.</span>
+                                    <span ng-if="venues[show.venue].host != venues[show2.venue].host">a {{venueDistances[show.venue][show2.venue][0] / 60}} minute walk away.</span>
+                                </div>
+                                <button ng-click="addPerformance(suggestion.performance)" class="btn btn-info">Add to Schedule</button>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
                     <br>
-                    <p>Every show you want to see is on your schedule.</p>
-                    <p>But, there's still room on your schedule for other shows.</p>
-                </div>
-                <div ng-if="screen == 'no-possible-desired'">
-                    <h1>There's bad news and there's good news</h1>
-                    <br>
-                    <p><strong>Bad news:</strong> there's no room on your schedule for any more of the shows you're interested in.</p>
-                    <p><strong>Good news:</strong> there's still room on your schedule for other shows.</p>
+                    <p><a href="/my-fringe" class="btn btn-primary">View Schedule</a></p>
                 </div>
                 <div ng-if="screen == 'instant-add'">
                     <h1>I found

@@ -4,7 +4,8 @@
 .label-venue-aqua,
 .label-venue-van-in-front-of-shakespeare-center,
 .label-venue-club-fringe-lounge,
-.label-venue-tree-by-the-firehouse-museum {
+.label-venue-tree-by-the-firehouse-museum,
+.label-venue-lowndes-shakespeare-center-courtyard {
     background: #40cdbd;
     background: -webkit-linear-gradient(to right, #40cdbd, #ff8c00, #ff0080);
     background: linear-gradient(to right, #40cdbd, #ff8c00, #ff0080);

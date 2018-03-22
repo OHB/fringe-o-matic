@@ -155,7 +155,7 @@ angular.module('fringeApp')
         };
 
         this.hasPermission = function() {
-            return getCurrentUser().getGrantedScopes().indexOf(calendarScope) > -1;
+            return getCurrentUser().getGrantedScopes() && getCurrentUser().getGrantedScopes().indexOf(calendarScope) > -1;
         };
 
         this.requestPermission = function() {

@@ -9,11 +9,15 @@ if ($COMPILING) {
     $js = $build->js;
 }
 ?><!DOCTYPE html>
-<html ng-app="fringeApp">
+<html ng-app="fringeApp" lang="en">
 <head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-language" content="en">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php if ($COMPILING) { ?>
+        <link rel="canonical" href="https://fringeomatic.com{{CANONICAL}}" />
+    <?php } ?>
     <base href="/">
     <meta name="description" content="Create your perfect Fringe schedule automatically.">
     <meta name="keywords" content="Orlando International Fringe Theater Festival, Fringeomatic, Fringe-o-Matic, ">

@@ -23,7 +23,7 @@
     <hr>
     <div class="row text-center">
         <div class="col-md-5">
-            <h4>There are {{floridaArtistCount}} artists from Florida</h4>
+            <h4>There are {{floridaArtistCount}} artists from {{floridaArtistLocations.data.rows.length}} Florida cities</h4>
             <div google-chart chart="floridaArtistLocations" style="width:100%; height: 350px"></div>
         </div>
         <div class="col-md-7">
@@ -36,6 +36,13 @@
         <div class="col-md-12">
             <h4>There are also {{internationalArtistCount}} artists from {{internationalArtistLocations.data.rows.length}} countries</h4>
             <div google-chart chart="internationalArtistLocations" style="width:100%; height: 750px"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row text-center">
+        <div class="col-md-12">
+            <h4>Most performances start in the evening, but the weekends have performances all day</h4>
+            <div google-chart chart="performanceDistribution" style="width: 100%; height: 600px; margin: 20px 0;"></div>
         </div>
     </div>
     <hr>

@@ -177,6 +177,7 @@ angular.module('fringeApp').component('fun', {
             'Windermere, FL': [28.4955593, -81.5347952],
             'Winter Garden, FL': [28.5652787, -81.5861847],
             'Winter Park, FL': [28.5999998, -81.3392352],
+            'Winter Springs, FL': [28.698885, -81.308123],
             'Atlamonte Springs, FL': [28.661109, -81.365624]
         };
         var data = objToData(flaloc, 'City', 'Artists');
@@ -242,6 +243,78 @@ angular.module('fringeApp').component('fun', {
             options: {
                 bars: 'horizontal',
                 legend: {position: 'none'}
+            }
+        };
+
+        var performanceData = {};
+        angular.forEach(Data.getPerformances(), function(performance) {
+            var m = moment(performance.start, 'X'),
+                hour = m.hour(),
+                min = m.minute(),
+                day = m.date();
+
+            if (min === 59) {
+                hour ++;
+            }
+
+            if (! performanceData[day]) {
+                performanceData[day] = {};
+            }
+
+            if (! performanceData[day][hour]) {
+                performanceData[day][hour] = 0;
+            }
+            performanceData[day][hour] ++;
+        });
+
+        var rows = [];
+        angular.forEach(performanceData, function(hours, day) {
+            angular.forEach(hours, function(performances, hour) {
+                rows.push({
+                    c: [
+                        {v: ''},
+                        {v: day},
+                        {v: hour},
+                        {v: performances},
+                        {v: performances},
+                        {v: 'FOO'}
+                    ]
+                });
+            });
+        });
+
+        $scope.performanceDistribution = {
+            type: 'BubbleChart',
+            data: {
+                cols: [
+                    {id: 'k', label: 'ID', type: 'string'},
+                    {id: 'x', label: 'Day', type: 'number'},
+                    {id: 'y', label: 'Hour', type: 'number'},
+                    {id: 'p1', label: 'Performances', type: 'number'},
+                    {id: 'p2', label: 'Performances', type: 'number'}
+                ],
+                rows: rows
+            },
+            options: {
+                enableInteractivity: false,
+                colorAxis: {minValue: 0,  colors: ['#fff', '#a2238d']},
+                theme: 'maximized',
+                hAxis: {
+                    viewWindow: {min: 14, max: 29},
+                    ticks: Object.keys(performanceData).map(function(i) {
+                        return {v: i, f: 'May ' + i};
+                    })
+                },
+                vAxis: {
+                    viewWindow: {min: 10, max: 25},
+                    ticks: [10, 12, 14, 16, 18, 20, 22, 24].map(function(i) {
+                        if (i === 24) {
+                            return {v: 24, f: '12am'};
+                        }
+
+                        return {v: i, f: i < 12 ? i + 'am' : ((i > 12 ? (i - 12) : i) + 'pm')};
+                    })
+                }
             }
         };
     }]

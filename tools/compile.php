@@ -115,7 +115,7 @@ $pages = [
 ];
 
 $hta = str_replace('{{PAGE-REWRITES}}', implode("\n", array_map(function($page) {
-    return "RewriteRule    ^{$page}$    /    [NC,L]";
+    return "RewriteRule    ^{$page}$    /deployed.php    [NC,L]";
 }, $pages)), $hta);
 
 file_put_contents(__DIR__ . '/../deploy/.htaccess', $hta);

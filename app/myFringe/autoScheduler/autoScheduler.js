@@ -1,12 +1,13 @@
 angular.module('fringeApp').component('myFringeAutoScheduler', {
     templateUrl: 'app/myFringe/autoScheduler/autoScheduler.html',
     controller: [
-        '$scope', '$q', '$timeout', '$uibModal', '$location', 'Data', 'Schedule', 'User', 'Availability', 'Configuration', 'Plurals', '$analytics',
-        function($scope, $q, $timeout, $uibModal, $location, Data, Schedule, User, Availability, Configuration, Plurals, $analytics) {
+        '$scope', '$q', '$timeout', '$uibModal', '$location', 'Data', 'Schedule', 'User', 'Availability', 'Configuration', 'Plurals', '$analytics', '$sce',
+        function($scope, $q, $timeout, $uibModal, $location, Data, Schedule, User, Availability, Configuration, Plurals, $analytics, $sce) {
             $scope.plurals = Plurals;
             $scope.moment = moment;
             $scope.interestText = Configuration.interestText;
             $scope.instantAddScreenCount = 0;
+            $scope.trustAsHtml = $sce.trustAsHtml;
 
             var generateRun = false;
 
@@ -34,6 +35,14 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     desiredShowsNotOnSchedule = desiredShows.diff(showsAttending),
                     now = Date.now() / 1000;
 
+                $scope.shows = shows;
+                $scope.performances = performances;
+                $scope.genres = Data.getGenres();
+                $scope.ratings = Data.getRatings();
+                $scope.venues = Data.getVenues();
+                $scope.venueDistances = Data.getVenueDistances();
+                $scope.venueHosts = Data.getVenueHosts();
+
                 schedule.map(function(performanceId) {
                     $scope.progressByDesire[Schedule.getShowDesire(performances[performanceId].show)] ++;
                 });
@@ -58,7 +67,73 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     return 'schedule-full';
                 }
 
-                // everything the user wants is scheduled, and there's extra room.
+                // get non-desired suggestions
+                var likedGenres = {};
+                angular.forEach(shows, function(show, showId) {
+                    if (showsAttending.indexOf(showId) > -1 || Schedule.getShowDesire(showId) > 0) {
+                        var multiplier = Math.max(1, Schedule.getShowDesire(showId));
+                        for (var i = 0; i < show.genres.length; i ++) {
+                            ! likedGenres[show.genres[i]] ? likedGenres[show.genres[i]] = multiplier : likedGenres[show.genres[i]] += multiplier;
+                        }
+                    }
+                });
+
+                var recommendedShows = {}, maxScore = 0;
+                angular.forEach(shows, function(show, showId) {
+                    var score = 0;
+                    for (var i = 0; i < show.genres.length; i ++) {
+                        score += likedGenres[show.genres[i]] || 0;
+                    }
+
+                    recommendedShows[showId] = score;
+                    maxScore = Math.max(maxScore, score);
+                });
+
+                var suggestedShows = [];
+                $scope.suggestedPerformances = possiblePerformances.map(function(pId1) {
+                    var performance1 = performances[pId1],
+                        showId = performance1.show,
+                        venueId1  = shows[showId].venue;
+
+                    if (recommendedShows[showId] !== undefined && recommendedShows[showId] / maxScore > .5 && suggestedShows.indexOf(showId) === -1) {
+                        for (var i = 0; i < schedule.length; i ++) {
+                            var pId2 = schedule[i],
+                                performance2 = performances[pId2],
+                                venueId2 = shows[performance2.show].venue,
+                                distances = venueDistances[venueId1][venueId2],
+                                offset = (distances[1] === undefined ? distances[0] : Math.min(distances[0], distances[1]));
+
+                            if (offset > 300) {
+                                continue;
+                            }
+
+                            // the venue is good. but does the show start within 30 minutes?
+
+                            var diff = performance2.start > performance1.stop ? performance2.start - performance1.stop : performance1.start - performance2.stop;
+
+                            if (diff > 1800) {
+                                continue;
+                            }
+
+                            suggestedShows.push(showId);
+
+                            return {
+                                performance: pId1,
+                                adjacentPerformance: pId2,
+                                score: recommendedShows[showId] / maxScore
+                            };
+                        }
+                    }
+
+                    return null;
+                }).filter(function(i) {
+                    return !!i;
+                }).sort(function(a, b) {
+                    return b.score - a.score;
+                });
+
+
+                // everything the user wants is scheduled, and there may be extra room.
                 if (desiredShowsNotOnSchedule.length === 0) {
                     if (generateRun) {
                         $location.path('/my-fringe');
@@ -162,6 +237,11 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     Schedule.add(entry.id);
                 });
 
+                analyze();
+            };
+
+            $scope.addPerformance = function(performanceId) {
+                Schedule.add(performanceId);
                 analyze();
             };
 
