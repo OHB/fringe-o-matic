@@ -124,7 +124,9 @@ echo "Minifying index.html...\n";
 ob_start();
 $COMPILE = true;
 include_once (__DIR__ . '/../index.php');
-minify('deploy/index.html', 'http://html-minifier.com/raw?', ['input' => ob_get_clean()]);
+$html = post('http://html-minifier.com/raw?', ['input' => ob_get_clean()]);
+$html = str_replace('{{CANONICAL}}', '<!--CANONICAL-->', $html);
+put('deploy/index.html', $html);
 
 
 echo "\nDone!\n\n";

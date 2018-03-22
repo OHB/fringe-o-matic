@@ -1,5 +1,14 @@
 <require-online>
-    <div ng-if="availabilitySlots">
+    <div ng-if="firstTime">
+        <h1>Introduction</h1>
+        <p class="lead">This is where you set when you're available to see shows.</p>
+        <p>Initially, your schedule will be all green. Green means you're available to see a show during that time block.</p>
+        <p>Click on the times you are unavailable to turn those blocks grey.</p>
+        <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
+        <br>
+        <button class="btn btn-lg btn-primary" ng-click="completeIntro()">Continue</button>
+    </div>
+    <div ng-if="!firstTime && availabilitySlots">
         <div class="row">
             <div class="col-sm-10 col-xs-7">
                 <p class="hidden-xs">Select the time slots you are available by clicking them. Each slot is an hour.</p>
@@ -37,9 +46,11 @@
                                         ng-init="dow = moment(dayId, 'X').format('ddd')"
                                         ng-class="{'weekend': dow == 'Sat' || dow == 'Sun'}"
                                 >
-                                    {{::dow}}<br>
-                                    <span class="lead">{{::moment(dayId, 'X').format('D')}}</span><br>
-                                    {{::moment(dayId, 'X').format('MMM')}}
+                                    <div bs-tooltip="{title:'Toggle day'}" ng-click="toggleDay(dayId)" class="pointer">
+                                        {{::dow}}<br>
+                                        <span class="lead">{{::moment(dayId, 'X').format('D')}}</span><br>
+                                        {{::moment(dayId, 'X').format('MMM')}}
+                                    </div>
                                 </th>
                             </tr>
                             </thead>

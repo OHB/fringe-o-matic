@@ -1,10 +1,11 @@
 angular.module('fringeApp').component('myFringeAvailability', {
     templateUrl: 'app/myFringe/availability/availability.html',
     controller: [
-        '$scope', '$uibModal', '$timeout', 'Data', 'Schedule', 'Availability', 'Configuration', '$analytics',
-        function($scope, $uibModal, $timeout, Data, Schedule, Availability, Configuration, $analytics) {
+        '$scope', '$uibModal', '$timeout', 'Data', 'User', 'Schedule', 'Availability', 'Configuration', '$analytics',
+        function($scope, $uibModal, $timeout, Data, User, Schedule, Availability, Configuration, $analytics) {
             var performances;
 
+            $scope.firstTime = ! User.getSettings().availabilityIntroComplete;
             $scope.moment = moment;
             $scope.slotSize = Configuration.slotSize;
             $scope.availability = {};
@@ -30,10 +31,23 @@ angular.module('fringeApp').component('myFringeAvailability', {
                 });
             };
 
+            $scope.completeIntro = function() {
+                var settings = User.getSettings();
+                settings.availabilityIntroComplete = true;
+                User.setSettings(settings);
+                $scope.firstTime = false;
+            };
+
             $scope.toggleAvailability = function(slot) {
                 $analytics.eventTrack('Change', {category: 'Availability'});
                 $scope.availability[slot] ? Availability.setSlotUnavailable(slot) : Availability.setSlotAvaialble(slot);
                 $scope.availability[slot] = ! $scope.availability[slot];
+            };
+
+            $scope.toggleDay = function(dayId) {
+                for (var i = 0; i < $scope.availabilitySlots[dayId].length; i ++) {
+                    $scope.toggleAvailability($scope.availabilitySlots[dayId][i]);
+                }
             };
 
             var dragType;

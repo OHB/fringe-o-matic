@@ -121,6 +121,7 @@ $row = $result->fetch_object();
 $settings = [
     'scheduleMode' => $row->scheduleMode,
     'autoScheduleIntroComplete' => (bool) $row->autoScheduleIntroComplete,
+    'availabilityIntroComplete' => (bool) $row->availabilityIntroComplete,
     'displaySchedulerStats' => (bool) $row->displaySchedulerStats,
     'googleCalendarSyncId' => $row->googleCalendarSyncId,
     'publicScheduleName' => $row->publicScheduleName

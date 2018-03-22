@@ -16,11 +16,11 @@
             <p>When the Auto-Scheduler runs, it will fill your schedule with higher-interest shows first.</p>
             <br>
             <h3>2. When are you available?</h3>
-            <p>On the <a href="/my-fringe/availability">Availability</a> tab, you can select which times you are available to see shows.</p>
+            <p>If you haven't done so already, you can select which times you are available to see shows on the <a href="/my-fringe/availability">Availability</a> tab.</p>
             <p>When the Auto-Scheduler runs, it won't schedule shows for times you aren't available.</p>
             <br>
             <div class="text-center">
-                <button class="btn btn-lg btn-primary" ng-click="completeIntro()">Got it!</button>
+                <button class="btn btn-lg btn-primary" ng-click="completeIntro()">Got it. I'm ready!</button>
             </div>
         </div>
         <div ng-if="screen == 'no-interests'">
@@ -168,7 +168,7 @@
                     <p><a href="/my-fringe" class="btn btn-primary">View Schedule</a></p>
                 </div>
                 <div ng-if="screen == 'instant-add'">
-                    <h1>I found
+                    <h1>Here's
                         <ng-pluralize
                                 count="instantAddPerformances.length"
                                 when="instantAddScreenCount == 1 ? plurals.showSome : plurals.showSomeMore"

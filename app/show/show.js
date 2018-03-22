@@ -1,6 +1,6 @@
 angular.module('fringeApp').component('show', {
     templateUrl: 'app/show/show.html',
-    controller: ['$scope', '$routeParams', 'Data', 'Schedule', '$sce', function($scope, $routeParams, Data, Schedule, $sce) {
+    controller: ['$rootScope', '$scope', '$routeParams', 'Data', 'Schedule', '$sce', function($rootScope, $scope, $routeParams, Data, Schedule, $sce) {
         $scope.moment = moment;
         $scope.now = Date.now() / 1000;
         $scope.showId = Data.findShowIdBySlug($routeParams.show);
@@ -13,6 +13,8 @@ angular.module('fringeApp').component('show', {
         $scope.isUserAttendingPerformance = Schedule.isUserAttendingPerformance;
         $scope.trustAsHtml = $sce.trustAsHtml;
         $scope.titleColor = '#fff';
+
+        $rootScope.pageTitle = 'Fringe-o-Matic · ' + $scope.show.name;
 
         var allShows = Data.getSortedShows(),
             current = allShows.indexOf($scope.showId);

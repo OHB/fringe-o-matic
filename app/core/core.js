@@ -35,6 +35,8 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 var parts = $route.current.$$route.originalPath.split('/');
                 $scope.currentRoute = '/' + parts[1];
                 $window.scroll(0, 0);
+
+                $rootScope.pageTitle = 'Fringe-o-Matic · ' + ($route.current.$$route.title || '');
             }
         });
 

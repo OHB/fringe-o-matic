@@ -9,11 +9,7 @@ Show screen. Image needs to be square
 allow multiple performances to be manually added
     warn when adding #2 only (don't warn when adding 3rd performance of a given show)
 
-auto-suggest performances to fill gaps
-    performance must be within 10 minutes walk
-    suggest based on genres matching the genres of existing show
-    replace the "good news bad news" screen
-
+click header to toggle day (availability)
 
 BUG
 Go to Schedule

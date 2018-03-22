@@ -196,51 +196,59 @@ angular.module('fringeApp')
 
             $routeProvider
                 .when('/', {
-                    template: '<home></home>'
+                    template: '<home></home>',
+                    title: 'Create your perfect Fringe schedule automatically'
                 }).when('/my-fringe', {
-                    template: '<my-fringe></my-fringe>'
+                    template: '<my-fringe></my-fringe>',
+                    title: 'My Fringe'
                 }).when('/my-fringe/availability', {
-                    template: '<my-fringe></my-fringe>'
+                    template: '<my-fringe></my-fringe>',
+                    title: 'My Fringe · Availability'
                 }).when('/my-fringe/auto-scheduler', {
-                    template: '<my-fringe></my-fringe>'
-                }).when('/shows-old', {
-                    template: '<shows-old></shows-old>'
-                }).when('/shows-old/show/:show', {
-                    template: '<shows-old></shows-old>'
-                }).when('/shows-old/venue/:venue', {
-                    template: '<shows-old></shows-old>'
-
-
+                    template: '<my-fringe></my-fringe>',
+                    title: 'My Fringe · Auto-Scheduler'
                 }).when('/shows', {
-                    template: '<shows></shows>'
+                    template: '<shows></shows>',
+                    title: 'Shows'
                 }).when('/shows/venue/:venue', {
-                    template: '<shows></shows>'
-
+                    template: '<shows></shows>',
+                    title: 'Shows'
                 }).when('/show/:show', {
-                    template: '<show></show>'
-
+                    template: '<show></show>',
+                    title: 'Show'
                 }).when('/schedule/:param1?/:param2?', {
-                    template: '<schedule></schedule>'
+                    template: '<schedule></schedule>',
+                    title: 'Schedule'
                 }).when('/venues', {
-                    template: '<venues></venues>'
+                    template: '<venues></venues>',
+                    title: 'Venues'
                 }).when('/map', {
-                    template: '<fringe-map></fringe-map>'
+                    template: '<fringe-map></fringe-map>',
+                    title: 'Map'
                 }).when('/map/venue/:venue', {
-                    template: '<fringe-map></fringe-map>'
+                    template: '<fringe-map></fringe-map>',
+                    title: 'Map'
                 }).when('/map/host/:host', {
-                    template: '<fringe-map></fringe-map>'
+                    template: '<fringe-map></fringe-map>',
+                    title: 'Map'
                 }).when('/public/:id', {
-                    template: '<public></public>'
+                    template: '<public></public>',
+                    title: 'Public Schedule'
                 }).when('/fun', {
-                    template: '<fun></fun>'
+                    template: '<fun></fun>',
+                    title: 'Fun'
                 }).when('/about/credits', {
-                    templateUrl: 'pages/about/credits.html'
+                    templateUrl: 'pages/about/credits.html',
+                    title: 'Credits'
                 }).when('/policies/privacy', {
-                    templateUrl: 'pages/policies/privacy.html'
+                    templateUrl: 'pages/policies/privacy.html',
+                    title: 'Privacy Policy'
                 }).when('/policies/terms', {
-                    templateUrl: 'pages/policies/terms.html'
+                    templateUrl: 'pages/policies/terms.html',
+                    title: 'Terms of Service'
                 }).when('/test', {
-                    template: '<test></test>'
+                    template: '<test></test>',
+                    title: 'Test'
                 }).otherwise({redirectTo: '/'});
         }
     ])

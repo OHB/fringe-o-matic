@@ -45,6 +45,9 @@ if (isset($json->settings->scheduleMode) && in_array($json->settings->scheduleMo
     $db->query("UPDATE `user_settings` SET `scheduleMode`='{$json->settings->scheduleMode}' WHERE `userId`={$userId}");
 }
 
+$value = (isset($json->settings->availabilityIntroComplete) ? $json->settings->availabilityIntroComplete : false) ? 1 : 0;
+$db->query("UPDATE `user_settings` SET `availabilityIntroComplete`={$value} WHERE `userId`={$userId}");
+
 $value = (isset($json->settings->autoScheduleIntroComplete) ? $json->settings->autoScheduleIntroComplete : false) ? 1 : 0;
 $db->query("UPDATE `user_settings` SET `autoScheduleIntroComplete`={$value} WHERE `userId`={$userId}");
 

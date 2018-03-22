@@ -16,13 +16,13 @@ if ($COMPILING) {
     <meta http-equiv="content-language" content="en">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php if ($COMPILING) { ?>
-        <link rel="canonical" href="https://fringeomatic.com{{CANONICAL}}" />
+        {{CANONICAL}}
     <?php } ?>
     <base href="/">
     <meta name="description" content="Create your perfect Fringe schedule automatically.">
-    <meta name="keywords" content="Orlando International Fringe Theater Festival, Fringeomatic, Fringe-o-Matic, ">
+    <meta name="keywords" content="Orlando International Fringe Theater Festival, Fringeomatic, Fringe-o-Matic">
     <meta name="author" content="Lewis Johnston">
-    <title>Fringe-o-Matic · Create your perfect Fringe schedule automatically.</title>
+    <title ng-bind="pageTitle">Fringe-o-Matic · Create your perfect Fringe schedule automatically</title>
 
     <?php foreach ($css as $filename) { ?>
         <link rel="stylesheet" type="text/css" href="<?php echo $filename; ?>" />
