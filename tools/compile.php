@@ -38,7 +38,7 @@ foreach (scandir(__DIR__ . '/../') as $file) {
 echo "Minifying templates...\n";
 $templates = "angular.module('fringeApp').run(['\$templateCache',function(\$templateCache){"
     . getFiles($build->templates, function($filename, $file) {
-        $html = json_encode(str_replace("\n", ' ', post('http://html-minifier.com/raw?', ['input' => $file])));
+        $html = json_encode(str_replace("\n", ' ', post('https://html-minifier.com/raw?', ['input' => $file])));
         return "\$templateCache.put('{$filename}', {$html});\n";
     })
     . '}]);';
@@ -51,7 +51,7 @@ foreach (findFiles(__DIR__ . '/../pages') as $item) {
     $filename = basename($item);
     $path = substr($item, strlen(__DIR__ . '/../pages'), -strlen($filename));
     @mkdir(__DIR__ . '/../deploy/pages' . $path, 0777, true);
-    minify('deploy/pages' . $path . $filename, 'http://html-minifier.com/raw?', [
+    minify('deploy/pages' . $path . $filename, 'https://html-minifier.com/raw?', [
         'input' => file_get_contents($item)
     ]);
 }
@@ -106,12 +106,13 @@ echo "Creating .htaccess...\n";
 $hta = file_get_contents(__DIR__ . '/htaccess-template.txt');
 $pages = [
     'my-fringe', 'my-fringe/', 'my-fringe/schedule', 'my-fringe/availability', 'my-fringe/auto-scheduler',
-    'show/.*',
+    'show/.*', 'show/.*/stats',
     'shows', 'shows/venue/.*', 'shows/genre/.*', 'shows/rating/.*',
     'schedule', 'schedule/', 'schedule/full/.*', 'schedule/smart/.*',
     'map', 'map/venue/.*', 'map/host/.*',
     'public/.*',
-    'venues', 'fun', 'about/credits', 'policies/privacy', 'policies/terms'
+    'venues', 'fun', 'about/credits', 'policies/privacy', 'policies/terms',
+    'admin', 'admin/users', 'admin/sellouts'
 ];
 
 $hta = str_replace('{{PAGE-REWRITES}}', implode("\n", array_map(function($page) {
@@ -124,7 +125,7 @@ echo "Minifying index.html...\n";
 ob_start();
 $COMPILE = true;
 include_once (__DIR__ . '/../index.php');
-$html = post('http://html-minifier.com/raw?', ['input' => ob_get_clean()]);
+$html = post('https://html-minifier.com/raw?', ['input' => ob_get_clean()]);
 $html = str_replace('{{CANONICAL}}', '<!--CANONICAL-->', $html);
 put('deploy/index.html', $html);
 

@@ -13,6 +13,7 @@ angular.module('fringeApp').component('show', {
         $scope.isUserAttendingPerformance = Schedule.isUserAttendingPerformance;
         $scope.trustAsHtml = $sce.trustAsHtml;
         $scope.titleColor = '#fff';
+        $scope.hasAvailablePerformances = false;
 
         $rootScope.pageTitle = 'Fringe-o-Matic · ' + $scope.show.name;
 
@@ -35,7 +36,7 @@ angular.module('fringeApp').component('show', {
                 $scope.hasImage = false;
                 for (var i = 0; i < swatchDesires.length; i ++) {
                     if (swatches[swatchDesires[i]]) {
-                        console.log('Swatch: ', swatchDesires[i]);
+                        // console.log('Swatch: ', swatchDesires[i]);
                         $scope.hasImage = true;
                         $scope.backgroundColor = swatches[swatchDesires[i]].getHex();
                         $scope.titleColor = swatches[swatchDesires[i]].getTitleTextColor();
@@ -44,7 +45,7 @@ angular.module('fringeApp').component('show', {
                     }
                 }
                 if (! $scope.hasImage) {
-                    console.log('No matching swatch!', swatches);
+                    // console.log('No matching swatch!', swatches);
                 }
 
                 $scope.loaded = true;
@@ -120,6 +121,10 @@ angular.module('fringeApp').component('show', {
             }
 
             $scope.jsonld.push(json);
+
+            if (performance.start >= $scope.now && !performance.soldOut) {
+                $scope.hasAvailablePerformances = true;
+            }
         });
     }]
 });

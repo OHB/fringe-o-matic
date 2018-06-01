@@ -10,6 +10,8 @@ angular.module('fringeApp').component('myFringeSchedule', {
 
         $scope.shows = Data.getShows();
         $scope.venues = Data.getVenues();
+        $scope.now = Date.now() / 1000;
+
 
         $scope.refresh = function() {
             $scope.amazingSchedule = {};

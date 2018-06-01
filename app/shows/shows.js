@@ -29,7 +29,7 @@ angular.module('fringeApp').component('shows', {
 
             angular.forEach($scope.shows, function(show, showId) {
                 var availablePerformances = show.performances.filter(function(performanceId) {
-                    return $scope.performances[performanceId].start > Date.now() / 1000;
+                    return !$scope.performances[performanceId].soldOut && $scope.performances[performanceId].start > Date.now() / 1000;
                 });
 
                 $scope.performanceCounts[showId] = availablePerformances.length;
@@ -119,6 +119,7 @@ angular.module('fringeApp').component('shows', {
                         show.description | '',
                         show.artist || '',
                         show.artistLocation || '',
+                        show.warnings || '',
                         $scope.venues[show.venue].name,
                         show.genres.map(function(genre) {
                             return $scope.genres[genre];
@@ -132,7 +133,7 @@ angular.module('fringeApp').component('shows', {
                     return true;
                 });
 
-                $scope.displayedShows = $scope.allShows.slice(0, 10);
+                $scope.displayedShows = $scope.allShows;
                 $scope.dataLoaded = true;
             };
 

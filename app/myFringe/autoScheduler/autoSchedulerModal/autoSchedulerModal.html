@@ -3,6 +3,9 @@
         <h3 class="modal-title">Generating Schedule...</h3>
     </div>
     <div class="modal-body">
+        <audio style="visibility: hidden" id="generatingSound" preload="auto">
+            <source src="/lib/wanzieNoise.mp3" type="audio/mpeg">
+        </audio>
         <p>
             <small>
                 <strong>Progress</strong>
@@ -67,6 +70,7 @@
         <button bs-checkbox class="btn pull-left btn-default hidden-xs"
                 bs-tooltip="{title: 'Stats for nerds'}" data-placement="right"
                 ng-model="userData.settings.displaySchedulerStats"
+                ng-click="statsForNerds()"
         >
             <i class="glyphicon glyphicon-dashboard"></i>
         </button>

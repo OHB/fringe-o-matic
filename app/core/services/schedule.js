@@ -96,7 +96,7 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'User', 
     };
 
     // performances that can be added to the schedule, unless user is already seeing the show, includes undesired
-    this.getPossiblePerformances = function() {
+    this.getPossiblePerformances = function(removeSoldOut) {
         var performances = Data.getPerformances(),
             shows = Data.getShows(),
             venueDistances = Data.getVenueDistances(),
@@ -106,6 +106,10 @@ angular.module('fringeApp').service('Schedule', ['$q', 'Configuration', 'User', 
             now = Date.now() / 1000;
 
         angular.forEach(performances, function(performance1, performanceId) {
+            if (performance1.soldOut && removeSoldOut) {
+                return true;
+            }
+
             if (userSchedule.indexOf(performanceId) > -1 || ! Availability.isUserAvailable(performance1.start, performance1.stop)) {
                 return true;
             }

@@ -4,40 +4,17 @@ which tree?
 
 patron's picks
 
-Show screen. Image needs to be square
-
 allow multiple performances to be manually added
     warn when adding #2 only (don't warn when adding 3rd performance of a given show)
 
-click header to toggle day (availability)
 
-BUG
-Go to Schedule
-Click a link to another page
-doesn't work
-click another, it works.
-(first always fails)
-related to url update
-push state?
+IDEAS:
+    customizable auto-scheduler
+    kids-day. Choose a day on which to clump kids shows
+    for a scheduled show, find another time for a single show
 
 content loading / loaded directive
     transclude content on load, surely this works even though directive needs scope!
-
-no ticket links for free shows
-
-i need the extra points for empty days
-	this is tricky
-	points for close together (current does venue distance, but it should only apply if the two performances are close together in the schedule)
-	points for empty days (needs to include from fringe start to first show and last show to fringe end)
-
-
-
-tickets buying screen?
-	mark tickets as bought
-	select tickets to buy
-		auto populate cart???
-		mark tickets bought (optional deselect)
-
 
 
 http://getbootstrap.com/docs/3.3/customize/?id=161e4ccfce48a5a74e6a0f7f9746424a

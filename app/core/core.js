@@ -152,7 +152,7 @@ angular.module('fringeApp').controller('CoreCtrl', [
                 }, 1000);
             }
 
-            GoogleCalendarSync.sync();
+            // GoogleCalendarSync.sync();
 
         }, function() {
             Error.error('Unable to retrieve data from server', 'Please wait a moment and try again.');

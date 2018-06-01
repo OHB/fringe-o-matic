@@ -22,6 +22,7 @@ angular.module('fringeApp').service('User', ['$q', '$http', 'debounce', function
             $http.post('api/signin.php', {googleToken: googleToken}).then(function(response) {
                 data = response.data;
                 lastSavedData = angular.copy(data);
+                // $crisp.push(["set", "session:data", ["helpCode", data.account.helpCode]]);
                 deferred.resolve();
             }, function() {
                 deferred.reject();
@@ -33,6 +34,7 @@ angular.module('fringeApp').service('User', ['$q', '$http', 'debounce', function
     };
 
     this.signOut = function() {
+        // $crisp.push(["set", "session:data", ["helpCode", '']]);
         data = {
             account: {},
             preferences: {},

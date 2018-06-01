@@ -168,6 +168,7 @@ angular.module('fringeApp').component('fun', {
         var cities = {
             'Coral Springs, FL': [26.271192, -80.2706044],
             'Casselberry, FL': [28.677775, -81.3278455],
+            'Lake Mary, FL': [28.758883, -81.317845],
             'Lakeland, FL': [28.0394654, -81.9498042],
             'Longwood, FL': [28.7030519, -81.3384011],
             'Orlando, FL': [28.5383355, -81.3792365],

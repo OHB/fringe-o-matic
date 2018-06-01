@@ -16,7 +16,8 @@ var modules = [
     'infinite-scroll',
     'angulartics',
     'angulartics.google.analytics',
-    'googlechart'
+    'googlechart',
+    'ngTap'
 ];
 
 if (ENVIRONMENT === 'dev') {

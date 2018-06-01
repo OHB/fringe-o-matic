@@ -4,6 +4,7 @@ angular.module('fringeApp').component('fringeMap', {
         '$scope', '$routeParams', 'NgMap', '$window', '$timeout', '$q', 'debounce', 'Data', 'MapConfig', '$analytics',
         function($scope, $routeParams, NgMap, $window, $timeout, $q, debounce, Data, MapConfig, $analytics) {
             $scope.lawnPolygon = MapConfig.lawnPolygon;
+            $scope.pathLines = MapConfig.pathLines;
             $scope.isGroupVisible = {};
 
             $scope.venueHosts = Data.getVenueHosts();

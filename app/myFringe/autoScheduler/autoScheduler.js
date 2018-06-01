@@ -30,7 +30,7 @@ angular.module('fringeApp').component('myFringeAutoScheduler', {
                     shows = Data.getShows(),
                     venues = Data.getVenues(),
                     venueDistances = Data.getVenueDistances(),
-                    possiblePerformances = Schedule.getPossiblePerformances(),
+                    possiblePerformances = Schedule.getPossiblePerformances(true),
                     showsAttending = Schedule.getShowsAttending(),
                     desiredShowsNotOnSchedule = desiredShows.diff(showsAttending),
                     now = Date.now() / 1000;

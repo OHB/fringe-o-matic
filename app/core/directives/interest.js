@@ -21,7 +21,7 @@ angular.module('fringeApp').directive('interest', function() {
                 html += '<i class="rating-icon glyphicon" ng-class="icon(' + i + ')"';
 
                 if (clickable) {
-                    html += ' bs-tooltip="{title: interestText[' + (i + 1) + ']}" ng-click="click(' + (i + 1) + ')" ng-mouseenter="enter(' + i + ')"';
+                    html += ' bs-tooltip="{title: interestText[' + (i + 1) + ']}" ng-tap="click(' + (i + 1) + ')" ng-click="click(' + (i + 1) + ')" ng-mouseenter="enter(' + i + ')"';
                 }
                 html += '></i>';
             }
@@ -30,7 +30,7 @@ angular.module('fringeApp').directive('interest', function() {
 
             return html;
         },
-        controller: ['$scope', 'Schedule', 'Configuration', '$analytics', function($scope, Schedule, Configuration, $analytics) {
+        controller: ['$scope', 'Schedule', 'Configuration', '$analytics', 'debounce', function($scope, Schedule, Configuration, $analytics, debounce) {
             var hoveredOver;
 
             $scope.interestText = Configuration.interestText;
@@ -43,10 +43,17 @@ angular.module('fringeApp').directive('interest', function() {
                 return i < (hoveredOver || $scope.get()) ? 'glyphicon-ok-sign' : 'glyphicon-ok-circle';
             };
 
-            $scope.click = function(i) {
+            $scope.click = debounce(function(i) {
+                console.log('clicked');
+                i = i === $scope.get() ? 0 : i;
+
                 $analytics.eventTrack('Click', {category: 'Interest'});
                 Schedule.setShowDesire($scope.showId, i === $scope.get() ? 0 : i);
-            };
+
+                if (i === 0) {
+                    hoveredOver = undefined;
+                }
+            }, 100);
 
             $scope.enter = function(i) {
                 hoveredOver = i + 1;

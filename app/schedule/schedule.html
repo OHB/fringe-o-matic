@@ -57,7 +57,7 @@
                         <td nowrap>
                             {{::moment(entry.performance.start, 'X').format('h:mma')}}
                             <div class="visible-xs-block text-center" style="margin-top: 15px" ng-if="online && ! entry.inPast">
-                                <performance-ticket-button store-url="::entry.performance.storeUrl" analytics-on analytics-category="Schedule"></performance-ticket-button>
+                                <performance-ticket-button performance="entry.performance" analytics-on analytics-category="Schedule"></performance-ticket-button>
                             </div>
                         </td>
                         <td>
@@ -85,7 +85,7 @@
                             <attending-buttons></attending-buttons>
                         </td>
                         <td ng-if="::! signedIn" class="align-middle hidden-xs">
-                            <performance-ticket-button store-url="::entry.performance.storeUrl" analytics-on analytics-category="Schedule"></performance-ticket-button>
+                            <performance-ticket-button performance="entry.performance" analytics-on analytics-category="Schedule"></performance-ticket-button>
                         </td>
                     </tr>
                     </tbody>

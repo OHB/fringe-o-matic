@@ -32,6 +32,13 @@
                                fill-color="#cbe6a3"
                                fill-opacity="0.8">
                         </shape>
+                        <shape ng-repeat="line in pathLines" name="polyline"
+                               path="{{line}}"
+                               stroke-color="#a3ae93"
+                               stroke-opacity="1"
+                               stroke-weight="10">
+
+                        </shape>
                         <marker position="current-position" icon="{url:'img/map/current-location.png', scaledSize:[24, 24]}"></marker>
                         <div ng-repeat="group in ::markerGroups">
                             <marker ng-repeat="(markerId, marker) in ::group.markers" id="{{group.id + '-' + markerId}}" position="{{::marker.position}}" title="{{::marker.title}}" icon="img/map/{{marker.icon}}.png" ng-if="isGroupVisible[group.id]" on-click="markerClick(marker, group.id, markerId)"></marker>

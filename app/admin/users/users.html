@@ -1,0 +1,31 @@
+<div class="jumbotron" ng-if="isAdmin">
+    <div class="container">
+        <h1>Administration</h1>
+    </div>
+</div>
+<div class="container" ng-if="isAdmin">
+    <p>
+        <a class="btn btn-primary" href="/admin"><i class="glyphicon glyphicon-stats"></i> Statistics</a>
+        <button class="btn btn-default pull-right" ng-click="refresh()"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>
+    </p>
+    <h1>Users</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Help Code</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="account in accounts">
+            <td>{{account.id}}</td>
+            <td>
+                <span style="display: inline-block; height: 12px; width: 12px; border: 1px solid black" ng-style="{backgroundColor: '#' + account.helpCode}"></span>
+                &nbsp;
+                <a href="/admin/users/{{account.helpCode}}">{{account.helpCode}}</a></td>
+            <td><button class="btn btn-default btn-xs" ng-click="copyData(account.helpCode)">Copy Data</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>

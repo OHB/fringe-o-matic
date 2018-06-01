@@ -17,7 +17,14 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
             });
         });
 
+        $scope.statsForNerds = function() {
+            if (! $scope.userData.settings.displaySchedulerStats) {
+                document.getElementById('generatingSound').play();
+            }
+        };
+
         var processGeneratedSchedule = function(schedule, conflicts) {
+            console.log(schedule, conflicts);
             $scope.proposed = [];
             $scope.unscheduled = [];
             $scope.accept = {};
@@ -208,7 +215,7 @@ angular.module('fringeApp').controller('AutoSchedulerModalCtrl', [
         }];
 
 
-        var possiblePerformances = Schedule.getPossiblePerformances(),
+        var possiblePerformances = Schedule.getPossiblePerformances(true),
             alreadyAttending = Schedule.getShowsAttending();
 
         $scope.shows = Data.getShows();

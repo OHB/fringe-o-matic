@@ -14,8 +14,8 @@
         </div>
     </div>
     <div class="row hidden-print" style="margin-bottom: 30px; background: #23074d; background: -webkit-linear-gradient(to right, #23074d, #cc5333); background: linear-gradient(to right, #23074d, #cc5333); color: white" ng-style="hasImage ? {background: backgroundColor, color: textColor} : {}">
-        <div ng-if="hasImage" style="float: right; width: 450px; height: 450px; max-height:100vw; background-size: cover" ng-style="{background: '#fff url(\'img/show/{{show.image}}\') center no-repeat'}"></div>
-        <div style="padding: 20px 20px 10px; width: 100%" ng-style="hasImage ? {width: 'calc(100% - 450px)'} : {}">
+        <div ng-if="hasImage" style="float: right; width: 450px; height: 450px; max-height:100vw; max-width:100vw; background-size: cover" ng-style="{background: '#fff url(\'img/show/{{show.image}}\') center no-repeat', backgroundSize: 'cover'}"></div>
+        <div style="padding: 20px 20px 10px; width: 100%" ng-style="hasImage ? {width: 'calc(100% - 450px)'} : {}" class="hidden-xs">
             <div class="h3" style="line-height: 1em; margin-top:0; color: inherit" ng-if="$parent.$parent.signedIn">
                 <interest show-id="showId"></interest>
             </div>
@@ -28,7 +28,23 @@
             <br>
             <br>
             <p>
-                <a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeUrl" analytics-on analytics-event="Click" analytics-category="Show" analytics-label="Buy Tickets">Buy Tickets</a>
+                <a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeUrl && hasAvailablePerformances" analytics-on analytics-event="Click" analytics-category="Show" analytics-label="Buy Tickets">Buy Tickets</a>
+            </p>
+        </div>
+        <div style="padding: calc(100vw + 20px) 20px 10px; width: 100%" class="visible-xs">
+            <div class="h3" style="line-height: 1em; margin-top:0; color: inherit" ng-if="$parent.$parent.signedIn">
+                <interest show-id="showId"></interest>
+            </div>
+            <h1 ng-style="{color: titleColor}" style="margin-top: 50px">{{show.name}}</h1>
+            <p ng-if="::show.artist">
+                <strong ng-bind="show.artist"></strong><span ng-if="show.artistLocation">, {{show.artistLocation}}</span>
+            </p>
+            <hr style="border-top: 1px solid {{titleColor}}">
+            <p>{{venues[show.venue].name}}</p>
+            <br>
+            <br>
+            <p>
+                <a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-lg btn-default" ng-if="show.storeUrl && hasAvailablePerformances" analytics-on analytics-event="Click" analytics-category="Show" analytics-label="Buy Tickets">Buy Tickets</a>
             </p>
         </div>
     </div>

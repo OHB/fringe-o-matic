@@ -91,12 +91,18 @@
                 </th>
             </tr>
             <tr>
+                <th></th>
                 <th>Time</th>
                 <th>Show</th>
                 <th class="hidden-xs">Venue</th>
                 <th></th>
             </tr>
             <tr ng-repeat="item in amazingScheduleDay" ng-class="item.as">
+                <td ng-if="item.as=='performance'" style="vertical-align: middle">
+                    <button class="btn btn-xs btn-danger" ng-click="removeFromSchedule(item.id)" bs-tooltip="{title:'Remove'}">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </td>
                 <td ng-if="item.as=='performance'" nowrap class="align-middle">{{moment(item.start, 'X').format('h:mma')}}</td>
                 <td ng-if="item.as=='performance'" class="align-middle">
                     <a class="hidden-print" href="/show/{{shows[item.show].slug}}">{{shows[item.show].name}}</a>
@@ -111,15 +117,10 @@
                     </span>
                 </td>
                 <td class="text-right align-middle hidden-print">
-                    <a ng-if="item.storeUrl" href="{{item.storeUrl}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px" analytics-on analytics-event="Click" analytics-category="My Schedule" analytics-label="Buy Tickets">
+                    <a ng-if="item.storeUrl && item.start >= now" href="{{item.storeUrl}}" target="fringeshop" class="btn btn-default" style="padding: 6px 8px" analytics-on analytics-event="Click" analytics-category="My Schedule" analytics-label="Buy Tickets">
                         <img src="img/ticket.svg" style="width:1.5em" bs-tooltip="{title:'Buy Tickets'}">
                     </a>
                 </td>
-                <!--<td ng-if="item.as=='performance'">-->
-                    <!--<button class="btn btn-xs btn-danger" ng-click="removeFromSchedule(item.id)" bs-tooltip="{title:'Remove'}">-->
-                        <!--<span class="glyphicon glyphicon-remove"></span>-->
-                    <!--</button>-->
-                <!--</td>-->
                 <td ng-if="item.as!=='performance'" colspan="5" ng-class="item.as">{{item.text}}</td>
             </tr>
             </tbody>

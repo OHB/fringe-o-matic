@@ -20,7 +20,7 @@ foreach ($data->performance as $performance) {
     $start = strtotime($performance->PerformanceDateTime);
     $showareVenueId = $performance->SingleAreaVenueAreaID;
 
-    if ($eventId == -1 || in_array($eventId, [188, 314, 315])) {
+    if ($eventId == -1 || in_array($eventId, [188, 314, 315, 317, 319])) {
         continue;
     }
 
@@ -40,7 +40,7 @@ foreach ($data->performance as $performance) {
             if ($performance2->start === $start && $performance2->show == $showId) {
                 $performanceId = $id;
 
-                $storeUrl = 'https://orlandofringe.showare.com/orderticketsarea.asp?p=' . $perfId . '&a=' . $showareVenueId;
+                $storeUrl = 'https://orlandofringe.showare.com/ordertickets.asp?p=' . $perfId;
                 $statement->bind_param('si', $storeUrl, $id);
                 $statement->execute();
 

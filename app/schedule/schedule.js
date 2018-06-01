@@ -85,7 +85,7 @@ angular.module('fringeApp').component('schedule', {
                     return ! entry.inPast && entry.canBeScheduled && showsAttending.indexOf(entry.showId) === -1;
                 });
                 $scope.dataLoaded = true;
-                $scope.displayedSchedule = $scope.schedule.slice(0, 20);
+                $scope.displayedSchedule = $scope.schedule;
             };
 
             $scope.addMoreItems = function() {

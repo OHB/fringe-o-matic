@@ -121,7 +121,7 @@ $row = $result->fetch_object();
 $settings = [
     'scheduleMode' => $row->scheduleMode,
     'autoScheduleIntroComplete' => (bool) $row->autoScheduleIntroComplete,
-    'availabilityIntroComplete' => (bool) $row->availabilityIntroComplete,
+    'availabilityIntroComplete' => (bool) $row->autoScheduleIntroComplete,
     'displaySchedulerStats' => (bool) $row->displaySchedulerStats,
     'googleCalendarSyncId' => $row->googleCalendarSyncId,
     'publicScheduleName' => $row->publicScheduleName
@@ -148,7 +148,7 @@ while ($row = $result->fetch_object()) {
 $unavailability = [];
 $result = $db->query("SELECT * FROM `user_availability` WHERE `userId`={$userId} AND `available`=0");
 while ($row = $result->fetch_object()) {
-    $unavailability[] = $row->slotStart;
+    $unavailability[] = (string) $row->slotStart;
 }
 
 header('Content-type: application/json');

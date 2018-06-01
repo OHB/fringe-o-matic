@@ -1,0 +1,99 @@
+<div class="jumbotron">
+    <div class="container">
+        <h1>Show Statistics</h1>
+    </div>
+</div>
+<div class="container">
+    <h1>{{show.name}}</h1>
+    <div ng-if="!loaded">
+        <h3>Crunching the numbers...</h3>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" style="width: 100%">
+            </div>
+        </div>
+    </div>
+    <div ng-if="loaded">
+        <div class="alert alert-warning">Note: this data is representative of users who use Fringe-o-Matic ONLY. It does <em>not</em> represent tickets sold or actual attendee counts.</div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Interest</h3>
+                <p>{{(stats.interestCounts[4]+stats.interestCounts[1]+stats.interestCounts[2]+stats.interestCounts[3])/stats.interestCounts[0]*100|number:1}}% of users expressed interest in this show.</p>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Interest</th>
+                        <th>Count</th>
+                        <th>Top Genres</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="interest in ['4','3','2','1']" ng-if="stats.interestCounts[interest]">
+                        <td nowrap><interest desire="interest"></interest></td>
+                        <td>{{stats.interestCounts[interest]|number}}</td>
+                        <td class="small">
+                            <span ng-repeat="id in stats.topGenres[interest]">{{genres[id]}}{{$last ? '' : ', '}}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h3>Performances on Schedules</h3>
+                <p><ng-pluralize count="stats.attendeeCount" when="{0: 'No one has', one: '1 person has', other: '{} people have'}"></ng-pluralize> added this show to their schedule.</p>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Performance</th>
+                        <th>Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="p in show.performances">
+                        <th>{{moment(performances[p].start, 'X').format('MMM D, h:mma')}}</th>
+                        <td>{{stats.performances[p] || 0}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <h3>Relationship to Other Shows</h3>
+        <p>This table shows how interested users are in other shows compared to this one.</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>This Show</th>
+                <th>Other Show</th>
+                <th class="hidden-xs">Interest</th>
+                <th colspan="2" class="hidden-xs">Correlation</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="interest in ['4','3','2','1','0']" ng-if="stats.interestRels[interest]">
+            <tr>
+                <td rowspan="{{stats.interestRels[interest].length}}" nowrap><interest desire="interest"></interest></td>
+                <td>
+                    <span class="visible-xs">
+                        <interest desire="stats.interestRels[interest][0].interest"></interest> ({{stats.interestRels[interest][0].count / stats.interestCounts[interest] * 100 | number:1}}%)<br>
+                    </span>
+                    <a href="/show/{{shows[stats.interestRels[interest][0].show].slug}}">{{shows[stats.interestRels[interest][0].show].name}}</a>
+                </td>
+                <td nowrap class="hidden-xs"><interest desire="stats.interestRels[interest][0].interest"></interest></td>
+                <td class="hidden-xs">{{stats.interestRels[interest][0].count / stats.interestCounts[interest] * 100 | number:1}}%</td>
+                <td class="hidden-xs"><span class="glyphicon glyphicon-info-sign" bs-tooltip="{title: tooltip(interest, stats.interestRels[interest][0])}"></span></td>
+            </tr>
+            <tr ng-repeat="(i,item) in stats.interestRels[interest]" ng-if="i>0">
+                <td>
+                    <span class="visible-xs">
+                        <interest desire="item.interest"></interest> ({{item.count / stats.interestCounts[interest] * 100 | number:1}}%)<br>
+                    </span>
+                    <a href="/show/{{shows[item.show].slug}}" nowrap>{{shows[item.show].name}}</a
+                    ></td>
+                <td nowrap class="hidden-xs"><interest desire="item.interest"></interest></td>
+                <td class="hidden-xs">{{item.count / stats.interestCounts[interest] * 100 | number:1}}%</td>
+                <td class="hidden-xs"><span class="glyphicon glyphicon-info-sign" bs-tooltip="{title: tooltip(interest, item)}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

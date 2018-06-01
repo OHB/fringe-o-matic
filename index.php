@@ -67,6 +67,7 @@ if ($COMPILING) {
 
         ga('create', 'UA-113297473-1', '<?php echo $COMPILING ? 'auto' : 'none'; ?>');
     </script>
+<!--    <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="f57ce39a-d51c-4962-be86-2684f61e074e";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>-->
 </head>
 <body ng-controller="CoreCtrl" ng-class="{'online': isOnline, 'offline': !isOnline, 'syncing': isSyncing}">
 <header class="navbar-primary navbar navbar-fixed-top" offset-height="navHeight">
@@ -106,6 +107,9 @@ if ($COMPILING) {
                 <li class="dropdown" ng-show="signedIn && loaded">
                     <a href bs-dropdown>Signed in <span class="hidden-sm">as {{signedInName}}</span> <span class="caret"></span></a>
                     <ul class="dropdown-menu" style="border-radius: 4px">
+                        <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/admin'}">
+                            <a href="/admin" rel="nofollow">Administration</a>
+                        </li>
                         <li ng-if="isUserAdmin" ng-class="{active:currentRoute == '/test'}">
                             <a href="/test" rel="nofollow">Test</a>
                         </li>

@@ -27,7 +27,7 @@
                 <p class="lead text-center">No matching shows.</p>
                 <p><button class="btn btn-sm" ng-click="resetFilters();refresh()">Clear filters</button></p>
             </div>
-            <div class="page-header" style="margin:0">
+            <div class="page-header" style="margin:0" ng-if="dataLoaded && displayedShows.length">
                 <h3 style="margin:0 0 20px">Showing <ng-pluralize count="allShows.length" when="plurals.show"></ng-pluralize></h3>
             </div>
             <div class="row" ng-repeat="showId in displayedShows" ng-init="show=shows[showId]" style="background:#f9f9f9; margin:0 0 10px 0;" ng-show="displayedShows.length">
@@ -49,7 +49,7 @@
                         </div>
                         <p style="margin-bottom: 35px" class="hidden-print">
                             <span><a href="/show/{{::show.slug}}" class="btn btn-primary">Learn More</a></span>
-                            <span ng-if="::show.storeUrl"><a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-info" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
+                            <span ng-if="::show.storeUrl && performanceCounts[showId]"><a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-info" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
                         </p>
                     </div>
                     <div class="visible-xs-block">
@@ -62,7 +62,7 @@
                         </p>
                         <p class="hidden-print">
                             <span><a href="/show/{{::show.slug}}" class="btn btn-primary btn-sm">Learn More</a></span>
-                            <span ng-if="::show.storeUrl"><a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-info btn-sm" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
+                            <span ng-if="::show.storeUrl && performanceCounts[showId]"><a href="{{show.storeUrl}}" target="fringeshop" class="btn btn-info btn-sm" style="margin-left: 5px" analytics-on analytics-event="Click" analytics-category="Shows" analytics-label="Buy Tickets">Buy Tickets</a></span>
                         </p>
                     </div>
                     <p style="margin: 0" class="hidden-xs">

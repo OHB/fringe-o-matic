@@ -79,7 +79,8 @@ while ($show = $showResults->fetch_assoc()) {
             'start' => $start,
             'stop' => $end,
             'show' => (string) $show['id'],
-            'storeUrl' => $performance['storeUrl']
+            'storeUrl' => $performance['storeUrl'],
+            'soldOut' => (bool) $performance['soldOut']
         ];
 
         if (! isset($data['availabilitySlots'][$day])) {

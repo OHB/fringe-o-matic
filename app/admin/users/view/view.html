@@ -1,0 +1,122 @@
+<div class="jumbotron" ng-if="isAdmin">
+    <div class="container">
+        <h1>Administration</h1>
+    </div>
+</div>
+<div class="container" ng-if="isAdmin">
+    <h1>User {{helpCode}}</h1>
+    <div ng-if="!loaded">
+        <h3>Loading...</h3>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" style="width: 100%">
+            </div>
+        </div>
+    </div>
+    <div ng-if="loaded">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Preferences</h3>
+                <table class="table table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th>Show</th>
+                        <th>Interest</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="showId in sortedShows" ng-if="data.preferences[showId]">
+                        <td>{{shows[showId].name}}</td>
+                        <td>{{data.preferences[showId]}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <h3>Settings</h3>
+                <table class="table table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="(key,value) in data.settings">
+                        <th nowrap>{{key}}</th>
+                        <td>{{value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h3>Schedule</h3>
+                <table class="table table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Show</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="performanceId in sortedPerformances" ng-if="data.schedule.indexOf(performanceId) > -1">
+                        <td nowrap>{{moment(performances[performanceId].start, 'X').format('M/D H:mm')}}</td>
+                        <td>{{shows[performances[performanceId].show].name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <h3>Maybes</h3>
+                <table class="table table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Show</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="performanceId in sortedPerformances" ng-if="data.maybe.indexOf(performanceId) > -1">
+                        <td nowrap>{{moment(performances[performanceId].start, 'X').format('M/D H:mm')}}</td>
+                        <td>{{shows[performances[performanceId].show].name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <h3>Availability</h3>
+        <table class="table table-bordered table-condensed table-bordered availability">
+            <thead>
+            <tr>
+                <th
+                        class="text-center"
+                        ng-repeat="(dayId, x) in ::availabilitySlots"
+                        ng-init="dow = moment(dayId, 'X').format('ddd')"
+                        ng-class="{'weekend': dow == 'Sat' || dow == 'Sun'}"
+                >
+                    <div>
+                        {{::dow}}<br>
+                        <span class="lead">{{::moment(dayId, 'X').format('D')}}</span><br>
+                        {{::moment(dayId, 'X').format('MMM')}}
+                    </div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="timeId in ::availabilitySlotsAll">
+                <td
+                        nowrap
+                        ng-repeat="(dayId, daySlots) in ::availabilitySlots"
+                        ng-init="start = +dayId + timeId; stop = start + slotSize; empty = daySlots.indexOf(start) == -1; dow = moment(dayId, 'X').format('ddd')"
+                        ng-class="::{empty: empty, weekend: dow == 'Sat' || dow == 'Sun'}"
+                >
+                    <div
+                            class="availability-block"
+                            ng-class="!empty && (availability[start] ? 'bg-success' : 'unavailable')"
+                            ng-if="::!empty"
+                    >
+                        {{::moment(start, 'X').format('h a')}}
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

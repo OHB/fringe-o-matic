@@ -1,0 +1,28 @@
+<div class="jumbotron" ng-if="isAdmin">
+    <div class="container">
+        <h1>Administration</h1>
+    </div>
+</div>
+<div class="container" ng-if="isAdmin">
+    <p>
+        <a class="btn btn-primary" href="/admin"><i class="glyphicon glyphicon-stats"></i> Statistics</a>
+    </p>
+    <h1>Manage Sellouts</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Show</th>
+            <th class="hidden-xs">Performance</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody ng-repeat="showId in sortedShows" ng-init="show=shows[showId]">
+        <tr ng-repeat="pId in show.performances" ng-init="performance = performances[pId]" ng-if="performances[pId].start >= now">
+            <td>{{show.name}}<span class="visible-xs"><br>{{moment(performance.start, 'X').format('MMM D, h:mma')}}</span></td>
+            <td class="hidden-xs">{{moment(performance.start, 'X').format('MMM D, h:mma')}}</td>
+            <td ng-if="!performance.soldOut"><button class="btn btn-danger btn-xs" ng-if="! performance.soldOut" ng-click="setSellout(pId)">SOLD OUT</button></td>
+            <td ng-if="performance.soldOut">Sold Out</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
