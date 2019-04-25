@@ -11,7 +11,6 @@ var modules = [
     'mgcrea.ngStrap.select',
     'mgcrea.ngStrap.tab',
     'mgcrea.ngStrap.tooltip',
-    'ngMap',
     'qImproved',
     'infinite-scroll',
     'angulartics',

@@ -166,25 +166,33 @@ angular.module('fringeApp').component('fun', {
         };
 
         var cities = {
+            'Altamonte Springs, FL': [28.661109, -81.365624],
             'Coral Springs, FL': [26.271192, -80.2706044],
             'Casselberry, FL': [28.677775, -81.3278455],
+            'Clermont, FL': [28.5494, -81.7729],
+            'Deltona, FL': [28.9005, -81.2637],
             'Lake Mary, FL': [28.758883, -81.317845],
             'Lakeland, FL': [28.0394654, -81.9498042],
             'Longwood, FL': [28.7030519, -81.3384011],
+            'Ocala, FL': [29.1872, -82.1401],
             'Orlando, FL': [28.5383355, -81.3792365],
             'Oviedo, FL': [28.669997, -81.2081203],
+            'Rockledge, FL': [28.3164, -80.7270],
+            'Sarasota, FL': [27.3364, -82.5307],
             'Sanford, FL': [28.8028612, -81.269453],
             'Tallahassee, FL': [30.4382559, -84.2807329],
+            'Tampa, FL': [27.9506, -82.4572],
             'Windermere, FL': [28.4955593, -81.5347952],
             'Winter Garden, FL': [28.5652787, -81.5861847],
             'Winter Park, FL': [28.5999998, -81.3392352],
-            'Winter Springs, FL': [28.698885, -81.308123],
-            'Atlamonte Springs, FL': [28.661109, -81.365624]
+            'Winter Springs, FL': [28.698885, -81.308123]
         };
+
         var data = objToData(flaloc, 'City', 'Artists');
         data.cols.unshift({id: 'lng', label: 'lng', type: 'number'});
         data.cols.unshift({id: 'lon', label: 'lon', type: 'number'});
         data.rows = data.rows.map(function(row) {
+            console.log(row, cities[row.c[0].v]);
             var city = cities[row.c[0].v];
             row.c.unshift({v: city[1]});
             row.c.unshift({v: city[0]});

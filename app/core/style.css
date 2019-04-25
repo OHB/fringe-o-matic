@@ -1,21 +1,26 @@
-.label-venue-teen,
-.label-venue-breakthrough-theatre-of-winter-park,
-.label-venue-savoy-orlando,
-.label-venue-aqua,
-.label-venue-van-in-front-of-shakespeare-center,
-.label-venue-club-fringe-lounge,
-.label-venue-tree-by-the-firehouse-museum,
-.label-venue-lowndes-shakespeare-center-courtyard {
-    background: #40cdbd;
-    background: -webkit-linear-gradient(to right, #40cdbd, #ff8c00, #ff0080);
-    background: linear-gradient(to right, #40cdbd, #ff8c00, #ff0080);
+.label-venue-default {
     color: #fff;
     text-shadow: 0 0 1px #000;
 }
-.label-venue-black-lawn {
-    background: #000000;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #0f9b0f 10%, #000000 30%);
-    background: linear-gradient(to top, #0f9b0f 10%, #000000 30%);
+.label-venue-angel-statue,
+.label-venue-van-in-front-of-shakespeare-center,
+.label-venue-front-of-rep,
+.label-venue-loch-haven-park-trees,
+.label-venue-breakthrough-theatre-of-winter-park,
+.label-venue-savoy-orlando,
+.label-venue-in-front-of-oma {
+    border: 1px solid #000;
+    color: #000;
+    text-shadow: none;
+}
+.label-venue-rainbow {
+    background: #40cdbd;
+    background: -webkit-linear-gradient(left, red, orange , yellow, green, blue, violet); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, red, orange, yellow, green, blue, violet); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, red, orange, yellow, green, blue, violet); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, red, orange , yellow, green, blue, violet); /* Standard syntax (must be last) */
+    color: #fff;
+    text-shadow: 0 0 1px #000;
 }
 .label-venue-orange {
     background: #f15922;
@@ -29,6 +34,7 @@
     background: radial-gradient(ellipse farthest-corner at right bottom, #ada996 0%, #f2f2f2 8%, #dbdbdb 30%, #eaeaea 40%, transparent 80%),
     radial-gradient(ellipse farthest-corner at left top, #ada996 0%, #f2f2f2 25%, #dbdbdb 62.5%, #eaeaea 100%);
     color: black;
+    text-shadow: none;
 }
 .label-venue-brown {
     background: #8b4513;
@@ -36,12 +42,18 @@
 .label-venue-yellow {
     background: #ebeb00;
     color: black;
+    text-shadow: none;
 }
 .label-venue-purple {
     background: #a2238d;
 }
 .label-venue-blue {
     background: #0000cd;
+}
+.label-venue-womens-restroom-by-blue {
+    border: 1px solid #0000cd;
+    text-shadow: none;
+    color: #0000cd;
 }
 .label-venue-red {
     background: #cc0000;
@@ -58,11 +70,7 @@
 .label-venue-green {
     background: #7cfc00;
     color: black;
-}
-.label-venue-white {
-    background: white;
-    color: black;
-    border: 1px solid black;
+    text-shadow: none;
 }
 
 .rating-icon {

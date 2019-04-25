@@ -200,7 +200,7 @@
                             </td>
                             <td>
                                 <p class="h4" style="margin:0 0 10px;"><a href="/show/{{::entry.show.slug}}">{{::entry.show.name}}</a></p>
-                                <span class="label label-venue-default label-venue-{{::entry.venueId}}">{{::entry.venue.name}}</span>
+                                <span class="label label-venue-default label-venue-{{venues[entry.venueId].slug}}">{{::entry.venue.name}}</span>
                             </td>
                             <td nowrap class="align-middle hidden-xs"><interest show-id="entry.showId"></interest></td>
                         </tr>

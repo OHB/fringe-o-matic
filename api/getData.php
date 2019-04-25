@@ -19,7 +19,7 @@ if (! isset($_GET['refresh']) && file_exists('cache.json')) {
 $db = include __DIR__ . '/../../fringe_db_connect.php';
 
 $showPerformances = [];
-$results = $db->query('select * from performances where showId in (select id from shows where seasonId=2) order by start');
+$results = $db->query('select * from performances where showId in (select id from shows where seasonId=3) order by start');
 while ($row = $results->fetch_assoc()) {
     if (! isset($showPerformances[$row['showId']])) {
         $showPerformances[$row['showId']] = [];
@@ -28,7 +28,7 @@ while ($row = $results->fetch_assoc()) {
 }
 
 $showGenres = [];
-$results = $db->query('select * from show_genres where showId in (select id from shows where seasonId=2)');
+$results = $db->query('select * from show_genres where showId in (select id from shows where seasonId=3)');
 while ($row = $results->fetch_assoc()) {
     if (! isset($showGenres[$row['showId']])) {
         $showGenres[$row['showId']] = [];
@@ -48,7 +48,7 @@ $data = [
     'availabilitySlotsAll' => []
 ];
 
-$showResults = $db->query('select * from shows where seasonId=2');
+$showResults = $db->query('select * from shows where seasonId=3');
 
 while ($show = $showResults->fetch_assoc()) {
     $data['shows'][$show['id']] = [
@@ -80,7 +80,8 @@ while ($show = $showResults->fetch_assoc()) {
             'stop' => $end,
             'show' => (string) $show['id'],
             'storeUrl' => $performance['storeUrl'],
-            'soldOut' => (bool) $performance['soldOut']
+            'soldOut' => (bool) $performance['soldOut'],
+            'price' => $performance['price']
         ];
 
         if (! isset($data['availabilitySlots'][$day])) {
@@ -106,7 +107,7 @@ foreach ($data['availabilitySlots'] as $day => &$slots) {
 
 ksort($data['availabilitySlots']);
 
-$results = $db->query('select * from ratings where seasonId=2');
+$results = $db->query('select * from ratings where seasonId=3');
 while ($row = $results->fetch_assoc()) {
 //    $data['ratings'][$row['id']] = [
 //        'name' => $row['name'],
@@ -115,7 +116,7 @@ while ($row = $results->fetch_assoc()) {
     $data['ratings'][$row['id']] = $row['name'];
 }
 
-$results = $db->query('select * from genres where seasonId=2 order by name');
+$results = $db->query('select * from genres where seasonId=3 order by name');
 while ($row = $results->fetch_assoc()) {
 //    $data['genres'][$row['id']] = [
 //        'name' => $row['name'],
@@ -124,7 +125,7 @@ while ($row = $results->fetch_assoc()) {
     $data['genres'][$row['id']] = $row['name'];
 }
 
-$hostResults = $db->query('select * from venue_hosts where seasonId=2');
+$hostResults = $db->query('select * from venue_hosts where seasonId=3');
 
 while ($host = $hostResults->fetch_assoc()) {
     $data['venueHosts'][$host['id']] = [
@@ -138,19 +139,17 @@ while ($host = $hostResults->fetch_assoc()) {
     ];
 }
 
-$results = $db->query('select * from venues where venueHostId in (select id from venue_hosts where seasonId=2)');
+$results = $db->query('select * from venues where venueHostId in (select id from venue_hosts where seasonId=3)');
 
 while ($row = $results->fetch_assoc()) {
     $data['venues'][$row['id']] = [
         'name' => $row['name'],
         'slug' => $row['slug'],
         'host' => (string) $row['venueHostId'],
-        'mapPos' => [$row['latitude'], $row['longitude']],
-        'mapIcon' => $row['mapIcon']
     ];
 }
 
-$results = $db->query('select * from venue_distances where venueId1 in (select id from venues where venueHostId in (select id from venue_hosts where seasonId=2))');
+$results = $db->query('select * from venue_distances where venueId1 in (select id from venues where venueHostId in (select id from venue_hosts where seasonId=3))');
 
 while ($row = $results->fetch_assoc()) {
     if (! isset($data['distances'][$row['venueId1']])) {

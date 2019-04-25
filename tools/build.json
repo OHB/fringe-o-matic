@@ -30,7 +30,8 @@
     "app/myFringe/availability/slotPerformancesModal/slotPerformancesModal.html",
     "app/myFringe/autoScheduler/autoScheduler.html",
     "app/myFringe/autoScheduler/autoSchedulerModal/autoSchedulerModal.html",
-    "app/core/notifications/popover.html"
+    "app/core/notifications/popover.html",
+    "app/now/now.html"
   ],
   "css": [
     "lib/css/bootstrap.min.css",
@@ -46,12 +47,12 @@
   ],
   "_js": [
     "app/map/map.js",
+    "lib/ng-map.min.js",
     "app/map/mapControls/mapControls.js"
   ],
   "js": [
     "lib/prototypes.js",
     "lib/genetics.js",
-    "lib/ng-map.min.js",
     "lib/ng-tap.js",
     "lib/qImproved.js",
     "lib/ui-bootstrap-custom-tpls-2.5.0.min.js",
@@ -92,6 +93,7 @@
     "app/myFringe/schedule/schedule.js",
     "app/myFringe/schedule/googleCalendarSyncSetupModal/googleCalendarSyncSetupModal.js",
     "app/myFringe/schedule/shareModal/shareModal.js",
+    "app/now/now.js",
     "app/schedule/schedule.js",
     "app/schedule/fullSmartToggle/fullSmartToggle.js",
     "app/schedule/attendingButtons/attendingButtons.js",
@@ -108,7 +110,8 @@
     "img": "img",
     "vendor": "vendor",
     "lib/fonts": "fonts",
-    "tools-public": "tools"
+    "tools-public": "tools",
+    "display": "display"
   },
   "rootIgnoreFiles": [
     ".gitignore",

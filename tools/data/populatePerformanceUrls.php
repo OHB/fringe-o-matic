@@ -20,13 +20,13 @@ foreach ($data->performance as $performance) {
     $start = strtotime($performance->PerformanceDateTime);
     $showareVenueId = $performance->SingleAreaVenueAreaID;
 
-    if ($eventId == -1 || in_array($eventId, [188, 314, 315, 317, 319])) {
+    if ($eventId == -1 || in_array($eventId, [341, 340, 336, 337, 339, 346])) {
         continue;
     }
 
     $showId = $performanceId = null;
 
-    echo date('Y-m-d H:i:s', $start) . "\t";
+    echo date('Y-m-d H:i:s', $start) . "\n";
 
     foreach ($json->shows as $id => $show) {
         if ($show->storeUrl === 'https://orlandofringe.showare.com/eventperformances.asp?evt=' . $eventId) {
@@ -43,6 +43,14 @@ foreach ($data->performance as $performance) {
                 $storeUrl = 'https://orlandofringe.showare.com/ordertickets.asp?p=' . $perfId;
                 $statement->bind_param('si', $storeUrl, $id);
                 $statement->execute();
+
+                $image = $performance->Image1;
+
+                if (! file_exists('../../img/show/' . $image)) {
+                    file_put_contents('../../img/show/' . $image, file_get_contents('https://orlandofringe.showare.com/uplimage/' . $image));
+                }
+
+                $db->query('update shows set image450="' . $db->escape_string($image) . '" where id=' . $showId);
 
                 break;
             }

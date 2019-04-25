@@ -1,0 +1,27 @@
+{
+  "config": {
+    "effectiveMidnight": 10800,
+    "nextShowCutover": 900,
+    "manualOffset": 2594300
+  },
+  "multiVenue": [
+    {
+      "name": "Shakes Entrance",
+      "venues": [
+        {
+          "venue": "1",
+          "direction": "n"
+        },
+        {
+          "venue": "2",
+          "direction": "e"
+        },
+        {
+          "venue": "3",
+          "direction": "sw"
+        }
+      ],
+      "location": "1"
+    }
+  ]
+}

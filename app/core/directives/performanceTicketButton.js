@@ -4,7 +4,6 @@ angular.module('fringeApp').directive('performanceTicketButton', function() {
             'performance': '='
         },
         controller: ['$scope', function($scope) {
-            console.log($scope.performance);
             $scope.now = Date.now() / 1000;
         }],
         template: '<span>' +

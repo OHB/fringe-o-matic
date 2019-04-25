@@ -1,11 +1,11 @@
 <?php
 $venueGroups = [
-    'shakesmoma' => [2, 3, 4, 6, 7, 8, 9, 11, 16, 17, 18, 19],
-    'rep' => [5, 10, 14],
+    'shakesmoma' => [2, 3, 4, 6, 7, 8, 9, 11, 16, 20, 21, 23, 24],
+    'rep' => [5, 10, 25],
     'venue' => [1],
     'savoy' => [13],
     'breakthrough' => [12],
-    'aqua' => [15]
+    'center' => [22]
 ];
 
 $distances = [
@@ -13,17 +13,17 @@ $distances = [
     ['shakesmoma', 'venue', 20, 20],
     ['shakesmoma', 'savoy', 20, 20],
     ['shakesmoma', 'breakthrough', 45, 20],
-    ['shakesmoma', 'aqua', 20, 20],
+    ['shakesmoma', 'center', 20, 35],
     ['rep', 'venue', 25, 15],
     ['rep', 'savoy', 20, 20],
     ['rep', 'breakthrough', 50, 25],
-    ['rep', 'aqua', 25, 25],
+    ['rep', 'center', 25, 35],
     ['venue', 'savoy', 15, 15],
     ['venue', 'breakthrough', 60, 20],
-    ['venue', 'aqua', 35, 20],
+    ['venue', 'center', 15, 20],
     ['savoy', 'breakthrough', 60, 20],
-    ['savoy', 'aqua', 35, 20],
-    ['breakthrough', 'aqua', 45, 20]
+    ['savoy', 'center', 20, 30],
+    ['breakthrough', 'center', 65, 20]
 ];
 
 $all = [];

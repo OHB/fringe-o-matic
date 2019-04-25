@@ -95,7 +95,7 @@ if ($result->num_rows === 0) {
             $values[] = '(' . $userId . ', ' . $slot . ')';
         }
     }
-    $sql .= 'INSERT INTO `user_availability` (`userId`, `slotStart`) VALUES ' . implode(',', $values) . ';';
+    $sql .= 'INSERT IGNORE INTO `user_availability` (`userId`, `slotStart`) VALUES ' . implode(',', $values) . ';';
 
     $db->multi_query($sql);
     while ($db->next_result()) {;}
@@ -121,7 +121,7 @@ $row = $result->fetch_object();
 $settings = [
     'scheduleMode' => $row->scheduleMode,
     'autoScheduleIntroComplete' => (bool) $row->autoScheduleIntroComplete,
-    'availabilityIntroComplete' => (bool) $row->autoScheduleIntroComplete,
+    'availabilityIntroComplete' => (bool) $row->availabilityIntroComplete,
     'displaySchedulerStats' => (bool) $row->displaySchedulerStats,
     'googleCalendarSyncId' => $row->googleCalendarSyncId,
     'publicScheduleName' => $row->publicScheduleName

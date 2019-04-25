@@ -22,7 +22,6 @@ angular.module('fringeApp').component('distanceCalculator', {
 
             var distances = $scope.distances[$scope.distanceCalc.from.value][$scope.distanceCalc.to.value];
 
-            console.log($scope.distanceCalc, distances);
             $scope.timeWalk = distances[0];
             $scope.timeDrive = distances[1];
             $scope.timeMinimum = $scope.timeDrive !== undefined ? Math.min($scope.timeWalk, $scope.timeDrive) : $scope.timeWalk;

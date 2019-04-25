@@ -145,7 +145,7 @@
                         <span class="hidden-sm"> - {{moment(performance.stop, 'X').format('h:mma')}}</span>
                     </td>
                     <td><strong>{{shows[performance.show].name}}</strong><br>
-                        <span class="label label-venue-default label-venue-{{shows[performance.show].venue}}">
+                        <span class="label label-venue-default label-venue-{{venues[shows[performance.show].venue].slug}}">
                             {{venues[shows[performance.show].venue].name}}
                         </span>
                     </td>
@@ -301,7 +301,7 @@
                 </div>
             </div>
             <p>As you can see, the number of possible schedules increases rapidly. If you had a super computer which could examine a million schedules per second and you wanted to see 15 shows, it would still take more than 5 days to go through them all.</p>
-            <p>And this will blow your mind: if you wanted to see 50 shows and went back in time to the beginning of the universe with a supercomputer that could check <em>a trillion schedules per microsecond</em>, by 2018 it would only be 0.52% complete!</p>
+            <p>And this will blow your mind: if you wanted to see 50 shows and went back in time to the beginning of the universe with a supercomputer that could check <em>a trillion schedules per microsecond</em>, by 2019 it would only be 0.52% complete!</p>
             <p>So, checking every possible schedule would take a little too long and you'd miss Fringe altogether. That's why the Auto-Scheduler uses a custom <a href="https://en.wikipedia.org/wiki/Genetic_algorithm">Genetic Algorithm</a> instead. A genetic algorithm is terrible at finding the best schedule, but its excellent at finding a really good schedule.</p>
             <p>In the end, this is the type of problem that would be <em>perfect</em> for a <a href="https://en.wikipedia.org/wiki/Quantum_computing" target="_blank">Quantum Computer</a>...it could theoretically determine the best schedule almost instantly. But, unless you have a spare quantum computer laying around, you're stuck with this.</p>
         </div>

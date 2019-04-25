@@ -1,0 +1,31 @@
+<div class="jumbotron">
+    <div class="container">
+        <h1>Now!</h1>
+    </div>
+</div>
+<div class="container">
+    <h2>Current Time: {{moment(now, 'X').format('dddd, MMMM D h:mma')}}</h2>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Venue</th>
+            <th colspan="2">Current Show</th>
+            <th colspan="2">Next Show</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="venue in nowShows" ng-init="today = moment(now, 'X').format('ddd'); nextDay = moment(venue.nextPerformance.start, 'X').format('ddd')">
+            <td>{{venues[venue.id].name}}</td>
+            <td ng-if="! venue.currentPerformance"></td>
+            <td ng-if="! venue.currentPerformance"></td>
+            <td ng-if="venue.currentPerformance">{{moment(venue.currentPerformance.start, 'X').format('h:mma')}}</td>
+            <td ng-if="venue.currentPerformance">{{shows[venue.currentPerformance.show].name}}</td>
+            <td ng-if="! venue.nextPerformance"></td>
+            <td ng-if="! venue.nextPerformance"></td>
+            <td ng-if="venue.nextPerformance && today !== nextDay">{{moment(venue.nextPerformance.start, 'X').format('ddd @ h:mma')}}</td>
+            <td ng-if="venue.nextPerformance && today === nextDay">{{moment(venue.nextPerformance.start, 'X').format('h:mma')}}</td>
+            <td ng-if="venue.nextPerformance">{{shows[venue.nextPerformance.show].name}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

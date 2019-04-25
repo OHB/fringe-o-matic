@@ -109,7 +109,8 @@ $pages = [
     'show/.*', 'show/.*/stats',
     'shows', 'shows/venue/.*', 'shows/genre/.*', 'shows/rating/.*',
     'schedule', 'schedule/', 'schedule/full/.*', 'schedule/smart/.*',
-    'map', 'map/venue/.*', 'map/host/.*',
+    'now',
+//    'map', 'map/venue/.*', 'map/host/.*',
     'public/.*',
     'venues', 'fun', 'about/credits', 'policies/privacy', 'policies/terms',
     'admin', 'admin/users', 'admin/sellouts'

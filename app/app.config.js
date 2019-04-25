@@ -5,7 +5,7 @@ angular.module('fringeApp')
         }
     })
     .value('Configuration', {
-        seasonSlug: '2018-orlando-fringe-festival',
+        seasonSlug: '2019-orlando-fringe-festival',
         googleAuthClientId: '728570220201-2tkhj9m3stsqgprscc77o256r0f441au.apps.googleusercontent.com',
         googleApiKey: 'AIzaSyD0y40AVRhf_DDSsFCRT0mBXhjdkQZP4Ys',
         slotSize: 3600,
@@ -51,9 +51,10 @@ angular.module('fringeApp')
     .value('Menu', [
         {route: '', title: 'Home'},
         {route: 'my-fringe', title: 'My Fringe'},
+        {route: 'now', title: 'Now'},
         {route: 'shows', title: 'Shows'},
         {route: 'schedule', title: 'Schedule'},
-        {route: 'venues', title: 'Venues'},
+        {route: 'venues', title: 'Venues'}
         // {route: 'map', title: 'Map'}
     ])
     // .value('MapConfig', {
@@ -283,6 +284,9 @@ angular.module('fringeApp')
                 }).when('/my-fringe/auto-scheduler', {
                     template: '<my-fringe></my-fringe>',
                     title: 'My Fringe · Auto-Scheduler'
+                }).when('/now', {
+                    template: '<now></now>',
+                    title: 'Now'
                 }).when('/shows', {
                     template: '<shows></shows>',
                     title: 'Shows'
